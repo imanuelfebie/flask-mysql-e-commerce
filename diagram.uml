@@ -1,0 +1,11 @@
+@startuml
+
+class Store {
+	id int()
+}
+
+class BaseUser {
+
+}
+
+@enduml
