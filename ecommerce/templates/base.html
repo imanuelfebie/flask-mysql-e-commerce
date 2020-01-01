@@ -18,21 +18,34 @@
 <body>
    
     <!-- Header & Navbar here -->
-    <header>
-    	<nav class="nav-extended transparent">
+    
+    	<nav class="nav-extended green darken-3">
     		<div class="nav-wrapper">
 				<div class="container">
-					<a href="#" class="brand-logo">Tokopedia</a>
+					<a href="#" class="brand-logo">Some Brand Here</a>
+					<a href="" data-target="sidenav-links" class="sidenav-trigger">
+						<i class="material-icons">menu</i>
+					</a>
 					<ul class="right hide-on-med-and-down">
-						<li><a href=""></a></li>
+						<li><a href="#">Category</a></li>
+						<li><a href="#">Login</a></li>
+						<li><a href="">Register</a></li>
 					</ul>
 				</div>
     		</div> 
+    		<!--
     		<div class="nav-content center-align hide-on-med-and-down">
 				<span class="nav-title">One Stop Shop</span>	
     		</div>
-    	</nav>
-    </header>
+    		-->
+    	</nav> 
+
+    <!-- Sidenav -->
+    <ul class="sidenav" id="sidenav-links">
+		<li><a href="">Category</a></li>
+		<li><a href="">Login</a></li>
+		<li><a href="">Register</a></li>
+    </ul>
     
     <!-- Main content -->
     <div class="container">
@@ -41,7 +54,14 @@
 
     <!-- Footer here -->
 
+    <!-- JQuery -->
+	<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<script>
+		$(document).ready(function(){
+			$('.sidenav').sidenav();
+		})
+	</script>
 </body>
 </html>
