@@ -12,6 +12,18 @@ This project is build using [Flask](https://palletsproject.com/p/flask), a light
 - Python 3.8
 - [Pipenv](https://pipenv.readthedocs.io/en/latest) (it's always advised to create your python projects inside virtual environments)
 
+If your on MacOS, you can install Pipenv easily with Homebrew. You can also use Linuxbrew on Linux using the same command:
+
+```bash
+$ brew install pipenv
+```
+
+If your have a working installation of pip, you can install Pipenv using pip. To install:
+
+```bash
+$ pip install --user pipenv
+```
+
 If both of these are installed on you system you can simply clone the project `git clone https://github.com/imanuelfebie/flask-mysql-e-commerce.git`. Change into the project directory and run `pipenv install`. This will install all the python packages that are required for this to be able to run:
 
 - flask
