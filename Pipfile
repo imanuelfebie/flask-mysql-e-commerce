@@ -10,6 +10,8 @@ pylint = "*"
 flask = "*"
 flask-mysqldb = "*"
 flask-wtf = "*"
+yaml = "*"
+pyyaml = "*"
 
 [requires]
 python_version = "3.8"
