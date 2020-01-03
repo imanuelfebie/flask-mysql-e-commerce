@@ -1,6 +1,8 @@
 # Local files & Folder
 docs/
-.yaml
+*.yaml
+*.txt
+*.pdf
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
