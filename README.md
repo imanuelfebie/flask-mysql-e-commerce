@@ -24,12 +24,9 @@ If your have a working installation of pip, you can install Pipenv using pip. To
 $ pip install --user pipenv
 ```
 
-If both of these are installed on you system you can simply clone the project `git clone https://github.com/imanuelfebie/flask-mysql-e-commerce.git`. Change into the project directory and run `pipenv install`. This will install all the python packages that are required for this to be able to run:
+Make sure that python 3.8 is set as your default python interpreter and that `pipenv` is added to your `$PATH`. If both of these are installed and are working correctly on you system you can simply clone the project `git clone https://github.com/imanuelfebie/flask-mysql-e-commerce.git`. Change into the project directory and run `pipenv install`. This will install all the python packages that are required for this to be able to run:
 
 - flask
 - flask-mysqldb
 
-Run the development server with `python run.py` and you can view the web app on  `localhost:5000`.
-
-
-
+In order to activate the virtual environment run `pipenv shell` inside the project directory. Run the development server with `python run.py`, if there are no errors displayed you can view the web app on `localhost:5000`
