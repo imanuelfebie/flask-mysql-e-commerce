@@ -3,7 +3,7 @@ from .forms import UserRegistrationForm
 
 users = Blueprint('users', __name__)
 
-@users.route('/')
+@users.route('/register')
 def register():
     form = UserRegistrationForm()
     

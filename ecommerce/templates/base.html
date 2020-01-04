@@ -19,17 +19,22 @@
    
     <!-- Header & Navbar here -->
     
-    	<nav class="nav-extended green darken-3">
+    	<nav class="nav-extended green">
     		<div class="nav-wrapper">
 				<div class="container">
-					<a href="#" class="brand-logo">Some Brand Here</a>
+					<a href="{{ url_for('main.index') }}" class="brand-logo">Bahanapedia</a>
 					<a href="" data-target="sidenav-links" class="sidenav-trigger">
 						<i class="material-icons">menu</i>
-					</a>
+					</a>	
 					<ul class="right hide-on-med-and-down">
-						<li><a href="#">Category</a></li>
-						<li><a href="#">Login</a></li>
-						<li><a href="">Register</a></li>
+						<li><a href="#">Categories</a></li>
+						<li>
+							<a href="#">
+								<i class="tiny material-icons">shopping_cart</i>
+							</a>
+						</li>
+						<li><a href="" class="btn-small white green-text">Login</a></li>
+						<li><a href="{{ url_for('users.register') }}">Create account</a></li>
 					</ul>
 				</div>
     		</div> 
@@ -42,6 +47,7 @@
 
     <!-- Sidenav -->
     <ul class="sidenav" id="sidenav-links">
+    	<li><a href="">Bahanapedia</a></li>
 		<li><a href="">Category</a></li>
 		<li><a href="">Login</a></li>
 		<li><a href="">Register</a></li>

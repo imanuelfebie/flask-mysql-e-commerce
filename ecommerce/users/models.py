@@ -1,15 +1,20 @@
-# User model
-
+from ecommerce import cur
 
 class User:
+    '''User model that represents the User table of the database'''
 
-    def __init__(self, email, firstname, password, address, avatar):
+
+    def __init__(self, email, firstname, lastname, password):
         self.email = email
         self.firstname = firstname
+        self.lastname = lastname
         self.password = password
-        self.address = address
-        self.avatar = avatar
 
-        def __repr__(self):
+    def __repr__(self):
             '''String representation of the User object'''
             return "<User: {}>".format(self.email)
+
+    def create_object(self):
+            cur.execute('''INSERT INTO user (email, firstname, lastname, password) VALUES (%s, %s, %s, %s)''', (self.email, self.firstname, self.lastname, self.password))
+
+            mysql.connection.commit()

@@ -15,8 +15,11 @@ app.config['MYSQL_HOST'] = db_config['host']
 app.config['MYSQL_USER'] = db_config['username']
 app.config['MYSQL_PASSWORD'] = db_config['password']
 app.config['MYSQL_DB'] = db_config['database']
+#app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
-db = MySQL(app) # MySQL instance and passing the Flask object as an argument
+# MySQL instance and passing the Flask object as an argument
+mysql = MySQL(app) 
+# cur = mysql.connection.cursor()
 
 # routes import
 from ecommerce.main.routes import main
