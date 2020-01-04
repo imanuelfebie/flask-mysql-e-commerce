@@ -18,4 +18,10 @@ app.config['MYSQL_DB'] = db_config['database']
 
 db = MySQL(app) # MySQL instance and passing the Flask object as an argument
 
-from ecommerce import routes
+# routes import
+from ecommerce.main.routes import main
+from ecommerce.users.routes import users
+
+app.register_blueprint(main)
+app.register_blueprint(users)
+

@@ -1,8 +1,11 @@
 # Local files & Folder
 docs/
+diagram/
 *.yaml
 *.txt
 *.pdf
+*.mwb
+*.bak
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
