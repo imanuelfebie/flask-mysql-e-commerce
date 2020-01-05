@@ -1,25 +1,30 @@
-from flask import Flask
+from flask import Flask, request
 from flask_mysqldb import MySQL
-import yaml
+#import yaml
 
 # Flask object
 app = Flask(__name__) 
 
 # Secret key
-app.config['SECRET_KEY'] = '12345678'
+app.config['SECRET_KEY'] = '12345678' 
 
 # Database config
-db_config = yaml.load(open('db.yaml'))
+#db_config = yaml.load(open('local_db.yaml'))
 
-app.config['MYSQL_HOST'] = db_config['host']
-app.config['MYSQL_USER'] = db_config['username']
-app.config['MYSQL_PASSWORD'] = db_config['password']
-app.config['MYSQL_DB'] = db_config['database']
-#app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+#app.config['MYSQL_HOST'] = db_config['host']
+#app.config['MYSQL_USER'] = db_config['username']
+#app.config['MYSQL_PASSWORD'] = db_config['password']
+#app.config['MYSQL_DB'] = db_config['database']
+
+
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'batman'
+app.config['MYSQL_PASSWORD'] = 'password'
+app.config['MYSQL_DB'] = 'ecommerce_db'
+app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 # MySQL instance and passing the Flask object as an argument
-mysql = MySQL(app) 
-# cur = mysql.connection.cursor()
+mysql = MySQL(app)
 
 # routes import
 from ecommerce.main.routes import main

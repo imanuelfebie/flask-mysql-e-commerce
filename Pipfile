@@ -10,7 +10,6 @@ pylint = "*"
 flask = "*"
 flask-mysqldb = "*"
 flask-wtf = "*"
-yaml = "*"
 pyyaml = "*"
 
 [requires]
