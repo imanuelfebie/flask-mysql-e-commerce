@@ -11,6 +11,8 @@ flask = "*"
 flask-wtf = "*"
 pyyaml = "*"
 pymysql = "*"
+python-dotenv = "*"
+gunicorn = "*"
 
 [requires]
 python_version = "3.8"

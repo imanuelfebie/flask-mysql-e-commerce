@@ -1,16 +1,13 @@
-from dotenv import load_dotenv
 import pymysql
-import os
 
-load_dotenv()
 
 class Database:
 
     def __init__(self):
-        host = os.getenv('DB_HOST')
-        user = os.getenv('DB_USER')
-        password = os.getenv('DB_PASSWORD')
-        db = os.getenv('DB_DATABASE')
+        host = 'us-cdbr-iron-east-05.cleardb.net'
+        user = 'b5de033d9bb9f7'
+        password = 'd746b139'
+        db = 'heroku_7edc97b06ff109d'
 
         self.connect = pymysql.connect(
                 host=host,
@@ -20,5 +17,3 @@ class Database:
                 cursorclass=pymysql.cursors.DictCursor)  
 
         self.cursor = self.connect.cursor()
-
-  

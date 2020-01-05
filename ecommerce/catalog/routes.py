@@ -9,18 +9,22 @@ catalog = Blueprint('catalog', __name__)
 def category_create():
     form = CategoryCreateForm()
     
-    if request.method == 'POST':
-        category = Category(name=form.name.data)
-        cur = mysql.connection.cursor()
-        cur.execute("INSERT INTO category (name) VALUES (%s)", (category.name))
-        mysql.connection.commit()
+    if form.validate_on_submit():
+        category = Category(form.name.data)
+        category.create()
+        return 'Object created'
 
-        return 'Success'
     else:
         # print this if commit to database fails
+        print(form.name.data)
         print('Commit failed')
 
     return render_template('catagory_create.html', form=form)
+
+@catalog.route('/categories')
+def category_list():
+    category_list = Category.objects_all()
+    return render_template('category_list.html', category_list=category_list)
 
 @catalog.route('/products')
 def product_list():

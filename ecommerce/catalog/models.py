@@ -1,5 +1,5 @@
 #from ecommerce import mysql
-from ecommerce import db
+from ecommerce import mysql
 
 
 class Category:
@@ -13,22 +13,17 @@ class Category:
     
     def create(self):
         '''Create new Category object'''
+        #sql = 'INSERT INTO category (name) VALUES {}'.format(self.name)
+        mysql.cursor.execute("INSERT INTO category (name) VALUES (%s)", (self.name))
+        mysql.connect.commit()
+
+
+    def objects_all():
+        mysql.cursor.execute("SELECT * FROM category")
+        results = mysql.cursor.fetchall()
+        return results
+
         
-
-        #cur = mysql.connection.cursor()
-        #cur.execute('''INSERT INTO category (name) VALUES (%s)''', (self.name))
-        #mysql.connection.commit()
-        #cur.close()
-        pass
-
-    def get_all():
-        #cur = mysql.connection.cursor()
-        #cur.execute("SELECT * FROM category")
-        #object_list = cur.fetchall()
-
-        #return str(object_list)
-        pass
-
 
 
 class Product:

@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<h4>Categories</h4>
+{% for category in category_list %}
+	<p><a href="" class="grey-text">{{ category.name }}</a></p>
+{% endfor %}
+{% endblock body %}
