@@ -8,12 +8,15 @@ class Database:
 
     def __init__(self):
         host = os.environ.get('CLEARDB_DATABASE_URL')
-        #user = os.getenv('DB_USER')
-        #password = os.getenv('DB_PASSWORD')
-        #db = os.getenv('DB_DATABASE')
+        user = os.getenv('CLEARDB_USERNAME')
+        password = os.getenv('CLEARDB_PASSWORD')
+        db = os.getenv('CLEARDB_DATABASE')
 
         self.connect = pymysql.connect(
                 host=host,
+                user=user,
+                password=password,
+                db=db,
                 cursorclass=pymysql.cursors.DictCursor)  
 
         self.cursor = self.connect.cursor()
