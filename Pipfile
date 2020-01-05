@@ -8,9 +8,9 @@ pylint = "*"
 
 [packages]
 flask = "*"
-flask-mysqldb = "*"
 flask-wtf = "*"
 pyyaml = "*"
+pymysql = "*"
 
 [requires]
 python_version = "3.8"

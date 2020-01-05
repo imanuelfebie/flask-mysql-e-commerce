@@ -5,18 +5,19 @@ from ecommerce import mysql
 
 catalog = Blueprint('catalog', __name__)
 
-@catalog.route('/add-category')
+@catalog.route('/add-category', methods=['GET', 'POST'])
 def category_create():
     form = CategoryCreateForm()
     
-    if form.validate_on_submit():
+    if request.method == 'POST':
         category = Category(name=form.name.data)
-        category.create()
-        #flash(f'New category has been added')
-        print('Category created')
-        
-        return redirect(url_for('main.index'))
+        cur = mysql.connection.cursor()
+        cur.execute("INSERT INTO category (name) VALUES (%s)", (category.name))
+        mysql.connection.commit()
+
+        return 'Success'
     else:
+        # print this if commit to database fails
         print('Commit failed')
 
     return render_template('catagory_create.html', form=form)

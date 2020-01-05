@@ -1,5 +1,7 @@
 from flask import Flask, request
-from flask_mysqldb import MySQL
+from ecommerce.db import Database
+
+#from flask_mysqldb import MySQL
 #import yaml
 
 # Flask object
@@ -7,6 +9,8 @@ app = Flask(__name__)
 
 # Secret key
 app.config['SECRET_KEY'] = '12345678' 
+
+mysql = Database()
 
 # Database config
 #db_config = yaml.load(open('local_db.yaml'))
@@ -17,14 +21,14 @@ app.config['SECRET_KEY'] = '12345678'
 #app.config['MYSQL_DB'] = db_config['database']
 
 
-app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_USER'] = 'batman'
-app.config['MYSQL_PASSWORD'] = 'password'
-app.config['MYSQL_DB'] = 'ecommerce_db'
-app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
+#app.config['MYSQL_HOST'] = 'localhost'
+#app.config['MYSQL_USER'] = 'batman'
+#app.config['MYSQL_PASSWORD'] = 'password'
+#app.config['MYSQL_DB'] = 'ecommerce_db'
+#app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
 # MySQL instance and passing the Flask object as an argument
-mysql = MySQL(app)
+#mysql = MySQL(app)
 
 # routes import
 from ecommerce.main.routes import main
