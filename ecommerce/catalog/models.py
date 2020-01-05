@@ -24,7 +24,15 @@ class Category:
         return results
 
         
-
-
 class Product:
-    pass
+    
+    def __init__(self, name, description, stock, price, category_id):
+        self.name = name
+        self.description = description
+        self.stock = stock
+        self.price = price
+        self.category_id = category_id
+        #self.available = True
+
+    def objects_all():
+        mysql.cursor.execute("SELECT * FROM product")

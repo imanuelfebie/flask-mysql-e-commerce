@@ -28,10 +28,8 @@ def category_list():
 
 @catalog.route('/products')
 def product_list():
-    cur = mysql.connection.cursor()
-    cur.execute('''SELECT * FROM product''')
-    product_list = cur.fetchall()
-    
+    product_list = Product.objects_all()
+
     return render_template('product_list.html', product_list=product_list)
 
 

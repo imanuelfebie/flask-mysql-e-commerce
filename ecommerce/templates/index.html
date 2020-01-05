@@ -1,5 +1,24 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<h4 class="grey-text">Newest Products</h4>
+<h5>Welcome</h5>
+<div class="row">
+	{% for product in product_list %}
+	<div class="col s4">
+		<div class="card">
+			<div class="card-image">
+				<img src="../static/img/product_default.jpg" alt="">
+			</div>
+			<div class="card-content">
+				<span class="card-title">{{ product.name }}</span>
+				<p class="truncate">{{ product.description }}</p>
+			</div>
+			<div class="card-action">
+				<a href="">$ {{ product.price }}</a>
+				<a href="">Stock {{ product.stock }}</a>
+			</div>
+		</div>
+	</div>
+	{% endfor %}
+</div>
 {% endblock body %}
