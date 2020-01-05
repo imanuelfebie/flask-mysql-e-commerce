@@ -36,3 +36,5 @@ class Product:
 
     def objects_all():
         mysql.cursor.execute("SELECT * FROM product")
+        result = mysql.cursor.fetchall()
+        return result
