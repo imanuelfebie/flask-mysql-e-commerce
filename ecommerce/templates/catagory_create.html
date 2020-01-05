@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block title %}New Category{% endblock title %}
+
+{% block body %}
+<div class="card">
+	<div class="card-content">
+		<span class="card-title">New Category</span>
+		<div class="row">
+			<form action="">
+				{{ form.hidden_tag() }}
+				<div class="input-field">
+					{{ form.name(class="validate") }}
+					{{ form.name.label() }}
+				</div>
+				<div class="input-field">
+					{{ form.submit(class='btn green white-text') }}
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock body %}

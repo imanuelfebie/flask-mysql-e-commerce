@@ -1,4 +1,4 @@
-from ecommerce import cur
+from ecommerce import mysql
 
 class User:
     '''User model that represents the User table of the database'''
@@ -15,6 +15,7 @@ class User:
             return "<User: {}>".format(self.email)
 
     def create_object(self):
-            cur.execute('''INSERT INTO user (email, firstname, lastname, password) VALUES (%s, %s, %s, %s)''', (self.email, self.firstname, self.lastname, self.password))
+        cur = mysql.connection.cursor()
+        cur.execute('''INSERT INTO user (email, firstname, lastname, password) VALUES (%s, %s, %s, %s)''', (self.email, self.firstname, self.lastname, self.password))
 
-            mysql.connection.commit()
+        mysql.connection.commit()

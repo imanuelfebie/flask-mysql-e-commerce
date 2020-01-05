@@ -29,7 +29,8 @@ mysql = MySQL(app)
 # routes import
 from ecommerce.main.routes import main
 from ecommerce.users.routes import users
+from ecommerce.catalog.routes import catalog
 
 app.register_blueprint(main)
 app.register_blueprint(users)
-
+app.register_blueprint(catalog)
