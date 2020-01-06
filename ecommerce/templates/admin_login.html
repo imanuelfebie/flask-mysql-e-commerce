@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin login{% endblock title %}
+
+{% block body %}
+<div class="row"></div>
+<div class="card">
+	<div class="card-content">
+		<form action="" method="post">
+			<div class="input-field">
+				{{ form.username(class="validate") }}
+				{{ form.username.label() }}
+			</div>
+			<div class="input-field">
+				{{ form.password(class="validate") }}
+				{{ form.password.label() }}
+			</div>
+			<div class="input-field">
+				{{ form.login(class="btn green white-text") }}
+			</div>
+		</form>
+	</div>
+</div>
+{% endblock body%}
+

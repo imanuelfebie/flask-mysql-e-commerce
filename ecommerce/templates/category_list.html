@@ -2,7 +2,15 @@
 
 {% block body %}
 <h4>Categories</h4>
+<div class="row">
 {% for category in category_list %}
-	<p><a href="" class="grey-text">{{ category.name }}</a></p>
+<div class="col s3">
+	<div class="card">
+		<div class="card-content">
+			<p><a href="" class="grey-text">{{ category.name }}</a></p>
+		</div>
+	</div>
+</div>
 {% endfor %}
+</div>
 {% endblock body %}
