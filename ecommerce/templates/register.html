@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block title %}Register user{% endblock %}
+
+{% block body %}
+<div class="row">
+	<div class="col s12">
+	<div class="card">
+		<div class="card-content">
+			<span class="card-title center-align">Register now</span>
+			<form action="" method="post" class="">
+				{{ form.hidden_tag() }}
+				<!-- firstname & lastname input fields -->
+				<div class="row">
+					<div class="input-field">
+						{{ form.firstname(class="validate")}}
+						{{ form.firstname.label() }}
+					</div>
+					<div class="input-field">
+						{{ form.lastname(class="validate") }}
+						{{ form.lastname.label() }}
+					</div>
+					<div class="input-field">
+						{{ form.email(class='validate') }}
+						{{ form.email.label() }}
+					</div>
+					<div class="input-field">
+						{{ form.password1(class="validate") }}
+						{{ form.password1.label() }}
+					</div>
+					<div class="input-field">
+						{{ form.password2(class="validate") }}
+						{{ form.password2.label() }}
+					</div>
+					<div class="input-field">
+						{{ form.submit(class="btn green") }}
+					</div>
+				</div>
+			</form>	
+		</div>
+		<div class="card-action center-align">
+			Already an account? <a href="" class="green-text">Login</a>
+		</div>
+	</div>
+	</div>
+</div>
+
+{% endblock body %}
