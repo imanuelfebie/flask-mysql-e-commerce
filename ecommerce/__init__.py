@@ -1,5 +1,6 @@
 from flask import Flask, request
 from ecommerce.db import Database
+from flask_login import LoginManager
 
 # Flask object
 app = Flask(__name__) 
@@ -9,6 +10,8 @@ app.config['SECRET_KEY'] = '12345678'
 
 # Database object
 mysql = Database()
+
+login_manager = LoginManager(app)
 
 # routes import
 from ecommerce.main.routes import main
