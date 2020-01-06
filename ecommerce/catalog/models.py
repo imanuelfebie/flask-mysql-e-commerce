@@ -14,7 +14,7 @@ class Category:
     
     def create(self):
         '''Create new Category object'''
-        #sql = 'INSERT INTO category (name) VALUES {}'.format(self.name)
+        #sql = 'INSERT INTO category (name) VALUES {}'.format(self.name) 
         mysql.reconnect()
         mysql.cursor.execute("INSERT INTO category (name) VALUES (%s)", (self.name))
         mysql.connect.commit()
