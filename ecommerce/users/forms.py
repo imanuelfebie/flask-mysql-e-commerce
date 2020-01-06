@@ -15,6 +15,7 @@ class UserRegistrationForm(FlaskForm):
         DataRequired(),
         EqualTo('password1')])
     submit = SubmitField('Register')
+    login = SubmitField('Login')
 
     # Need to add username validation - Checking wether user already exist or not
     # both username and email

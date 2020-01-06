@@ -21,4 +21,6 @@ class Database:
 
         self.cursor = self.connect.cursor()
 
-  
+    def reconnect(self):
+    	self.connect.ping(reconnect=True)
+

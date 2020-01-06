@@ -10,10 +10,8 @@ def register():
     
     return render_template('register.html', form=form)
 
-@users.route('/users')
-def user_list():
-    c = mysql.connection.cursor()
-    c.execute('''SELECT * FROM user''')
-    users = c.fetchall()
+@users.route('/login')
+def login():
+	form = UserRegistrationForm()
 
-    return render_template('users.html', users=users)
+	return render_template('login.html', form=form)

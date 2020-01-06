@@ -10,13 +10,13 @@
 	<!-- Custom CSS -->
 	<link rel="stylesheet" href="../static/custom.css">
 
-    <!--Import Google Icon Font-->      
+    <!--Import Google Icon Font-->
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <title>{% block title %}{% endblock title %}</title>    
+    <title>{% block title %}{% endblock title %}</title>
 </head>
 <body>
-   
+
     <!-- Header & Navbar here -->
     	<nav>
     		<div class="nav-wrapper green">
@@ -24,7 +24,7 @@
 					<a href="{{ url_for('main.index') }}" class="brand-logo">Bahanapedia</a>
 					<a href="" data-target="sidenav-links" class="sidenav-trigger">
 						<i class="material-icons">menu</i>
-					</a>	
+					</a>
 					<ul class="right hide-on-med-and-down">
 						<li><a href="{{ url_for('catalog.category_list') }}">Categories</a></li>
 						<li>
@@ -32,11 +32,11 @@
 								<i class="tiny material-icons">shopping_cart</i>
 							</a>
 						</li>
-						<li><a href="" class="btn-small white green-text">Login</a></li>
+						<li><a href="{{ url_for('users.login') }}" class="btn-small white green-text">Login</a></li>
 						<li><a href="{{ url_for('users.register') }}">Create account</a></li>
 					</ul>
 				</div>
-    		</div> 
+    		</div>
     	</nav>
 
     <!-- Sidenav -->
@@ -46,7 +46,7 @@
 		<li><a href="">Login</a></li>
 		<li><a href="">Register</a></li>
     </ul>
-    
+
     <!-- Main content -->
     <div class="container">
         {% block body %}{% endblock %}
