@@ -31,7 +31,7 @@ class User:
 
     def create_object(self):
         mysql.reconnect()
-        mysql.cursor.execute('''INSERT INTO user (firstname, lastname, email, password) VALUES (
+        mysql.cursor.execute('''INSERT INTO user (email, firstname, lastname, password) VALUES (
             %s, %s, %s, %s
         )''', (self.email, self.firstname, self.lastname, self.password))
         mysql.connect.commit()
