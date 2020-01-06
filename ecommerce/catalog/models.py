@@ -2,6 +2,7 @@
 from ecommerce import mysql
 
 
+
 class Category:
     '''Category object'''
     
@@ -14,11 +15,13 @@ class Category:
     def create(self):
         '''Create new Category object'''
         #sql = 'INSERT INTO category (name) VALUES {}'.format(self.name)
+        mysql.reconnect()
         mysql.cursor.execute("INSERT INTO category (name) VALUES (%s)", (self.name))
         mysql.connect.commit()
 
 
     def objects_all():
+        mysql.reconnect()
         mysql.cursor.execute("SELECT * FROM category")
         results = mysql.cursor.fetchall()
         return results
@@ -35,6 +38,7 @@ class Product:
         #self.available = True
 
     def objects_all():
+        mysql.reconnect()
         mysql.cursor.execute("SELECT * FROM product")
         result = mysql.cursor.fetchall()
         return result

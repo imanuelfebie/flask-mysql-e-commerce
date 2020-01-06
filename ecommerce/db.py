@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 import pymysql
 import os
 
+
 load_dotenv()
 
 class Database:
@@ -21,4 +22,6 @@ class Database:
 
         self.cursor = self.connect.cursor()
 
-  
+    def reconnect(self):
+        self.connect.ping(reconnect=True)
+
