@@ -1,8 +1,23 @@
-#from ecommerce import mysql
+from ecommerce import mysql
+
+
+class Admin:
+
+    def __init__(self):
+        self.username = username
+        self.email = email
+        self.password = password
+
+    def __repr__(self):
+        return f'{self.username}'
+    
+    def get_object(self):
+        mysql.reconnect()
+        mysql.cursor.execute("SELECT * FROM admin WHERE id = 1")
+        return mysql.cursor.fetchall()
 
 class User:
     '''User model that represents the User table of the database'''
-
 
     def __init__(self, email, firstname, lastname, password):
         self.email = email
@@ -15,8 +30,8 @@ class User:
             return "<User: {}>".format(self.email)
 
     def create_object(self):
-       # cur = mysql.connection.cursor()
-       # cur.execute('''INSERT INTO user (email, firstname, lastname, password) VALUES (%s, %s, %s, %s)''', (self.email, self.firstname, self.lastname, self.password))
-
-       # mysql.connection.commit()
-       pass
+        mysql.reconnect()
+        mysql.cursor.execute('''INSERT INTO user (firstname, lastname, email, password) VALUES (
+            %s, %s, %s, %s
+        )''', (self.email, self.firstname, self.lastname, self.password))
+        mysql.connect.commit()
