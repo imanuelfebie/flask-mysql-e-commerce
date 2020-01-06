@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 import pymysql
 import os
 
+
 load_dotenv()
 
 class Database:

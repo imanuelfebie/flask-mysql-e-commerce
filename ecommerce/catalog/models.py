@@ -2,6 +2,7 @@
 from ecommerce import mysql
 
 
+
 class Category:
     '''Category object'''
     

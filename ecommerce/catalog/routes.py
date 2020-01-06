@@ -10,13 +10,13 @@ def category_create():
     form = CategoryCreateForm()
     
     if form.validate_on_submit():
-        category = Category(form.name.data)
+        category = Category(request.args.get('name'))
         category.create()
         return 'Object created'
 
     else:
         # print this if commit to database fails
-        print(form.name.data)
+        print(request.args.get('name'))
         print('Commit failed')
 
     return render_template('catagory_create.html', form=form)
