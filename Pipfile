@@ -13,6 +13,7 @@ pyyaml = "*"
 pymysql = "*"
 python-dotenv = "*"
 gunicorn = "*"
+flask-login = "*"
 
 [requires]
 python_version = "3.8"
