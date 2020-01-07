@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template
-from .forms import UserRegistrationForm, AdminLogin
-from ecommerce.users.models import User
+from .forms import UserRegistrationForm, AdminLogin, StoreRegistrationForm
+from ecommerce.users.models import User, Store
 from ecommerce import mysql, login_manager
 from ecommerce.catalog.models import Basket,Total
 
