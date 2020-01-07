@@ -28,15 +28,18 @@
 						{{ form.price(class='validate') }}
 						{{ form.price.label() }}
 					</div>
-                    <div class="input-field">
-						{{ form.available(class='validate') }}
-						{{ form.available.label() }}
+					<div class="switch">
+						<label for="">
+							{{ form.available(type="checkbox") }}
+							<span class="lever"></span>
+						</label>
 					</div>
+
                     <label>category</label>
                     <select class="browser-default">
                         <option value="" disabled selected>Choose your product's category</option>
                         {% for category in category_list %}
-                        <option value="{{ category.name}}">{{ category.name }}</option>
+                        	<option value="{{ category.name}}">{{ category.name }}</option>
                         {% endfor %}
                     </select>
 					<div class="input-field">

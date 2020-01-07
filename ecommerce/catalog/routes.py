@@ -44,7 +44,7 @@ def product_create():
             form.stock.data,
             form.price.data,
             form.available.data,
-            form.category.data
+            form.category.data,
             )
         product.create_object()
 
