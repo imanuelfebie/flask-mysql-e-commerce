@@ -34,7 +34,7 @@ class User:
         mysql.cursor.execute('''INSERT INTO user (email, firstname, lastname, password) VALUES (
             %s, %s, %s, %s
         )''', (self.email, self.firstname, self.lastname, self.password))
-        mysql.connect.commit()
+        mysql.connect.commit() 
 
     @classmethod
     def get(cls, id):
@@ -52,10 +52,11 @@ class User:
         
 class Store:
 
-    def __init__(self, name, about, address):
+    def __init__(self, name, about, address, user_id):
         self.name = name
         self.about = about
         self.address = address
+        self.user_id = user_id
 
     def __repr__(self):
             '''String representation of the Store object'''
@@ -63,7 +64,7 @@ class Store:
 
     def create_object(self):
         mysql.reconnect()
-        mysql.cursor.execute('''INSERT INTO store (name, about, address) VALUES (
-            %s, %s, %s
-        )''', (self.name, self.about, self.address))
+        mysql.cursor.execute('''INSERT INTO store (name, about, address, user_id) VALUES (
+            %s, %s, %s, %s
+        )''', (self.name, self.about, self.address, self.user_id))
         mysql.connect.commit()
