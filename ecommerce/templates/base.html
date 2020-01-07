@@ -20,6 +20,7 @@
     <!-- Header & Navbar here -->
     	<nav class="nav-extended">
     		<div class="nav-wrapper green">
+    			<div class="container">
 				<a href="{{ url_for('main.index') }}" class="brand-logo">Bahanapedia</a>
 				<a href="" data-target="sidenav-links" class="sidenav-trigger">
 					<i class="material-icons">menu</i>
@@ -34,6 +35,7 @@
 					<li><a href="{{ url_for('users.user_login') }}" class="btn-small white green-text">Login</a></li>
 					<li><a href="{{ url_for('users.register') }}">Create account</a></li>
 				</ul>
+				</div>
     		</div>	
     	</nav>
 
