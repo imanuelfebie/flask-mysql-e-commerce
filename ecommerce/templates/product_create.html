@@ -33,12 +33,13 @@
 						{{ form.available.label() }}
 					</div>
                     <label>category</label>
-                    <select class="browser-default">
+                    <select class="browser-default" name='cvalue'>
                         <option value="" disabled selected>Choose your product's category</option>
                         {% for category in category_list %}
-                        <option value="{{ category.name}}">{{ category.name }}</option>
+                        <option value="{{ category.id}}">{{ category.name }}</option>
                         {% endfor %}
-                    </select>
+
+					</select>
 					<div class="input-field">
 						{{ form.submit(class="btn green") }}
 					</div>
