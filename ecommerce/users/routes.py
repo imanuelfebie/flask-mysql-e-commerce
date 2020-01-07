@@ -2,6 +2,7 @@ from flask import Blueprint, render_template
 from .forms import UserRegistrationForm, AdminLogin
 from ecommerce.users.models import User
 from ecommerce import mysql, login_manager
+from ecommerce.catalog.models import Basket
 
 users = Blueprint('users', __name__)
 
@@ -41,3 +42,10 @@ def login():
 	form = UserRegistrationForm()
 
 	return render_template('login.html', form=form)
+
+@users.route('/basket_list')
+def basket_list():
+    basket_list = Basket.objects_all()
+    total_price= Basket.total_price()
+
+    return render_template('index.html', basket_list=basket_list, total_price=total_price)
