@@ -29,7 +29,9 @@ class UserRegistrationForm(FlaskForm):
 
 class StoreRegistrationForm(FlaskForm):
     '''Form to create a store'''
-    name = StringField('store name', validators=[DataRequired()])
-    description = TextAreaField('description')
+    name = StringField('name', validators=[DataRequired()])
+    about = TextAreaField('about')
+    address = StringField('address', validators=[DataRequired()])
+    submit = SubmitField('Register')
 
     
