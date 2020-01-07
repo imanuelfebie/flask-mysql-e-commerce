@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, session, redirect, url_for
+from flask import Blueprint, render_template, session, redirect, url_for, flash
 from werkzeug.security import generate_password_hash, check_password_hash
 from .forms import UserRegistrationForm, AdminLogin, StoreRegistrationForm, UserLoginForm
 from ecommerce.users.models import User, Store
@@ -22,11 +22,27 @@ def admin_login():
 def user_login():
     '''User login'''
     form = UserLoginForm()
+    error = None
 
     if form.validate_on_submit():
         user = User.filter_by(form.email.data)
-        print(type(user))
-        return redirect(url_for('users.user_dashboard'))
+        #print(user['password'])
+        if user is None:
+            #print(str(user['email'])) 
+            #hashed_password = user['password']
+            password = form.password.data
+            #print(password)
+            #print(hashed_password)
+            #print(check_password_hash(hashed_password, password))
+            print('user doesn\'t exist')
+            error = 'User doesn\'t exist'
+        elif not check_password_hash(user['password'], form.password.data):
+            print("password is incorrent")
+            error = 'Incorrect password'
+        else:   
+            return redirect(url_for('users.user_dashboard'))
+
+        flash(error)
 
     return render_template('login.html', form=form)
 
@@ -41,7 +57,7 @@ def register():
                 form.email.data,
                 form.firstname.data,
                 form.lastname.data,
-                generate_password_hash(form.password1.data, method='sha256')
+                generate_password_hash(form.password1.data)
                 )
         user.create_object()   
 
@@ -79,7 +95,7 @@ def storeRegister():
     
     return render_template('store_registration.html', form=form)
 
-@users.route('/store-dashboard')
+@users.route('/store-dashoard')
 def store_dashboard():
     return render_template('store_dashboard.html')
 

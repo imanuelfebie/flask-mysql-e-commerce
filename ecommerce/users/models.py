@@ -46,8 +46,8 @@ class User:
     @staticmethod
     def filter_by(email):
         mysql.reconnect()
-        user = mysql.cursor.execute('''SELECT * FROM user WHERE email LIKE (%s)''', (email))
-        return user
+        mysql.cursor.execute('''SELECT * FROM user WHERE email LIKE (%s)''', (email))
+        return mysql.cursor.fetchone()
 
         
 class Store:
