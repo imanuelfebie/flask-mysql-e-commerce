@@ -10,8 +10,8 @@
 			<a href="" class="collection-item">Update profile</a>
 			<a href="{{ url_for('users.storeRegister') }}" class="collection-item">Seller Account</a>
 			<a href="" class="collection-item">Purchase History</a>
-			<a href="" class="collection-item">Basket</a>
-		</div>	
+			<a href="{{ url_for('users.basket_list') }}" class="collection-item">Basket</a>
+		</div>
 	</div>
 	<div class="col s8">
 		<div class="card">
@@ -35,8 +35,7 @@
 				</div>
 			</div>
 		</div>
-		
+
 	</div>
 </div>
 {% endblock body %}
-
