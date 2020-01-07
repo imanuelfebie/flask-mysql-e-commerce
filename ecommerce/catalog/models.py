@@ -29,11 +29,12 @@ class Category:
         
 class Product:
     
-    def __init__(self, name, description, stock, price, category_id):
+    def __init__(self, name, description, stock, price, available, category_id):
         self.name = name
         self.description = description
         self.stock = stock
         self.price = price
+        self.available = available
         self.category_id = category_id
         #self.available = True
 
@@ -42,6 +43,13 @@ class Product:
         mysql.cursor.execute("SELECT * FROM product")
         result = mysql.cursor.fetchall()
         return result
+
+    def create_object(self):
+        mysql.reconnect()
+        mysql.cursor.execute('''INSERT INTO product (name, description, stock, price, available, category_id) VALUES (
+            %s, %s, %s, %s, %s, %s
+        )''', (self.name, self.description, self.stock, self.price, self.available, self.category_id))
+        mysql.connect.commit()
 
 class Basket:
     def __init__(self, name, description, stock, price, category_id):

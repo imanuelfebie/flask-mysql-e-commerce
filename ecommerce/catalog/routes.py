@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash
-from ecommerce.catalog.forms import CategoryCreateForm
+from ecommerce.catalog.forms import CategoryCreateForm, ProductCreateForm
 from ecommerce.catalog.models import Category, Product
 from ecommerce import mysql
 
@@ -31,5 +31,31 @@ def product_list():
     product_list = Product.objects_all()
 
     return render_template('product_list.html', product_list=product_list)
+
+@catalog.route('/add-product', methods=['GET', 'POST'])
+def product_create():
+    form = ProductCreateForm()
+    category_list = Category.objects_all()
+
+    if form.validate_on_submit():
+        product = Product(
+            form.name.data,
+            form.description.data,
+            form.stock.data,
+            form.price.data,
+            form.available.data,
+            form.category.data
+            )
+        product.create_object()
+
+        print("Product added")
+    else:
+        print(form.name.data)
+        print("fail")
+        print(form.category.data)
+        print(request.args.get('category'))
+
+    return render_template('product_create.html', form=form, category_list=category_list)
+
 
 
