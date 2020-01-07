@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Register store{% endblock %}
+
+{% block body %}
+<div class="row">
+	<div class="card col s12">
+		<div class="card-content">
+			<span class="card-title center-align">Add Product</span>
+			<form action="" method="post" class="">
+				{{ form.hidden_tag() }}
+				<!-- firstname & lastname input fields -->
+
+				<div class="row">
+					<div class="input-field">
+						{{ form.name(class="validate")}}
+						{{ form.name.label() }}
+					</div>
+					<div class="input-field">
+						{{ form.description(class="validate") }}
+						{{ form.description.label() }}
+					</div>
+					<div class="input-field">
+						{{ form.stock(class='validate') }}
+						{{ form.stock.label() }}
+					</div>
+                    <div class="input-field">
+						{{ form.price(class='validate') }}
+						{{ form.price.label() }}
+					</div>
+                    <div class="input-field">
+						{{ form.available(class='validate') }}
+						{{ form.available.label() }}
+					</div>
+                    <label>category</label>
+                    <select class="browser-default">
+                        <option value="" disabled selected>Choose your product's category</option>
+                        {% for category in category_list %}
+                        <option value="{{ category.name}}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+					<div class="input-field">
+						{{ form.submit(class="btn green") }}
+					</div>
+                </div>
+			</form>
+		</div>
+	</div>
+</div>
+
+{% endblock body %}
