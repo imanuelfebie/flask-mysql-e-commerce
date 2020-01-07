@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Register store{% endblock %}
+
+{% block body %}
+<div class="row">
+	<div class="card col s12">
+		<div class="card-content">
+			<span class="card-title center-align">Register your store</span>
+			<form action="" method="post" class="">
+				{{ form.hidden_tag() }}
+				<!-- firstname & lastname input fields -->
+
+				<div class="row">
+					<div class="input-field">
+						{{ form.name(class="validate")}}
+						{{ form.name.label() }}
+					</div>
+					<div class="input-field">
+						{{ form.about(class="validate") }}
+						{{ form.about.label() }}
+					</div>
+					<div class="input-field">
+						{{ form.address(class='validate') }}
+						{{ form.address.label() }}
+					</div>
+					<div class="input-field">
+						{{ form.submit(class="btn green") }}
+					</div>
+			</form>
+		</div>
+	</div>
+</div>
+
+{% endblock body %}
