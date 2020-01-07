@@ -52,22 +52,28 @@ class Product:
         mysql.connect.commit()
 
 class Basket:
-    def __init__(self, name, description, stock, price, category_id):
+    def __init__(self, name, description, stock, price, category_id,quantity):
         self.name = name
         self.description = description
         self.stock = stock
         self.price = price
         self.category_id = category_id
+        self.quantity=quantity
         #self.available = True
 
     def objects_all():
         mysql.reconnect()
+        mysql.cursor.execute("update order_item as o inner join product as p on o.product_id=p.product_id set o.total_price = p.price * o.quantity")
         mysql.cursor.execute("SELECT * FROM basket join order_item join product where basket.order_item_id=order_item.order_item_id and order_item.product_id=product.product_id")
         result = mysql.cursor.fetchall()
         return result
 
+class Total:
+    def __init__(self, total):
+        self.total= total
+
     def total_price():
         mysql.reconnect()
-        mysql.cursor.execute("SELECT sum(total_price) from basket join order_item on basket.order_item_id=order_item.order_item_id")
+        mysql.cursor.execute("SELECT sum(total_price) as total from basket join order_item on basket.order_item_id=order_item.order_item_id")
         result=mysql.cursor.fetchall()
         return result

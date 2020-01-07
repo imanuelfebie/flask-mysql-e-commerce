@@ -6,18 +6,16 @@
 <div class="row">
 	<div class="card col s12">
 		<div class="card-content">
-			<span class="card-title center-align">Register your store</span>
+			<span class="card-title center-align">Start Selling Today!</span>
 			<form action="" method="post" class="">
 				{{ form.hidden_tag() }}
-				<!-- firstname & lastname input fields -->
-
 				<div class="row">
 					<div class="input-field">
 						{{ form.name(class="validate")}}
 						{{ form.name.label() }}
 					</div>
 					<div class="input-field">
-						{{ form.about(class="validate") }}
+						{{ form.about(class="materialize-textarea") }}
 						{{ form.about.label() }}
 					</div>
 					<div class="input-field">

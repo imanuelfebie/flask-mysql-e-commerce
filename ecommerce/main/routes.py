@@ -10,9 +10,4 @@ def index():
 
     return render_template('index.html', product_list=product_list)
 
-# @main.route('/basket_list')
-# def basket_list():
-#     basket_list = Basket.objects_all()
-#     total_price= Basket.total_price()
-# 
-#     return render_template('index.html', basket_list=basket_list, total_price=total_price)
+

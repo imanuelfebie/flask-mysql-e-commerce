@@ -18,25 +18,25 @@
 <body>
 
     <!-- Header & Navbar here -->
-    	<nav>
+    	<nav class="nav-extended">
     		<div class="nav-wrapper green">
-				<div class="container">
-					<a href="{{ url_for('main.index') }}" class="brand-logo">Bahanapedia</a>
-					<a href="" data-target="sidenav-links" class="sidenav-trigger">
-						<i class="material-icons">menu</i>
-					</a>
-					<ul class="right hide-on-med-and-down">
-						<li><a href="{{ url_for('catalog.category_list') }}">Categories</a></li>
-						<li>
-							<a href="{{ url_for('users.basket_list') }}">
-								<i class="tiny material-icons">shopping_cart</i>
-							</a>
-						</li>
-						<li><a href="{{ url_for('users.login') }}" class="btn-small white green-text">Login</a></li>
-						<li><a href="{{ url_for('users.register') }}">Create account</a></li>
-					</ul>
+    			<div class="container">
+				<a href="{{ url_for('main.index') }}" class="brand-logo">Bahanapedia</a>
+				<a href="" data-target="sidenav-links" class="sidenav-trigger">
+					<i class="material-icons">menu</i>
+				</a>
+				<ul class="right hide-on-med-and-down">
+					<li><a href="{{ url_for('catalog.category_list') }}">Categories</a></li>
+					<li>
+						<a href="{{ url_for('users.basket_list') }}">
+							<i class="tiny material-icons">shopping_cart</i>
+						</a>
+					</li>
+					<li><a href="{{ url_for('users.user_login') }}" class="btn-small white green-text">Login</a></li>
+					<li><a href="{{ url_for('users.register') }}">Create account</a></li>
+				</ul>
 				</div>
-    		</div>
+    		</div>	
     	</nav>
 
     <!-- Sidenav -->
@@ -50,9 +50,11 @@
     <!-- Main content -->
     <div class="container">
     	<section class="section">
+    		<!--
     		<div class="card-panel center-align">
 				Success message here	
     		</div>
+    		-->
         	{% block body %}{% endblock %}
         </section>
     </div>
