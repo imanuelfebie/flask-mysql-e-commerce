@@ -49,11 +49,6 @@ def product_create():
             form.stock.data,
             form.price.data,
             form.available.data,
-<<<<<<< HEAD
-            form.category.data,
-=======
-            cvalue
->>>>>>> 411e3bff3b32c55a2b4fb46b197b0d9dc5342f2d
             )
         product.create_object()
 
