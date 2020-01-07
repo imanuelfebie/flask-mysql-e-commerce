@@ -36,7 +36,6 @@ def product_list():
 def product_create():
     form = ProductCreateForm()
     category_list = Category.objects_all()
-    cvalue = ""
 
     if request.method == "POST":
         cvalue = request.form['cvalue']
@@ -48,12 +47,7 @@ def product_create():
             form.description.data,
             form.stock.data,
             form.price.data,
-            form.available.data,
-<<<<<<< HEAD
-            form.category.data,
-=======
-            cvalue
->>>>>>> 411e3bff3b32c55a2b4fb46b197b0d9dc5342f2d
+            form.available.data
             )
         product.create_object()
 

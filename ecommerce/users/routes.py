@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, session, redirect, url_for, flash, g
-from flask_login import login_user
+#from flask_login import login_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from .forms import UserRegistrationForm, AdminLogin, StoreRegistrationForm, UserLoginForm
+from ecommerce.users.forms import UserRegistrationForm, AdminLogin, StoreRegistrationForm, UserLoginForm, AddressCreateForm
 from ecommerce.users.models import User, Store
 #from ecommerce import mysql, login_manager
 from ecommerce.catalog.models import Basket,Total
@@ -80,6 +80,17 @@ def register():
 
     return render_template('register.html', form=form)
 
+@users.route('/address-form', methods=['POST', 'GET'])
+def update_address():
+    form = AddressCreateForm()
+    msg = None
+    
+    if form.validate_on_submit():
+            
+    
+        return redirect(url_for('users.update_address')) 
+    
+
 @users.route('/dashboard')
 def user_dashboard():
     '''User account dashboard'''
@@ -104,14 +115,15 @@ def storeRegister():
                 form.name.data,
                 form.about.data,
                 form.address.data,
+                int(g.user['user_id'])
                 )
         store.create_object()
+        flash('Congrats! {} has been created.')
+        return redirect(url_for('users.store_dashboard'))
 
-        print('Success')
-    
     return render_template('store_registration.html', form=form)
 
-@users.route('/store-dashoard')
+@users.route('/store-dashboard')
 def store_dashboard():
     return render_template('store_dashboard.html')
 

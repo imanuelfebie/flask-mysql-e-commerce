@@ -4,6 +4,7 @@
 
 <div class="row">
 	<!-- Loop through the product objects and display them -->
+	{% if product_list %}
 	{% for product in product_list %}
 	<div class="col s4">
 		<div class="card">
@@ -25,5 +26,8 @@
 		</div>
 	</div>
 	{% endfor %}
+	{% else %}
+		<p class="center-align">Wow, such empty!</p>
+	{% endif %}
 </div>
 {% endblock body %}
