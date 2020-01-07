@@ -35,3 +35,16 @@ class User:
             %s, %s, %s, %s
         )''', (self.email, self.firstname, self.lastname, self.password))
         mysql.connect.commit()
+
+    @classmethod
+    def get(cls, id):
+        '''Retrieve the user object by id'''
+        mysql.reconnect()
+        mysql.cursor.execute("SELECT * FROM user WHERE user_id = {}".format(int(id)))
+        return mysql.cursor.fetchone()
+
+    @staticmethod
+    def filter_by(email):
+        mysql.reconnect()
+        user = mysql.cursor.execute('''SELECT * FROM user WHERE email LIKE (%s)''', (email))
+        return user

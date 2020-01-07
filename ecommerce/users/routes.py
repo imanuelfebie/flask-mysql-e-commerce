@@ -1,21 +1,38 @@
-from flask import Blueprint, render_template
-from .forms import UserRegistrationForm, AdminLogin
+from flask import Blueprint, render_template, session, redirect, url_for
+from werkzeug.security import generate_password_hash, check_password_hash
+from .forms import UserRegistrationForm, UserLoginForm, AdminLogin
 from ecommerce.users.models import User
 from ecommerce import mysql, login_manager
 
 users = Blueprint('users', __name__)
 
-#def load_user(user_id):
-
+@login_manager.user_loader
+def load_user(user_id):
+    return User.get(user_id)
 
 @users.route('/admin-login', methods=['GET', 'POST'])
 def admin_login():
+    '''Admin login page'''
     form = AdminLogin()
 
     return render_template('admin_login.html', form=form)
 
+@users.route('/login', methods=['GET', 'POST'])
+def user_login():
+    '''User login'''
+    form = UserLoginForm()
+
+    if form.validate_on_submit():
+        user = User.filter_by(form.email.data)
+        print(type(user))
+        return redirect(url_for('users.user_dashboard'))
+
+    return render_template('login.html', form=form)
+
+
 @users.route('/register', methods=['POST', 'GET'])
 def register():
+    '''User registration page'''
     form = UserRegistrationForm()
 
     if form.validate_on_submit():
@@ -23,21 +40,21 @@ def register():
                 form.email.data,
                 form.firstname.data,
                 form.lastname.data,
-                form.password1.data
+                generate_password_hash(form.password1.data, method='sha256')
                 )
-        user.create_object()
+        user.create_object()   
+        return render_template('index.html')
 
-        print('Success')
-        print(form.firstname.data)
-        print(form.lastname.data)
-        print(form.email.data)
-        print(form.password1.data)
-        print(form.password2.data)
-    
     return render_template('register.html', form=form)
 
-@users.route('/login')
-def login():
-	form = UserRegistrationForm()
+@users.route('/dashboard')
+def user_dashboard():
+    '''User account dashboard'''
+    user = User.get(11)    
 
-	return render_template('login.html', form=form)
+    return render_template('user_dashboard.html', user=user)
+
+
+
+
+

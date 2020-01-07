@@ -8,6 +8,12 @@ class AdminLogin(FlaskForm):
     password = PasswordField('password', validators=[DataRequired])
     login = SubmitField('Login')
 
+class UserLoginForm(FlaskForm):
+    '''Form for a user to authenticate'''
+    email = StringField('email', validators=[DataRequired(), Email()])
+    password = PasswordField('password', validators=[DataRequired()])
+    login = SubmitField('Login')
+
 
 class UserRegistrationForm(FlaskForm):
     '''Fields for new user registration'''

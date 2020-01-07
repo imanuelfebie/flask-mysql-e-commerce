@@ -32,7 +32,7 @@
 								<i class="tiny material-icons">shopping_cart</i>
 							</a>
 						</li>
-						<li><a href="{{ url_for('users.login') }}" class="btn-small white green-text">Login</a></li>
+						<li><a href="{{ url_for('users.user_login') }}" class="btn-small white green-text">Login</a></li>
 						<li><a href="{{ url_for('users.register') }}">Create account</a></li>
 					</ul>
 				</div>
@@ -50,9 +50,11 @@
     <!-- Main content -->
     <div class="container">
     	<section class="section">
+    		<!--
     		<div class="card-panel center-align">
 				Success message here	
     		</div>
+    		-->
         	{% block body %}{% endblock %}
         </section>
     </div>

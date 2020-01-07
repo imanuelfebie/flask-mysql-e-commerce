@@ -1,37 +1,29 @@
 {% extends 'base.html' %}
 
-{% block title %}Register user{% endblock %}
+{% block title %}Login{% endblock %}
 
 {% block body %}
-<div class="row">
-</div>
-<div class="row">
-</div>
-<div class="row">
-</div>
-<div class="row">
-</div>
+<div class="section">
 <div class="row">
 	<div class="card col s8 offset-s2">
 		<div class="card-content" align="center">
 			<span class="card-title center-align">Login</span>
-			<form action="" method="post" class="">
+			<form action="" method="POST" class="">
 				{{ form.hidden_tag() }}
-				<!-- firstname & lastname input fields -->
-					<div class="input-field">
-						{{ form.email(class='validate') }}
-						{{ form.email.label() }}
-					</div>
-					<div class="input-field">
-						{{ form.password1(class="validate") }}
-						{{ form.password1.label() }}
-					</div>
-					<div class="input-field">
-						{{ form.login(class="btn green") }}
-					</div>
+				<div class="input-field">
+					{{ form.email(class='validate') }}
+					{{ form.email.label() }}
+				</div>
+				<div class="input-field">
+					{{ form.password(class="validate") }}
+					{{ form.password.label() }}
+				</div>
+				<div class="input-field">
+					{{ form.login(class="btn green") }}
+				</div>
 			</form>
 		</div>
 	</div>
 </div>
-
+</div>
 {% endblock body %}
