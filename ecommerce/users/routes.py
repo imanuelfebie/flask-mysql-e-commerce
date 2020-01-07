@@ -78,3 +78,8 @@ def storeRegister():
         print('Success')
     
     return render_template('store_registration.html', form=form)
+
+@users.route('/store-dashboard')
+def store_dashboard():
+    return render_template('store_dashboard.html')
+
