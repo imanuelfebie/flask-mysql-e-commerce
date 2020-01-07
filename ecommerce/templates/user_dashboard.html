@@ -5,12 +5,37 @@
 {% block body %}
 <div class="row">
 	<div class="col s4">
-		<div class="collection with-header">
+		<div class="collection with-header z-depth-1">
 			<div class="collection-header"><h4>Dasboard</h4></div>
+			<a href="" class="collection-item">Update profile</a>
 			<a href="{{ url_for('users.storeRegister') }}" class="collection-item">Seller Account</a>
 			<a href="" class="collection-item">Purchase History</a>
 			<a href="" class="collection-item">Basket</a>
 		</div>	
+	</div>
+	<div class="col s8">
+		<div class="card">
+			<div class="card-content">
+				<span class="card-title">Profile</span>
+				<div class="row">
+					<div class="col s4">
+						<p>Name</p>
+						<p>Email</p>
+						<p>Address</p>
+					</div>
+					<div class="col s8">
+						<p>{{ g.user.firstname }} {{ g.user.lastname }}</p>
+						<p>{{ g.user.email }}</p>
+						{% if g.user.address %}
+							<p>{{ g.user.address }}</p>
+						{% else %}
+							<p>Unknown</p>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+		
 	</div>
 </div>
 {% endblock body %}

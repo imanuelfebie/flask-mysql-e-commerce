@@ -32,8 +32,12 @@
 							<i class="tiny material-icons">shopping_cart</i>
 						</a>
 					</li>
-					<li><a href="{{ url_for('users.user_login') }}" class="btn-small white green-text">Login</a></li>
+					{% if not g.user %}
+					<li><a href="{{ url_for('users.user_login') }}" class="btn-small waves-effect waves-dark white green-text">Login</a></li>
 					<li><a href="{{ url_for('users.register') }}">Create account</a></li>
+					{% else %}
+					<li><a href="{{ url_for('users.logout') }}" class="btn-small waves-effect waves-dark white green-text">Logout</a></li>
+					{% endif %}
 				</ul>
 				</div>
     		</div>	
@@ -50,11 +54,13 @@
     <!-- Main content -->
     <div class="container">
     	<section class="section">
-    		<!--
-    		<div class="card-panel center-align">
-				Success message here	
-    		</div>
-    		-->
+    		{% with messages = get_flashed_messages() %}
+    			{% if messages %}
+    				{% for message in messages %}
+    				<p class="center-align">{{ message }}</p>	
+    				{% endfor %}
+    			{% endif %}
+    		{% endwith %}
         	{% block body %}{% endblock %}
         </section>
     </div>
@@ -64,7 +70,7 @@
     	<div class="container">
 			<div class="footer-copyright green">
     			@ 2020
-    			<a href="{{ url_for('users.admin_login') }}" class="white-text right">Admin</a>
+    			<a href="" class="white-text right">Admin</a>
     		</div>
     	</div>
     </footer>
