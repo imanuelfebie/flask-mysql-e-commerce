@@ -49,3 +49,20 @@ def basket_list():
     total_price= Basket.total_price()
 
     return render_template('index.html', basket_list=basket_list, total_price=total_price)
+
+@users.route('/store-register', methods=['POST', 'GET'])
+def storeRegister():
+    form = StoreRegistrationForm()
+
+    if form.validate_on_submit():
+        store = Store(
+                form.name.data,
+                form.about.data,
+                form.address.data,
+                )
+        store.create_object()
+
+        print('Success')
+    
+    return render_template('store_registration.html', form=form)
+
