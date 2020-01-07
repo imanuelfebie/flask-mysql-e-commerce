@@ -55,6 +55,7 @@ class Basket:
 
     def objects_all():
         mysql.reconnect()
+        mysql.cursor.execute("update order_item as o inner join product as p on o.product_id=p.product_id set o.total_price = p.price * o.quantity")
         mysql.cursor.execute("SELECT * FROM basket join order_item join product where basket.order_item_id=order_item.order_item_id and order_item.product_id=product.product_id")
         result = mysql.cursor.fetchall()
         return result
