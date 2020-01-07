@@ -44,12 +44,13 @@ class Product:
         return result
 
 class Basket:
-    def __init__(self, name, description, stock, price, category_id):
+    def __init__(self, name, description, stock, price, category_id,quantity):
         self.name = name
         self.description = description
         self.stock = stock
         self.price = price
         self.category_id = category_id
+        self.quantity=quantity
         #self.available = True
 
     def objects_all():
@@ -58,8 +59,12 @@ class Basket:
         result = mysql.cursor.fetchall()
         return result
 
+class Total:
+    def __init__(self, total):
+        self.total= total
+
     def total_price():
         mysql.reconnect()
-        mysql.cursor.execute("SELECT sum(total_price) from basket join order_item on basket.order_item_id=order_item.order_item_id")
+        mysql.cursor.execute("SELECT sum(total_price) as total from basket join order_item on basket.order_item_id=order_item.order_item_id")
         result=mysql.cursor.fetchall()
         return result

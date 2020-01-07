@@ -3,7 +3,7 @@
 {% block title %}Basket{% endblock %}
 
 {% block body %}
-<h4>Products</h4>
+<h4>Basket</h4>
 <div class="row">
 	{% for basket in basket_list %}
 	<div class="col s4">
@@ -17,18 +17,21 @@
 			</div>
 			<div class="card-action">
 				<a href="">$ {{ basket.price }}</a>
+				<a href="">Quantity:{{ basket.quantity }}</a>
 			</div>
-		</div>
-		<div class="card-action center-align">
-			Price:
-				<span class="card-title">{{ total_price }}</span>
-				<a href="#" class="green-text">Pay</a>
 		</div>
 	</div>
 	{% endfor %}
 </div>
-
-
-
-
+{% for price in total_price %}
+	<div id="footer">
+        <div id="center">
+            <div class="card-action center-align">			
+			Price:$
+				<span class="card-title">{{ price.total }}</span>
+				<a href="#" class="green-text">Pay</a>
+			</div>
+        </div>
+    </div>
+	{% endfor %}
 {% endblock body %}
