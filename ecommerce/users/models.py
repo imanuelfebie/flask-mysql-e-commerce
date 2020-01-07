@@ -35,3 +35,22 @@ class User:
             %s, %s, %s, %s
         )''', (self.email, self.firstname, self.lastname, self.password))
         mysql.connect.commit()
+        
+class Store:
+
+    def __init__(self, name, about, address):
+        self.name = name
+        self.about = about
+        self.address = address
+
+    def __repr__(self):
+            '''String representation of the Store object'''
+            return f'{self.name}'
+
+    def create_object(self):
+        mysql.reconnect()
+        mysql.cursor.execute('''INSERT INTO store (name, about, address) VALUES (
+            %s, %s, %s
+        )''', (self.name, self.about, self.address))
+        mysql.connect.commit()
+    
