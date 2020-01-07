@@ -41,6 +41,13 @@ class Product:
         result = mysql.cursor.fetchall()
         return result
 
+    def create_object(self):
+        mysql.reconnect()
+        mysql.cursor.execute('''INSERT INTO product (name, description, stock, price, available, category_id) VALUES (
+            %s, %s, %s, %s, %s, %s
+        )''', (self.name, self.description, self.stock, self.price, self.available, self.category_id))
+        mysql.connect.commit()
+
 class Basket:
     def __init__(self, name, description, stock, price, category_id,quantity):
         self.name = name
@@ -65,5 +72,15 @@ class Total:
     def total_price():
         mysql.reconnect()
         mysql.cursor.execute("SELECT sum(total_price) as total from basket join order_item on basket.order_item_id=order_item.order_item_id")
+        result=mysql.cursor.fetchall()
+        return result
+
+class Payment:
+    def __init__(self,name):
+        self.name=name
+
+    def payment_method():
+        mysql.reconnect()
+        mysql.cursor.execute("SELECT * from payment_method")
         result=mysql.cursor.fetchall()
         return result

@@ -4,7 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from .forms import UserRegistrationForm, AdminLogin, StoreRegistrationForm, UserLoginForm
 from ecommerce.users.models import User, Store
 #from ecommerce import mysql, login_manager
-from ecommerce.catalog.models import Basket,Total
+from ecommerce.catalog.models import Basket,Total,Payment
 
 users = Blueprint('users', __name__)
 
@@ -94,6 +94,12 @@ def basket_list():
     total_price= Total.total_price()
 
     return render_template('basket_list.html', basket_list=basket_list, total_price=total_price)
+
+@users.route('/payment')
+def payment():
+    payment=Payment.payment_method()
+
+    return render_template('payment.html', payment=payment)
 
 @users.route('/store-register', methods=['POST', 'GET'])
 def storeRegister():
