@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from ecommerce.users.forms import UserRegistrationForm, AdminLogin, StoreRegistrationForm, UserLoginForm, AddressCreateForm
 from ecommerce.users.models import User, Store
 #from ecommerce import mysql, login_manager
+from ecommerce import mysql
 from ecommerce.catalog.models import Basket,Total,Payment
 
 users = Blueprint('users', __name__)
@@ -116,6 +117,7 @@ def payment():
 def storeRegister():
     form = StoreRegistrationForm()
 
+    print(g.user)
     if form.validate_on_submit():
         store = Store(
                 form.name.data,
@@ -125,11 +127,14 @@ def storeRegister():
                 )
         store.create_object()
         flash('Congrats! {} has been created.')
+        mysql.reconnect()
+        mysql.cursor.execute("update user join store on user.user_id=store.user_id set user.store_id=store.store_id")
         return redirect(url_for('users.store_dashboard'))
 
     return render_template('store_registration.html', form=form)
 
 @users.route('/store-dashboard')
 def store_dashboard():
+    print(g.user)
     return render_template('store_dashboard.html')
 

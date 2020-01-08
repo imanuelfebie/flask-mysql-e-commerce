@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,7 +22,7 @@
     	<nav class="nav-extended">
     		<div class="nav-wrapper green">
     			<div class="container">
-				<a href="{{ url_for('main.index') }}" class="brand-logo">Bahanapedia</a>
+				<a href="{{ url_for('main.index') }}" class="brand-logo">E-Commerce</a>
 				<a href="" data-target="sidenav-links" class="sidenav-trigger">
 					<i class="material-icons">menu</i>
 				</a>
@@ -33,10 +34,12 @@
 						</a>
 					</li>
 					{% if not g.user %}
-					<li><a href="{{ url_for('users.user_login') }}" class="btn-small waves-effect waves-dark white green-text">Login</a></li>
-					<li><a href="{{ url_for('users.register') }}">Create account</a></li>
+						<li><a href="{{ url_for('users.user_login') }}" class="btn-small waves-effect waves-dark white green-text">Login</a></li>
+						<li><a href="{{ url_for('users.register') }}">Create account</a></li>
 					{% else %}
-					<li><a href="{{ url_for('users.logout') }}" class="btn-small waves-effect waves-dark white green-text">Logout</a></li>
+						<li><a href="{{ url_for('users.logout') }}" class="btn-small waves-effect waves-dark white green-text">Logout</a></li>
+						<li><a href="">Account</a></li>
+
 					{% endif %}
 				</ul>
 				</div>
