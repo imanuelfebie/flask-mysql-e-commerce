@@ -14,7 +14,7 @@ def before_request():
 @main.route('/')
 def index():
     # retrieve all product objects from the databse
-    cursor = mysql.connect.cursor()
+    cursor = mysql.connect().cursor()
     cursor.execute('SELECT * FROM product')
     product_list = cursor.fetchall()
     # close cursor
