@@ -1,5 +1,7 @@
 # Flask E-Commerce sollution
 
+Live preview [here](https://flaskdb-store.herokuapp.com/).
+
 #### Contributors
 - Adriel Soengadi
 - Ikhsan Maulana
