@@ -17,7 +17,9 @@ login_manager = LoginManager(app)
 from ecommerce.main.routes import main
 from ecommerce.users.routes import users
 from ecommerce.catalog.routes import catalog
+from ecommerce.store.routes import store
 
 app.register_blueprint(main)
 app.register_blueprint(users)
 app.register_blueprint(catalog)
+app.register_blueprint(store)

@@ -5,15 +5,19 @@
 {% block body_class %}blue-grey darken-2{% endblock body_class %}
 
 {% block body %}
-<h5 class="center-align white-text"><a href="{{ url_for('main.index') }}" class="white-text">Brand</a></h5>
+<h5 class="center-align white-text">
+	<a href="{{ url_for('main.index') }}" class="white-text">
+		<i class="material-icons large">shop</i>
+	</a>
+</h5>
 <div class="row">
 	<div class="col l6 offset-l3 s10 offset-s1">
 		<div class="section">
-		<div class="card bounce">
+		<div class="card animated bounce">
 			<div class="card-content center-align">
 				<span class="card-title bounce">Login</span>
 				<form action="" method="POST">
-					{{ form.csrf_toke }}
+					{{ form.csrf_token }}
 					<div class="input-field">
 						{{ form.email(class="validate") }}
 						{{ form.email.label() }}
@@ -28,35 +32,12 @@
 				</form>
 			</div>
 			<div class="card-action center-align">
-				<p class="">No account yet? <a href="{{ url_for('users.register') }}" class="blue-grey darken-2">Register</a></p>
+				<p class="">No account yet? <a href="{{ url_for('users.register') }}" class="blue-grey-text darken-2">Register</a></p>
 			</div>
 		</div>
 		</div>
 	</div>
 </div>
-<!--
-<div class="row">
-	<div class="card col s8 offset-s2">
-		<div class="card-content" align="center">
-			<span class="card-title center-align">Login</span>
-			<form action="" method="POST" class="">
-				{{ form.hidden_tag() }}
-				<div class="input-field">
-					{{ form.email(class='validate') }}
-					{{ form.email.label() }}
-				</div>
-				<div class="input-field">
-					{{ form.password(class="validate") }}
-					{{ form.password.label() }}
-				</div>
-				<div class="input-field">
-					{{ form.login(class="btn ") }}
-				</div>
-			</form>
-		</div>
-	</div>
-</div>
--->
 </div>
 {% endblock body %}
 

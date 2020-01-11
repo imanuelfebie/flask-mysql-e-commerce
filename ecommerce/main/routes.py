@@ -1,6 +1,4 @@
 from flask import Blueprint, render_template, session, g
-from ecommerce.catalog.models import Product
-from ecommerce.catalog.models import Basket
 from ecommerce import mysql
 
 main = Blueprint('main', __name__)

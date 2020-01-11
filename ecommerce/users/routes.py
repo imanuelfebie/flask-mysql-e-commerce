@@ -1,11 +1,8 @@
 from flask import Blueprint, render_template, session, redirect, url_for, flash, g
-#from flask_login import login_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from ecommerce.users.forms import UserRegistrationForm, AdminLogin, StoreRegistrationForm, UserLoginForm, AddressCreateForm
-from ecommerce.users.models import User, Store
-#from ecommerce import mysql, login_manager
+from ecommerce.users.forms import UserRegistrationForm, UserLoginForm, AddressCreateForm
+
 from ecommerce import mysql
-from ecommerce.catalog.models import Basket,Total,Payment
 
 users = Blueprint('users', __name__)
 
@@ -23,6 +20,7 @@ def before_request():
 
 @users.route('/login', methods=['GET', 'POST'])
 def user_login():
+    cursor = mysql.connect().cursor()
 
     if not g.user:
         form = UserLoginForm()
@@ -30,9 +28,9 @@ def user_login():
 
         if form.validate_on_submit():
             # retrieve user from the database where the email equals the input value
-            mysql.reconnect()
-            mysql.cursor.execute('SELECT * FROM user WHERE email LIKE (%s)', (form.email.data))
-            user = mysql.cursor.fetchone() 
+            cursor.execute('SELECT * FROM user WHERE email LIKE (%s)', (form.email.data))
+            # fetch retreived user
+            user = cursor.fetchone() 
             session.pop('user', None)
 
             if user is None:
@@ -46,6 +44,7 @@ def user_login():
             else:
                 # start new session with user, redirect to dashboard page
                 session['user'] = user
+                cursor.close()
                 return redirect(url_for('users.user_dashboard'))
 
             # display if any errors occur
@@ -62,11 +61,11 @@ def logout():
 @users.route('/register', methods=['POST', 'GET'])
 def register():
     form = UserRegistrationForm()
+    cursor = mysql.connect().cursor()
 
     if form.validate_on_submit():
         # insert new user object into user
-        mysql.reconnect()
-        mysql.cursor.execute('INSERT INTO user (firstname, lastname, email, password) VALUES (%s, %s, %s, %s)', (
+        cursor.execute('INSERT INTO user (firstname, lastname, email, password) VALUES (%s, %s, %s, %s)', (
             form.firstname.data,
             form.lastname.data,
             form.email.data,
@@ -74,7 +73,8 @@ def register():
             ))
 
         # commit to db
-        mysql.connect.commit()
+        mysql.connect().commit()
+        cursor.close()
 
         flash('Awesome! You just created an account and can now login')
 
@@ -99,51 +99,8 @@ def user_dashboard():
         return redirect(url_for('users.user_login'))
     return render_template('user_dashboard.html')
     
-
-@users.route('/basket_list')
-def basket_list():
-    basket_list = Basket.objects_all()
-    total_price= Total.total_price()
-
-    return render_template('basket_list.html', basket_list=basket_list, total_price=total_price)
-
-@users.route('/payment')
-def payment():
-    payment=Payment.payment_method()
-
-    return render_template('payment.html', payment=payment)
-
-@users.route('/store/register', methods=['POST', 'GET'])
-def storeRegister():
-    form = StoreRegistrationForm()
-    print(g.user['user_id']) 
-    # retrieve user
-    # mysql.reconnect()
-    # mysql.cursor.execute('select * from user, store where user.id = store.id')
-    # user = mysql.cursor.fetchone()
-    
-    if form.validate_on_submit():
-        # insert store object into store table
-        mysql.reconnect()
-        mysql.cursor.execute('INSERT INTO store (user_id, name, about, address) VALUES (%s, %s, %s, %s)',
-                (int(g.user['user_id']),
-                form.name.data,
-                form.about.data,
-                form.address.data
-                ))
-
-        print(g.user['user_id'])
-        print(form.errors)
-        # commit changes to db
-        mysql.connect.commit()
-
-        # redirect to store overview
-        return redirect(url_for('users.store_dashboard'))
-
-    return render_template('store_registration.html', form=form)
-
-@users.route('/store-dashboard')
-def store_dashboard():
-    print(g.user)
-    return render_template('store_dashboard.html')
-
+#@users.route('/payment')
+#def payment():
+#    payment=Payment.payment_method()
+#
+#    return render_template('payment.html', payment=payment)

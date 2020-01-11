@@ -5,9 +5,13 @@
 {% block body_class %}blue-grey darken-2{% endblock body_class %}
 
 {% block body %}
-<h4 class="center-align"><a href="{{ url_for('main.index') }}" class="white-text">Store</a></h4>
+<h4 class="center-align">
+	<a href="{{ url_for('main.index') }}" class="white-text">
+		<i class="material-icons large">shop</i>
+	</a>
+</h4>
 <div class="row">
-	<div class="card col s12 animated bounce">
+	<div class="card col l6 offset-l3 s10 offsett-s1 animated bounce">
 		<div class="card-content">
 			<span class="card-title center-align">Register now</span>
 			<form action="" method="post" class="">
@@ -56,7 +60,7 @@
 						{{ form.password2.label() }}
 					</div>
 					<div class="input-field">
-						{{ form.submit(class="btn blue-grey darken-2") }}
+						{{ form.submit(class="btn blue-grey darken-2 right") }}
 					</div>
 			</form>
 		</div>

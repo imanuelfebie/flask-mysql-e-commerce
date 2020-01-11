@@ -1,8 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, IntegerField, BooleanField, DecimalField, SelectField
 from wtforms.validators import DataRequired, Length
-from ecommerce.catalog.models import Category, Product
-
 
 
 class CategoryCreateForm(FlaskForm):

@@ -40,14 +40,4 @@ class AddressCreateForm(FlaskForm):
     line2 = StringField('address 2') # not required field
     line3 = StringField('address 3') # not required field
     country = SelectField('country', validators=[DataRequired()])
-    submit = SubmitField('Submit')
-
-
-class StoreRegistrationForm(FlaskForm):
-    '''Form to create a store'''
-    name = StringField('name', validators=[DataRequired()])
-    about = TextAreaField('about')
-    address = StringField('address', validators=[DataRequired()])
-    submit = SubmitField('Register')
-
-    
+    submit = SubmitField('Submit')    
