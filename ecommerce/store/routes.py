@@ -15,8 +15,8 @@ def store_register():
     
     if form.validate_on_submit():
         # insert store object into store table
-        cursor.execute('INSERT INTO store (user_id, name, about, address) VALUES (%s, %s, %s, %s)',
-                (int(g.user['user_id']),
+        cursor.execute('INSERT INTO store (name, about, address) VALUES (%s, %s, %s, %s)',
+                (#(int(g.user['user_id']),
                 form.name.data,
                 form.about.data,
                 form.address.data
