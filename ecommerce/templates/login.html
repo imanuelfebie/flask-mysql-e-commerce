@@ -2,18 +2,18 @@
 {% block title %}Login{% endblock %}
 
 <!-- Change body background color to green -->
-{% block body_class %}green lighten-1{% endblock body_class %}
+{% block body_class %}blue-grey darken-2{% endblock body_class %}
 
 {% block body %}
 <h5 class="center-align white-text"><a href="{{ url_for('main.index') }}" class="white-text">Brand</a></h5>
 <div class="row">
-	<div class="col l6 offset-l3">
+	<div class="col l6 offset-l3 s10 offset-s1">
 		<div class="section">
 		<div class="card bounce">
 			<div class="card-content center-align">
 				<span class="card-title bounce">Login</span>
 				<form action="" method="POST">
-					{{ form.csrf_token }}
+					{{ form.csrf_toke }}
 					<div class="input-field">
 						{{ form.email(class="validate") }}
 						{{ form.email.label() }}
@@ -23,12 +23,12 @@
 						{{ form.password.label() }}
 					</div>
 					<div class="input-field">
-						{{ form.login(class="btn green lighten-1 white-text") }}
+						{{ form.login(class="btn blue-grey darken-2 white-text") }}
 					</div>
 				</form>
 			</div>
 			<div class="card-action center-align">
-				<p class="">No account yet? <a href="{{ url_for('users.register') }}" class="green-text lighten-1">Register</a></p>
+				<p class="">No account yet? <a href="{{ url_for('users.register') }}" class="blue-grey darken-2">Register</a></p>
 			</div>
 		</div>
 		</div>
@@ -50,7 +50,7 @@
 					{{ form.password.label() }}
 				</div>
 				<div class="input-field">
-					{{ form.login(class="btn green") }}
+					{{ form.login(class="btn ") }}
 				</div>
 			</form>
 		</div>

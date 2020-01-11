@@ -20,7 +20,7 @@ class Database:
                 db=db,
                 cursorclass=pymysql.cursors.DictCursor)  
 
-        self.cursor = self.connect.cursor()
+        #self.cursor = self.connect.cursor()
 
     def reconnect(self):
     	self.connect.ping(reconnect=True)

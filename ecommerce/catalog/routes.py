@@ -33,16 +33,22 @@ def category_create():
 @catalog.route('/categories')
 def category_list():
     # retrieve all category object from database
-    mysql.cursor.execute('SELECT * FROM category')
-    category_list = mysql.cursor.fetchall()
+    cursor = mysql.connect.cursor()
+    cursor.execute('SELECT * FROM category')
+    category_list = cursor.fetchall()
+    # close the cursor
+    cursor.close()
 
     return render_template('category_list.html', category_list=category_list)
 
 @catalog.route('/products')
 def product_list():
     # retrieve all product objects from database
-    mysql.cursor.execute('SELECT * FROM product')
-    product_list = mysql.cursor.fetchall()
+    cursor = mysql.connect.cursor()
+    cursor.execute('SELECT * FROM product')
+    product_list = cursor.fetchall()
+    # close the cursor
+    cursor.close()
     
     return render_template('product_list.html', product_list=product_list)
 
