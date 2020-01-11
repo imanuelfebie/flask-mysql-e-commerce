@@ -1,8 +1,10 @@
 {% extends 'base.html' %}
 
-{% block body %}
+{% include 'includes/navbar.html' %}
 
+{% block body %}
 <div class="row">
+
 	<!-- Loop through the product objects and display them -->
 	{% if product_list %}
 	{% for product in product_list %}

@@ -9,10 +9,6 @@ from ecommerce.catalog.models import Basket,Total,Payment
 
 users = Blueprint('users', __name__)
 
-#@login_manager.user_loader
-#def load_user(user_id):
-#    return User.get(user_id)
-
 @users.route('/getsession')
 def get_session():
     if 'user' in session:
@@ -29,33 +25,34 @@ def before_request():
 def user_login():
 
     if not g.user:
-        '''User login'''
         form = UserLoginForm()
         error = None
 
         if form.validate_on_submit():
-            user = User.filter_by(form.email.data)
+            # retrieve user from the database where the email equals the input value
+            mysql.reconnect()
+            mysql.cursor.execute('SELECT * FROM user WHERE email LIKE (%s)', (form.email.data))
+            user = mysql.cursor.fetchone() 
             session.pop('user', None)
+
             if user is None:
+                # checks if user exists, if not display error message
                 error = 'User doesn\'t exist'
+            
             elif not check_password_hash(user['password'], form.password.data):
+                # checks if password matches when user exists, if not displays error message
                 error = 'Please insert correct username and password'
+            
             else:
-                #login_user(user)
-                # print(session['user'])
+                # start new session with user, redirect to dashboard page
                 session['user'] = user
-                #user['is_authenticated'] = True
                 return redirect(url_for('users.user_dashboard'))
 
+            # display if any errors occur
             flash(error)
 
-        return render_template('login.html', form=form)
-    else:
-        return redirect(url_for('users.user_dashboard'))
-
-
-#session.pop('user', None)
-
+    return render_template('login.html', form=form)
+    
 @users.route('/logout')
 def logout():
     session.pop('user', None)
@@ -64,19 +61,23 @@ def logout():
 
 @users.route('/register', methods=['POST', 'GET'])
 def register():
-    '''User registration page'''
     form = UserRegistrationForm()
-    message = None
 
     if form.validate_on_submit():
-        user = User(
-                form.email.data,
-                form.firstname.data,
-                form.lastname.data,
-                generate_password_hash(form.password1.data)
-                )
-        user.create_object()   
+        # insert new user object into user
+        mysql.reconnect()
+        mysql.cursor.execute('INSERT INTO user (firstname, lastname, email, password) VALUES (%s, %s, %s, %s)', (
+            form.firstname.data,
+            form.lastname.data,
+            form.email.data,
+            generate_password_hash(form.password1.data)
+            ))
+
+        # commit to db
+        mysql.connect.commit()
+
         flash('Awesome! You just created an account and can now login')
+
         return redirect(url_for('users.user_login'))
 
     return render_template('register.html', form=form)
@@ -84,12 +85,11 @@ def register():
 @users.route('/address-form', methods=['POST', 'GET'])
 def update_address():
     form = AddressCreateForm()
-    msg = None
+
+    #if form.validate_on_submit():
+     
     
-    if form.validate_on_submit():
-            
-    
-        return redirect(url_for('users.update_address')) 
+    return redirect(url_for('users.update_address')) 
     
 
 @users.route('/dashboard')
@@ -113,22 +113,31 @@ def payment():
 
     return render_template('payment.html', payment=payment)
 
-@users.route('/store-register', methods=['POST', 'GET'])
+@users.route('/store/register', methods=['POST', 'GET'])
 def storeRegister():
     form = StoreRegistrationForm()
-
-    print(g.user)
+    print(g.user['user_id']) 
+    # retrieve user
+    # mysql.reconnect()
+    # mysql.cursor.execute('select * from user, store where user.id = store.id')
+    # user = mysql.cursor.fetchone()
+    
     if form.validate_on_submit():
-        store = Store(
+        # insert store object into store table
+        mysql.reconnect()
+        mysql.cursor.execute('INSERT INTO store (user_id, name, about, address) VALUES (%s, %s, %s, %s)',
+                (int(g.user['user_id']),
                 form.name.data,
                 form.about.data,
-                form.address.data,
-                int(g.user['user_id'])
-                )
-        store.create_object()
-        flash('Congrats! {} has been created.')
-        mysql.reconnect()
-        mysql.cursor.execute("update user join store on user.user_id=store.user_id set user.store_id=store.store_id")
+                form.address.data
+                ))
+
+        print(g.user['user_id'])
+        print(form.errors)
+        # commit changes to db
+        mysql.connect.commit()
+
+        # redirect to store overview
         return redirect(url_for('users.store_dashboard'))
 
     return render_template('store_registration.html', form=form)

@@ -1,9 +1,40 @@
 {% extends 'base.html' %}
-
 {% block title %}Login{% endblock %}
 
+<!-- Change body background color to green -->
+{% block body_class %}green lighten-1{% endblock body_class %}
+
 {% block body %}
-<div class="section">
+<h5 class="center-align white-text"><a href="{{ url_for('main.index') }}" class="white-text">Brand</a></h5>
+<div class="row">
+	<div class="col l6 offset-l3">
+		<div class="section">
+		<div class="card bounce">
+			<div class="card-content center-align">
+				<span class="card-title bounce">Login</span>
+				<form action="" method="POST">
+					{{ form.csrf_token }}
+					<div class="input-field">
+						{{ form.email(class="validate") }}
+						{{ form.email.label() }}
+					</div>
+					<div class="input-field">
+						{{ form.password(class="validate") }}
+						{{ form.password.label() }}
+					</div>
+					<div class="input-field">
+						{{ form.login(class="btn green lighten-1 white-text") }}
+					</div>
+				</form>
+			</div>
+			<div class="card-action center-align">
+				<p class="">No account yet? <a href="{{ url_for('users.register') }}" class="green-text lighten-1">Register</a></p>
+			</div>
+		</div>
+		</div>
+	</div>
+</div>
+<!--
 <div class="row">
 	<div class="card col s8 offset-s2">
 		<div class="card-content" align="center">
@@ -25,5 +56,7 @@
 		</div>
 	</div>
 </div>
+-->
 </div>
 {% endblock body %}
+

@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, SelectField, PasswordField, SubmitField, BooleanField, TextAreaField
+from wtforms import (StringField, IntegerField, SelectField, PasswordField, SubmitField, 
+        BooleanField, TextAreaField, HiddenField)
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 
 
@@ -47,7 +48,6 @@ class StoreRegistrationForm(FlaskForm):
     name = StringField('name', validators=[DataRequired()])
     about = TextAreaField('about')
     address = StringField('address', validators=[DataRequired()])
-    user_id = IntegerField('user_id')
     submit = SubmitField('Register')
 
     

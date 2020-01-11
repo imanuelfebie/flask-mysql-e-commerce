@@ -8,7 +8,7 @@ load_dotenv()
 class Database:
 
     def __init__(self):
-        host = os.environ.get('CLEARDB_DATABASE_URL')
+        host = os.getenv('CLEARDB_DATABASE_URL')
         user = os.getenv('CLEARDB_USERNAME')
         password = os.getenv('CLEARDB_PASSWORD')
         db = os.getenv('CLEARDB_DATABASE')

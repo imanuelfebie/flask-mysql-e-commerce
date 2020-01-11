@@ -2,7 +2,12 @@
 
 {% block title %}Register store{% endblock %}
 
+{% block body_class %}green lighten-1{% endblock body_class %}
+
 {% block body %}
+<div class="center-align">
+	<h4><a href="{{ url_for('users.user_dashboard') }}" class="white-text">Dashboard</a></h4>
+</div>
 <div class="row">
 	<div class="card col s12">
 		<div class="card-content">
@@ -10,20 +15,24 @@
 			<form action="" method="post" class="">
 				{{ form.hidden_tag() }}
 				<div class="row">
+					<!-- Store name input -->
 					<div class="input-field">
 						{{ form.name(class="validate")}}
 						{{ form.name.label() }}
 					</div>
+					<!-- Store description input -->
 					<div class="input-field">
 						{{ form.about(class="materialize-textarea") }}
 						{{ form.about.label() }}
 					</div>
+					<!-- Store address input -->
 					<div class="input-field">
 						{{ form.address(class='validate') }}
 						{{ form.address.label() }}
 					</div>
+
 					<div class="input-field">
-						{{ form.submit(class="btn green") }}
+						{{ form.submit(class="btn green white-text") }}
 					</div>
 			</form>
 		</div>
