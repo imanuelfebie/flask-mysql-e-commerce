@@ -54,10 +54,12 @@ def product_create():
     # retrieve all categories from db
     cursor = mysql.connect().cursor()
     category_list = cursor.execute("SELECT * FROM category")
+    mysql.connect().close()
 
     if g.user:            
         if form.validate_on_submit():
             # Insert form data into db
+            #cursor = mysql.connect().close()
             cursor.execute('''
                     INSERT INTO product (name, description, stock, price, available, category, store_id)
                     VALUES (%s, %s, %s, %s, %s, %s, %s)

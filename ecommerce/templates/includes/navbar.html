@@ -9,7 +9,7 @@
 			</a>
 			<ul class="right hide-on-med-and-down">
 				<li><a href="{{ url_for('catalog.category_list') }}">Categories</a></li>
-				<li><a href=""><i class="material-icons">shopping_cart</i></a></li>
+				<li><a href="{{ url_for('cart.shopping_cart') }}"><i class="material-icons">shopping_cart</i></a></li>
 				{% if not g.user %}
 				<li><a href="{{ url_for('users.user_login') }}" class="btn-small waves-effect waves-dark white green-text">Login</a></li>
 				<li><a href="{{ url_for('users.register') }}">Create account</a></li>

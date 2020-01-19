@@ -3,6 +3,10 @@ from ecommerce import mysql
 
 main = Blueprint('main', __name__)
 
+@main.route('/debug-sentry')
+def trigger_error():
+    division_by_zero = 1 / 0
+
 @main.before_request
 def before_request():
     g.user = None
