@@ -1,5 +1,5 @@
 from flask import session
-from ecommerce import mysql
+from ecommerce.db import Database as db
 
 class Cart:
 

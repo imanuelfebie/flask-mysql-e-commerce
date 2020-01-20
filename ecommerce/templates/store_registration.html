@@ -6,7 +6,7 @@
 
 {% block body %}
 <div class="center-align">
-	<h4><a href="{{ url_for('users.user_dashboard') }}" class="white-text">Dashboard</a></h4>
+	<h4><a href="{{ url_for('users.user_dashboard', id=g.user_id) }}" class="white-text">Dashboard</a></h4>
 </div>
 <div class="row">
 	<div class="card col s12">

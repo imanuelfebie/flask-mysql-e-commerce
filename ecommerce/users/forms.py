@@ -4,11 +4,6 @@ from wtforms import (StringField, IntegerField, SelectField, PasswordField, Subm
 from wtforms.validators import DataRequired, Length, Email, EqualTo
 
 
-class AdminLogin(FlaskForm):
-    username = StringField('username', validators=[DataRequired()])
-    password = PasswordField('password', validators=[DataRequired])
-    login = SubmitField('Login')
-
 class UserLoginForm(FlaskForm):
     '''Form for a user to authenticate'''
     email = StringField('email', validators=[DataRequired(), Email()])
@@ -28,10 +23,32 @@ class UserRegistrationForm(FlaskForm):
         DataRequired(),
         EqualTo('password1')])
     submit = SubmitField('Register')
-    login = SubmitField('Login')
 
     # Need to add username validation - Checking wether user already exist or not
     # both username and email
+
+
+class AddressRegisterForm(FlaskForm):
+    '''Register the user address'''
+    line1 = StringField('address 1', validators=[DataRequired()])
+    line2 = StringField('address 2') # not required field
+    line3 = StringField('address 3') # not required field
+    city = SelectField('city', coerce=int)
+    country = SelectField('country', choices=[])
+    postal_code = StringField('postal code', validators=[DataRequired()])
+    submit = SubmitField('Submit')    
+
+class UserUpdateForm(FlaskForm):
+    email = StringField('email', validators=[Email()])
+    firstname = StringField('firstname')
+    lastname = StringField('lastname')
+    submit = SubmitField('Update')
+
+
+class UserPasswordUpdateForm(FlaskForm):
+    new_password1 = PasswordField('new password', validators=[DataRequired()])
+    new_password2 = PasswordField('confirm new password', validators=[DataRequired(), EqualTo('new_password1')])
+    submit = SubmitField('Update')
 
 
 class AddressCreateForm(FlaskForm):
@@ -39,5 +56,7 @@ class AddressCreateForm(FlaskForm):
     line1 = StringField('address 1', validators=[DataRequired()])
     line2 = StringField('address 2') # not required field
     line3 = StringField('address 3') # not required field
-    country = SelectField('country', validators=[DataRequired()])
+    postal_code = StringField('postal code', validators=[DataRequired()])
+    country = StringField('country', validators=[DataRequired()])
+    user_id = HiddenField()
     submit = SubmitField('Submit')    

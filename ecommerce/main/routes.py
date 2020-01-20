@@ -1,11 +1,9 @@
+import pymysql
+
 from flask import Blueprint, render_template, session, g
-from ecommerce import mysql
+from ecommerce.db import Database as db
 
 main = Blueprint('main', __name__)
-
-@main.route('/debug-sentry')
-def trigger_error():
-    division_by_zero = 1 / 0
 
 @main.before_request
 def before_request():
@@ -15,13 +13,16 @@ def before_request():
 
 @main.route('/')
 def index():
-    # retrieve all product objects from the databse
-    cursor = mysql.connect().cursor()
-    cursor.execute('SELECT * FROM product')
-    product_list = cursor.fetchall()
-    # close cursor
-    cursor.close()
-
+    
+    with db.connection.cursor() as cursor:
+        try: 
+            cursor.execute("SELECT * FROM product")
+            product_list = cursor.fetchall()
+        except (pymysql.OperationalError):
+            db.reconnect()
+            cursor.execute("SELECT * FROM product")
+            product_list = cursor.fetchall()
+    
     return render_template('index.html', product_list=product_list)
 
 

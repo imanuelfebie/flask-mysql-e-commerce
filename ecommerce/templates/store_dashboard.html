@@ -2,14 +2,33 @@
 
 {% block title %}{% endblock title %}
 
+{% include 'includes/navbar.html' %}
+
 {% block body %}
 <div class="row">
-	<div class="col s4">
-		<div class="collection with-header">
-			<div class="collection-header"><h4>My Store</h4></div>
-			<a href="" class="collection-item">Products</a>
-			<a href="{{ url_for('catalog.product_create') }}" class="collection-item">New Product</a>
+	<!-- Store Details -->
+	<div class="col s12">
+		<div class="card-panel">
+			<div class="row valign-wrapper">
+				<div class="col s3">
+				</div>
+				<div class="col s9">
+					<h4>{{ object.name }}</h4>				
+					<small>Owned by {{ object.firstname }} {{ object.lastname }}</small>
+				</div>
+			</div>
 		</div>
 	</div>
+
+	<!-- Products -->
+
+</div>
+
+<div class="fixed-action-btn">
+	<a href="" class="btn-floating btn-large red">
+		<i class="large material-icons">mode_edit</i>
+	<ul>
+		<li><a href="" class="btn-floating red">insert_chart</a></li>
+	</ul>
 </div>
 {% endblock body %}

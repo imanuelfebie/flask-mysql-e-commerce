@@ -1,16 +1,12 @@
 import sentry_sdk
 from sentry_sdk.integrations.flask import FlaskIntegration
 from flask import Flask, request
-from ecommerce.db import Database
 
 # Flask object
 app = Flask(__name__) 
 
 # Secret key
 app.config['SECRET_KEY'] = '12345678' 
-
-# Database object
-mysql = Database()
 
 # Init sentry for flask
 sentry_sdk.init(

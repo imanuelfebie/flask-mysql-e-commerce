@@ -10,20 +10,25 @@
 			<ul class="right hide-on-med-and-down">
 				<li><a href="{{ url_for('catalog.category_list') }}">Categories</a></li>
 				<li><a href="{{ url_for('cart.shopping_cart') }}"><i class="material-icons">shopping_cart</i></a></li>
-				{% if not g.user %}
+				{% if not session.is_authenticated %}
 				<li><a href="{{ url_for('users.user_login') }}" class="btn-small waves-effect waves-dark white green-text">Login</a></li>
 				<li><a href="{{ url_for('users.register') }}">Create account</a></li>
 				{% else %}
 				<li><a href="{{ url_for('users.logout') }}" class="btn-small waves-effect waves-dark white green-text">Logout</a></li>	
-				<li><a href="{{ url_for('users.user_dashboard') }}">Account</a></li>
+				<li><a href="{{ url_for('users.user_dashboard', id=g.user.user_id) }}">Account</a></li>
+				{% endif %}
+				{% if g.user.store_id %}
+				<li><a href="{{ url_for('store.store_dashboard', id=g.user.store_id) }}">My Store</a></li>
 				{% endif %}
 			</ul>
 		</div>
     </div>
 </nav>
 
+<!--
 <ul class="sidenav" id="sidenav-links">
 	<li><a href="{{ url_for('catalog.category_list') }}">Categories</a></li>
 	<li><a href="{{ url_for('users.user_login') }}">Login</a></li>
 	<li><a href="{{ url_for('users.register') }}">Register</a></li>
 </ul>
+-->

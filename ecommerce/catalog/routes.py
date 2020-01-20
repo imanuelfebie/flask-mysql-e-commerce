@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, redirect, url_for, request, flash, g, session
 from ecommerce.catalog.forms import CategoryCreateForm, ProductCreateForm
+from ecommerce.db import Database as db
 #from ecommerce.users.routes import before_request as g
-from ecommerce import mysql
+#from ecommerce import mysql
 
 catalog = Blueprint('catalog', __name__)
 
@@ -17,67 +18,44 @@ def category_create():
     '''Adding new categories, this page should only be accessible for the admin'''
     form = CategoryCreateForm()
     
-    if form.validate_on_submit():
-        # create cursor and insert form data into category table
-        cursor = mysql.connect().cursor() 
-        cursor.execute('INSERT INTO category (name) VALUES (%s)', (form.name.data))
+   # if form.validate_on_submit():
+   #     # create cursor and insert form data into category table
+   #     cursor = db.connection().cursor() 
+   #     cursor.execute('INSERT INTO category (name) VALUES (%s)', (form.name.data))
 
-        # commit changes to database
-        mysql.connect().commit() 
-        cursor.close()
+   #     # commit changes to database
+   #     db.connection().commit() 
+   #     cursor.close()
 
-        return redirect(url_for('catalog.category_list'))
+   #     return redirect(url_for('catalog.category_list'))
 
-    else:
-        # print this if commit to database fails
-        print(request.args.get('name'))
-        print(form.errors)
-        print('Commit failed')
+   # else:
+   #     # print this if commit to database fails
+   #     print(request.args.get('name'))
+   #     print(form.errors)
+   #     print('Commit failed')
 
     return render_template('catagory_create.html', form=form)
 
 @catalog.route('/categories')
 def category_list():
     # retrieve all category object from database
-    cursor = mysql.connect().cursor()
-    cursor.execute('SELECT * FROM category')
-    category_list = cursor.fetchall()
-    
-    # close the cursor
-    cursor.close()
+    pass
 
-    return render_template('category_list.html', category_list=category_list)
+    #eturn render_template('category_list.html', category_list=category_list)
 
 @catalog.route('/add-product', methods=['GET', 'POST'])
 def product_create():
     form = ProductCreateForm()
 
-    # retrieve all categories from db
-    cursor = mysql.connect().cursor()
-    category_list = cursor.execute("SELECT * FROM category")
-    mysql.connect().close()
+    return render_template('product_create.html', form=form, category_list=category_list)
 
-    if g.user:            
-        if form.validate_on_submit():
-            # Insert form data into db
-            #cursor = mysql.connect()..close()
-            cursor.execute('''
-                    INSERT INTO product (name, description, stock, price, available, category, store_id)
-                    VALUES (%s, %s, %s, %s, %s, %s, %s)
-                    ''', (
-                        form.name.data,
-                        form.description.data,
-                        form.stock.data,
-                        form.price.data,
-                        form.available.data,
-                        form.category.data,
-                        form.store_id.data)) 
+@catalog.route('/product/<string:id>')
+def product_detail(id):
+    '''Retrieve one product by id'''
+    
+    with db.connection.cursor() as cursor:
+        cursor.execute('SELECT * FROM product WHERE product_id = (%s)', id)
+        product = cursor.fetchone()
 
-            # commit changes to database
-            mysql.connect().commit()
-            print("Product added")
-            # redirect user to his product overview page
-        else:
-            print("Adding product failed")
-
-        return render_template('product_create.html', form=form, category_list=category_list)
+    return render_template('product_detail.html', product=product)

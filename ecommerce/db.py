@@ -2,25 +2,20 @@ from dotenv import load_dotenv
 import pymysql
 import os
 
-
 load_dotenv()
 
 class Database:
+    
+    # establish connection to remote db
+    connection = pymysql.connect(
+            host=os.getenv('CLEARDB_DATABASE_URL'),
+            user=os.getenv('CLEARDB_USERNAME'),
+            password=os.getenv('CLEARDB_PASSWORD'),
+            db=os.getenv('CLEARDB_DATABASE'),
+            cursorclass=pymysql.cursors.DictCursor
+            )
 
-    def __init__(self):
-        # Database credentials
-        self.host = os.getenv('CLEARDB_DATABASE_URL')
-        self.user = os.getenv('CLEARDB_USERNAME')
-        self.password = os.getenv('CLEARDB_PASSWORD')
-        self.db = os.getenv('CLEARDB_DATABASE')
-
-    def connect(self):
-        '''connect to the database, also reconnects to prevent "OperationalErrors" during runtime'''
-        connect = pymysql.connect(
-                host=self.host,
-                user=self.user,
-                password=self.password,
-                db=self.db,
-                cursorclass=pymysql.cursors.DictCursor)  
-        connect.ping(reconnect=True)
-        return connect
+    @classmethod
+    def reconnect(cls):
+        '''Check's if there is a connection, if not it will reconnect to the database'''
+        return Database.connection.ping(reconnect=True)
