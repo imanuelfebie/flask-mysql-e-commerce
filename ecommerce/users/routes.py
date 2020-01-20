@@ -79,12 +79,15 @@ def register():
         flash('Awesome! You just created an account and can now login')
 
         return redirect(url_for('users.user_login'))
+    else:
+        print(form.errors)
+        print('Failed to insert new user to db')
 
     return render_template('register.html', form=form)
 
 @users.route('/address-form', methods=['POST', 'GET'])
 def update_address():
-    form = AddressCreateForm()
+    #form = AddressCreateForm()
 
     #if form.validate_on_submit():
      
@@ -98,9 +101,3 @@ def user_dashboard():
     if not g.user:
         return redirect(url_for('users.user_login'))
     return render_template('user_dashboard.html')
-    
-#@users.route('/payment')
-#def payment():
-#    payment=Payment.payment_method()
-#
-#    return render_template('payment.html', payment=payment)

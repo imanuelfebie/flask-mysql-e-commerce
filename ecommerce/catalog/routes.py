@@ -12,25 +12,26 @@ def before_request():
         g.user = session['user']
 
 
-@catalog.route('/add-category', methods=['GET', 'POST'])
+@catalog.route('/categories/new', methods=['GET', 'POST'])
 def category_create():
+    '''Adding new categories, this page should only be accessible for the admin'''
     form = CategoryCreateForm()
     
     if form.validate_on_submit():
         # create cursor and insert form data into category table
         cursor = mysql.connect().cursor() 
-        cursor.execute('INSERT INTO category (name) VALUES (%s)',
-                (form.name.data))
+        cursor.execute('INSERT INTO category (name) VALUES (%s)', (form.name.data))
 
         # commit changes to database
         mysql.connect().commit() 
-
-        # close cursor
         cursor.close()
+
+        return redirect(url_for('catalog.category_list'))
 
     else:
         # print this if commit to database fails
         print(request.args.get('name'))
+        print(form.errors)
         print('Commit failed')
 
     return render_template('catagory_create.html', form=form)
@@ -59,7 +60,7 @@ def product_create():
     if g.user:            
         if form.validate_on_submit():
             # Insert form data into db
-            #cursor = mysql.connect().close()
+            #cursor = mysql.connect()..close()
             cursor.execute('''
                     INSERT INTO product (name, description, stock, price, available, category, store_id)
                     VALUES (%s, %s, %s, %s, %s, %s, %s)

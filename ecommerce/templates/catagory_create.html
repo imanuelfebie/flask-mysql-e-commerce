@@ -8,7 +8,7 @@
 		<span class="card-title">New Category</span>
 		<div class="row">
 			<form action="" methods="POST">
-				{{ form.hidden_tag() }}
+				{{ form.csrf_token() }}
 				<div class="input-field">
 					{{ form.name(class="validate") }}
 					{{ form.name.label() }}

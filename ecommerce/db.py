@@ -15,7 +15,7 @@ class Database:
         self.db = os.getenv('CLEARDB_DATABASE')
 
     def connect(self):
-        # connect to the database, also reconnects to prevent "OperationalErrors" during runtime
+        '''connect to the database, also reconnects to prevent "OperationalErrors" during runtime'''
         connect = pymysql.connect(
                 host=self.host,
                 user=self.user,
@@ -24,9 +24,3 @@ class Database:
                 cursorclass=pymysql.cursors.DictCursor)  
         connect.ping(reconnect=True)
         return connect
-
-        #self.cursor = self.connect.cursor()
-
-    #def reconnect(self):
-    #	self.connect.ping(reconnect=True)
-
