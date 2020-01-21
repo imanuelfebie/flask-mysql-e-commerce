@@ -24,11 +24,15 @@
 
 </div>
 
+<!-- Edit tool for store owners -->
+{% if session.is_authenticated %}
 <div class="fixed-action-btn">
-	<a href="" class="btn-floating btn-large red">
-		<i class="large material-icons">mode_edit</i>
-	<ul>
-		<li><a href="" class="btn-floating red">insert_chart</a></li>
+  	<a class="btn-floating btn-large red">
+    	<i class="large material-icons">shop</i>
+  	</a>
+ 	<ul>
+    	<li><a href="{{ url_for('catalog.product_create', id=g.user.store_id) }}" class="btn-floating red"><i class="material-icons">add</i></a></li>
 	</ul>
 </div>
+{% endif %}
 {% endblock body %}

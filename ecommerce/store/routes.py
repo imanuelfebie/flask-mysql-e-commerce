@@ -23,25 +23,16 @@ def store_dashboard(id):
 def store_register(id):
     form = StoreRegistrationForm()
     
+    '''NO CLUE YET ON HOW TO UPDATE THE CURRENT USER TO THIS STORE'''
     if form.validate_on_submit():
-       # # insert store object into store table
-       # cursor.execute('INSERT INTO store (name, about, address) VALUES (%s, %s, %s, %s)',
-       #         (#(int(g.user['user_id']),
-       #         form.name.data,
-       #         form.about.data,
-       #         form.address.data
-       #         )) 
+        with db.connection.cursor() as cursor:
+            # Insert form data into db
+            cursor.execute('INSERT INTO store (name, about) VALUES (%s, %s)',
+                   (form.name.data, form.about.data)) 
+            # Commit changes to db
+            db.connection.commit()
 
-       # # commit changes to db
-       # mysql.connect().commit()
-       # 
-       # # close cursor
-       # cursor.close()
-        
-        print("Store commited to database")
-
-        # redirect to store overview
-        return redirect(url_for('store.store_dashboard'))
+        #return redirect(url_for('store.store_dashboard'))
 
     return render_template('store_registration.html', form=form)
 

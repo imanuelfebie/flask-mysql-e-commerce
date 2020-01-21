@@ -37,6 +37,7 @@ def category_create():
 
     return render_template('catagory_create.html', form=form)
 
+# Category list
 @catalog.route('/categories')
 def category_list():
     # retrieve all category object from database
@@ -44,12 +45,36 @@ def category_list():
 
     #eturn render_template('category_list.html', category_list=category_list)
 
-@catalog.route('/add-product', methods=['GET', 'POST'])
-def product_create():
+# Add product
+@catalog.route('/store/<string:id>/products/new', methods=['GET', 'POST'])
+def product_create(id):
     form = ProductCreateForm()
+    
+    with db.connection.cursor() as cursor:
+        # reconnect by default because heroku server connection is unstable
+        db.reconnect()
+        cursor.execute('SELECT * FROM category')
+        category_list = cursor.fetchall()
 
+        # validate form and submit product to db
+        if form.validate_on_submit():
+            cursor.execute('''INSERT INTO product (name, price, available, category_id, store_id) VALUES (%s, %s, %s, %s, %s)''', (
+                form.name.data,
+                form.price.data,
+                int(1),
+                form.category.data,
+                form.store_id.data
+                ))
+            # Commit changes to db
+            db.connection.commit()
+            print(form.errors)
+            print(form.category.data)
+            flash('Product added')
+            return redirect(url_for('store.store_dashboard', id=g.user.store_id))
+     
     return render_template('product_create.html', form=form, category_list=category_list)
 
+# Product details
 @catalog.route('/product/<string:id>')
 def product_detail(id):
     '''Retrieve one product by id'''

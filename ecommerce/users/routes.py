@@ -107,7 +107,7 @@ def register():
         flash('Awesome! You just created an account and can now login')
         
         # redirect user to address form
-        return redirect(url_for('users.register_address', id=g.user['user_id']))
+        return redirect(url_for('users.user_login'))
 
     else:
         print(form.errors)

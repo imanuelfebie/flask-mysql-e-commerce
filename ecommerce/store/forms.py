@@ -8,7 +8,6 @@ class StoreRegistrationForm(FlaskForm):
     '''Form to create a store'''
     name = StringField('name', validators=[DataRequired()])
     about = TextAreaField('about')
-    address = StringField('address', validators=[DataRequired()])
     submit = SubmitField('Register')
 
 
