@@ -2,7 +2,7 @@
 
 {% block title %}Register store{% endblock %}
 
-{% include 'includes/navbar.html' %}
+{% include 'includes/store_navbar.html' %}
 
 {% block body %}
 <div class="row">
@@ -22,12 +22,7 @@
 					</div>
 					<!-- Category Select Field -->
 					<div class="input-field">
-						<select class="browser-default">
-							<option value="" disabled selected>{{ form.category.label() }}</option>
-							{% for category in category_list %}
-							<option value="{{ category.category_id }}">{{ category.name }}</option>
-							{% endfor %}
-						</select>
+						{{ form.category(class="browser-default") }}	
 					</div>
 					<!-- Product Description Field -->
 					<div class="input-field">

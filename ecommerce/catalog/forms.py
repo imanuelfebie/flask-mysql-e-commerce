@@ -16,7 +16,5 @@ class ProductCreateForm(FlaskForm):
     category = SelectField('Category', coerce=int)
     description = StringField('description', validators=[DataRequired()])
     store_id = HiddenField('', validators=[DataRequired()])
-    #available = DecimalField('available', validators=[DataRequired()])
-    #available = BooleanField('available')
     submit = SubmitField('Add')
 

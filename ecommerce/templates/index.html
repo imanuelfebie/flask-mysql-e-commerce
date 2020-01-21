@@ -8,7 +8,7 @@
 	<!-- Loop through the product objects and display them -->
 	{% if product_list %}
 	{% for product in product_list %}
-	<div class="col l4 s6">
+	<div class="col l4 s12">
 		<div class="card">
 			<div class="card-image">
 				<a href="{{ url_for('catalog.product_detail', id=product.product_id) }}">

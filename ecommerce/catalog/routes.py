@@ -41,9 +41,11 @@ def category_create():
 @catalog.route('/categories')
 def category_list():
     # retrieve all category object from database
-    pass
+    with db.connection.cursor() as cursor:
+        cursor.execute('SELECT * FROM category')
+        category_list = cursor.fetchall()
 
-    #eturn render_template('category_list.html', category_list=category_list)
+    return render_template('category_list.html', category_list=category_list)
 
 # Add product
 @catalog.route('/store/<string:id>/products/new', methods=['GET', 'POST'])
@@ -55,24 +57,28 @@ def product_create(id):
         db.reconnect()
         cursor.execute('SELECT * FROM category')
         category_list = cursor.fetchall()
+        form.category.choices = [(category['category_id'], category['name']) for category in category_list]
 
-        # validate form and submit product to db
         if form.validate_on_submit():
-            cursor.execute('''INSERT INTO product (name, price, available, category_id, store_id) VALUES (%s, %s, %s, %s, %s)''', (
-                form.name.data,
-                form.price.data,
-                int(1),
-                form.category.data,
-                form.store_id.data
-                ))
+            cursor.execute('''INSERT INTO product 
+                              (name, price, available, category_id, store_id) VALUES (%s, %s, %s, %s, %s)''', (
+                                  form.name.data,
+                                  form.price.data,
+                                  int(1),
+                                  form.category.data,
+                                  form.store_id.data
+                                  ))
             # Commit changes to db
             db.connection.commit()
-            print(form.errors)
-            print(form.category.data)
             flash('Product added')
-            return redirect(url_for('store.store_dashboard', id=g.user.store_id))
+            return redirect(url_for('store.store_manager', id=g.user['store_id']))
+
+        else:
+            print('fail')
+            print(form.category.data)
+            print(form.errors)
      
-    return render_template('product_create.html', form=form, category_list=category_list)
+    return render_template('product_create.html', form=form)
 
 # Product details
 @catalog.route('/product/<string:id>')

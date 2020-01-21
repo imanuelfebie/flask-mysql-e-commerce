@@ -11,13 +11,27 @@ def before_request():
         g.user = session['user']
 
 @store.route('/store/<string:id>')
-def store_dashboard(id):
+def store_detail(id):
+    '''Display the store\'s name & owner'''
+
     with db.connection.cursor() as cursor:
         db.reconnect()
-        cursor.execute("SELECT * FROM user,store WHERE (%s)=store.store_id", (g.user['store_id']))
+        # Inner join to get the the necessary data to display
+        # the
+        cursor.execute('''SELECT u.firstname, u.lastname, s.name
+                          FROM user u
+                          INNER JOIN store s
+                          ON u.store_id=s.store_id
+                          WHERE s.store_id = (%s)
+                          ''', (id))
+        # fetch the data
         object = cursor.fetchone()
+    
+    return render_template("store_detail.html", object=object)
 
-    return render_template("store_dashboard.html", object=object)
+@store.route('/store/manager/<string:id>')
+def store_manager(id):
+    return render_template('store_manager.html')
 
 @store.route('/store/register/<string:id>', methods=['POST', 'GET'])
 def store_register(id):
