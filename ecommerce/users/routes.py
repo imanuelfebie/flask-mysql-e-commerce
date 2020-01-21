@@ -63,7 +63,7 @@ def user_login():
                 # start new session with user, redirect to dashboard page
                 session['is_authenticated'] = True
                 session['user'] = user
-                return redirect(url_for('users.user_dashboard', id=user['user_id']))
+                return redirect(url_for('users.account', id=user['user_id']))
 
             # display if any errors occur
             flash(error)
