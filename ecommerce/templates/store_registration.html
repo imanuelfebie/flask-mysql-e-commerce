@@ -2,11 +2,15 @@
 
 {% block title %}Register store{% endblock %}
 
-{% block body_class %}green lighten-1{% endblock body_class %}
+{% block body_class %}green accent-4{% endblock body_class %}
 
 {% block body %}
 <div class="center-align">
-	<h4><a href="{{ url_for('users.user_dashboard', id=g.user_id) }}" class="white-text">Dashboard</a></h4>
+	<h4>
+		<a href="{{ url_for('users.account', id=g.user.user_id) }}" class="white-text">
+			<i class="material-icons medium">keyboard_arrow_left</i>
+		</a>
+	</h4>
 </div>
 <div class="row">
 	<div class="card col s12">
@@ -24,11 +28,6 @@
 					<div class="input-field">
 						{{ form.about(class="materialize-textarea") }}
 						{{ form.about.label() }}
-					</div>
-					<!-- Store address input -->
-					<div class="input-field">
-						{{ form.address(class='validate') }}
-						{{ form.address.label() }}
 					</div>
 
 					<div class="input-field">

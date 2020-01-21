@@ -2,7 +2,7 @@
 
 {% block title %}Register user{% endblock %}
 
-{% block body_class %}blue-grey darken-2{% endblock body_class %}
+{% block body_class %}green accent-4{% endblock body_class %}
 
 {% block body %}
 <h4 class="center-align">
@@ -60,12 +60,12 @@
 						{{ form.password2.label() }}
 					</div>
 					<div class="input-field">
-						{{ form.submit(class="btn blue-grey darken-2 right") }}
+						{{ form.submit(class="btn green accent-4 right") }}
 					</div>
 			</form>
 		</div>
 		<div class="card-action center-align">
-			Already an account? <a href="{{ url_for('users.user_login') }}" class="blue-grey-text darken-2">Login</a>
+			Already an account? <a href="{{ url_for('users.user_login') }}" class="green-text darken-2">Login</a>
 		</div>
 	</div>
 </div>
