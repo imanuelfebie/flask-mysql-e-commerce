@@ -19,3 +19,7 @@ class Database:
     def reconnect(cls):
         '''Check's if there is a connection, if not it will reconnect to the database'''
         return Database.connection.ping(reconnect=True)
+
+    @staticmethod
+    def default_user_avatar():
+        pass

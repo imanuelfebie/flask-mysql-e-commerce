@@ -15,7 +15,7 @@
 				<li><a href="{{ url_for('users.register') }}">Create account</a></li>
 				{% else %}
 				<li><a href="{{ url_for('users.logout') }}" class="btn-small waves-effect waves-dark white green-text">Logout</a></li>	
-				<li><a href="{{ url_for('users.user_dashboard', id=g.user.user_id) }}">Account</a></li>
+				<li><a href="{{ url_for('users.account', id=g.user.user_id) }}">Account</a></li>
 				{% endif %}
 				{% if g.user.store_id %}
 				<li><a href="{{ url_for('store.store_dashboard', id=g.user.store_id) }}">My Store</a></li>

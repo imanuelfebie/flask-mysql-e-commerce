@@ -221,8 +221,22 @@ def address_update():
     
     return render_template('profile.html', profile_form=profile_form, address_form=address_form, password_form=password_form)
 
-@users.route('/dashboard/<string:id>')
+@users.route('/account/<string:id>')
 @is_authenticated
-def user_dashboard(id):
+def account(id):
     '''User account dashboard'''
-    return render_template('user_dashboard.html')
+    image = url_for('static', filename="profile_img/default_avatar.png")
+    return render_template('user_dashboard.html', image=image)
+
+
+
+
+
+
+
+
+
+
+
+
+
