@@ -34,7 +34,7 @@ def store_manager(id):
     '''Display the store owner's products'''
     with db.connection.cursor() as cursor:
         db.reconnect()
-        cursor.execute('''SELECT p.name, p.price, p.description, p.category_id, c.category_name FROM product p
+        cursor.execute('''SELECT p.product_id, p.name, p.price, p.description, p.category_id, c.category_name FROM product p
                           INNER JOIN category c
                           ON p.category_id=c.category_id
                           WHERE p.store_id = (%s)''',(id))

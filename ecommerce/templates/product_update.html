@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}{% endblock title %}
+
+{% include 'includes/store_navbar.html' %}
+
+{% block body %}
+<div class="card">
+	<div class="card-content">
+		<span class="card-title">Update {{ product.name }}</span>
+		<form action="" method="post">
+			{{ form.csrf_token() }}
+			<div class="input-field">
+				{{ form.name(class="validate") }}
+				{{ form.name.label() }}
+			</div>
+			<div class="input-field">
+				{{ form.price(class="validate") }}
+				{{ form.price.label() }}
+			</div>
+			<div class="input-field">
+				{{ form.category(class="browser-default") }}
+			</div>
+			<div class="input-field">
+				{{ form.description(class="materialize-textarea") }}
+				{{ form.description.label() }}
+			</div>
+			<div class="input-field">
+				{{ form.submit(class="btn green accent-4 white-text") }}
+			</div>
+		</form>
+	</div>
+</div>
+{% endblock body %}

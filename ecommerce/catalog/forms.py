@@ -18,3 +18,11 @@ class ProductCreateForm(FlaskForm):
     store_id = HiddenField('', validators=[DataRequired()])
     submit = SubmitField('Add')
 
+
+class ProductUpdateForm(FlaskForm):
+    name = StringField('name')
+    price = DecimalField('price')
+    category = SelectField('categories', coerce=int)
+    description = StringField('description')
+    submit = SubmitField('update')
+

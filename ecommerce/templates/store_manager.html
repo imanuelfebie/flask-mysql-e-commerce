@@ -8,6 +8,7 @@
 <!-- Show the owners Products -->
 <div class="card">
 	<div class="card-content">
+		<span class="card-title">My Products</span>
 		<table class="highlight responsive-table">
 			<thead>
 				<tr>
@@ -15,6 +16,7 @@
 					<th>Price</th>
 					<th>Description</th>
 					<th>Category</th>
+					<th></th>
 					<th></th>
 				</tr>
 			</thead>
@@ -26,8 +28,13 @@
 					<td class="truncate">{{ product.description }}</td>
 					<td>{{ product.category_name }}</td>
 					<td>
-						<a href="">
-							<i class="tiny material-icons red-text">delete</i>
+						<a href="{{ url_for('catalog.product_delete', id=product.product_id) }}">
+							<i class="tiny material-icons red-text">clear</i>
+						</a>
+					</td>
+					<td>
+						<a href="{{ url_for('catalog.product_update', id=product.product_id) }}">
+							<i class="tiny material-icons">edit_mode</i>
 						</a>
 					</td>
 				</tr>
