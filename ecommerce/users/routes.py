@@ -143,6 +143,19 @@ def profile(id):
     address_form = AddressCreateForm()
     password_form = UserPasswordUpdateForm()
 
+    with db.connection.cursor() as cursor:
+        db.reconnect()
+        cursor.execute('SELECT * FROM country')
+        country_list = cursor.fetchall()
+        address_form.country.choices = [(country['country_id'], country['name']) for country in country_list]
+        with db.connection.cursor() as cursor:
+            db.reconnect()
+            cursor.execute('''SELECT city_id, name FROM city''')
+            city_list = cursor.fetchall()
+            address_form.city.choices = [(city['city_id'], city['name']) for city in city_list]
+
+
+
     # Populate user detail fields
     profile_form.email.data = g.user['email']
     profile_form.firstname.data = g.user['firstname']
@@ -163,6 +176,7 @@ def profile_update(id):
     #profile_form.firstname.data = g.user['firstname']
     #profile_form.lastname.data = g.user['lastname']
     #print(g.user['email'])
+
 
     if profile_form.validate_on_submit():
         with db.connection.cursor() as cursor:
@@ -193,6 +207,7 @@ def password_update(id):
     address_form = AddressCreateForm()
     password_form = UserPasswordUpdateForm()
 
+
     if password_form.validate_on_submit():
         # Update the user password if the user passes the form validation
         with db.connection.cursor() as cursor:
@@ -212,13 +227,58 @@ def password_update(id):
     return render_template('profile.html', profile_form=profile_form, address_form=address_form, password_form=password_form)
 
 
-@users.route('/profile/update/address', methods=['POST', 'GET'])
+@users.route('/profile/update/address/<string:id>', methods=['GET', 'POST'])
 @is_authenticated
-def address_update():
+def address_update(id):
     profile_form = UserUpdateForm()
     address_form = AddressCreateForm()
     password_form = UserPasswordUpdateForm()
-    
+
+    with db.connection.cursor() as cursor:
+        db.reconnect()
+        cursor.execute('SELECT * FROM country')
+        country_list = cursor.fetchall()
+        address_form.country.choices = [(country['country_id'], country['name']) for country in country_list]
+        with db.connection.cursor() as cursor:
+            db.reconnect()
+            cursor.execute('''SELECT city_id, name FROM city''')
+            city_list = cursor.fetchall()
+            address_form.city.choices = [(city['city_id'], city['name']) for city in city_list]
+
+
+    if address_form.validate_on_submit():
+        with db.connection.cursor() as cursor:
+            cursor.execute('''INSERT INTO address (line1, line2, line3, postal_code, country_id, city_id) VALUES (%s, %s, %s, %s, %s, %s)''',
+                           (address_form.line1.data,
+                            address_form.line2.data,
+                            address_form.line3.data,
+                            address_form.postal_code.data,
+                            address_form.country.data,
+                            address_form.city.data
+                            ))
+            # save changes to db
+            db.connection.commit()
+            with db.connection.cursor() as cursor:
+                cursor.execute(
+                    'SELECT address_id FROM address WHERE line1 = (%s)',
+                    (address_form.line1.data
+                     ))
+                address_list = cursor.fetchall()
+                address_id = [(address['address_id']) for address in address_list]
+                with db.connection.cursor() as cursor:
+                    cursor.execute(
+                        '''UPDATE user SET address_id = (%s) WHERE user_id = (%s)''',
+                        (address_id,
+                         id
+                         ))
+                    db.connection.commit()
+
+                    # show success message and redirect to the same page
+                    flash('Address has been updated')
+                    return redirect(url_for('users.profile', id=g.user['user_id']))
+    else:
+        flash('Something went wrong')
+
     return render_template('profile.html', profile_form=profile_form, address_form=address_form, password_form=password_form)
 
 @users.route('/account/<string:id>')
