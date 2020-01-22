@@ -19,6 +19,7 @@
 				{% endif %}
 				{% if g.user.store_id %}
 				<li><a href="{{ url_for('store.store_detail', id=g.user.store_id) }}">My Store</a></li>
+				<li><a href="{{ url_for('store.store_manager', id=g.user.store_id) }}">Store Manager</a></li>
 				{% endif %}
 			</ul>
 		</div>
