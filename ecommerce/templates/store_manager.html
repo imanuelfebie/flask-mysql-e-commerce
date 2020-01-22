@@ -5,14 +5,35 @@
 {% include 'includes/store_navbar.html' %}
 
 {% block body %}
-
-
-<div class="fixed-action-btn">
-  	<a class="btn-floating btn-large red">
-    	<i class="large material-icons">mode_edit</i>
-  	</a>
-  	<ul>
-    	<li><a class="btn-floating red"><i class="material-icons">insert_chart</i></a></li>
-    </ul>
+<!-- Show the owners Products -->
+<div class="card">
+	<div class="card-content">
+		<table class="highlight responsive-table">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Price</th>
+					<th>Description</th>
+					<th>Category</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for product in product_list %}
+				<tr>
+					<td>{{ product.name }}</td>
+					<td>$ {{ '%0.2f'|format(product.price|float) }}</td>
+					<td class="truncate">{{ product.description }}</td>
+					<td>{{ product.category_name }}</td>
+					<td>
+						<a href="">
+							<i class="tiny material-icons red-text">delete</i>
+						</a>
+					</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
 </div>
 {% endblock body %}

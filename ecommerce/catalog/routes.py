@@ -61,11 +61,12 @@ def product_create(id):
 
         if form.validate_on_submit():
             cursor.execute('''INSERT INTO product 
-                              (name, price, available, category_id, store_id) VALUES (%s, %s, %s, %s, %s)''', (
+                              (name, price, available, category_id, description, store_id) VALUES (%s, %s, %s, %s, %s, %s)''', (
                                   form.name.data,
                                   form.price.data,
                                   int(1),
                                   form.category.data,
+                                  form.description.data,
                                   form.store_id.data
                                   ))
             # Commit changes to db
