@@ -16,7 +16,7 @@
 			<a href="{{ url_for('users.profile', id=g.user.user_id) }}" class="collection-item">
 				Update profile
 			</a>
-			{% if g.user.store_id is none %}
+			{% if g.user.store_id== 0 %}
 			<a href="{{ url_for('store.store_register', id=g.user.user_id) }}" class="collection-item">
 					Register Store
 			</a>
