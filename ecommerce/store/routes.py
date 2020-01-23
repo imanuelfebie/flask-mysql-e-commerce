@@ -18,7 +18,7 @@ def store_detail(id):
         db.reconnect()
         # Inner join to get the the necessary data to display
         # the
-        cursor.execute('''SELECT u.firstname, u.lastname, s.name
+        cursor.execute('''SELECT u.firstname, u.lastname, s.store_name
                           FROM user u
                           INNER JOIN store s
                           ON u.store_id=s.store_id
@@ -45,8 +45,52 @@ def store_manager(id):
 @store.route('/store/register/<string:id>', methods=['POST', 'GET'])
 def store_register(id):
     form = StoreRegistrationForm()
-    
-    '''NO CLUE YET ON HOW TO UPDATE THE CURRENT USER TO THIS STORE'''
-    
+
+    if form.validate_on_submit():
+        with db.connection.cursor() as cursor:
+            cursor.execute('INSERT INTO store (store_name, about) VALUES (%s, %s)', (
+                form.name.data,
+                form.about.data,
+            ))
+            cursor.connection.commit()
+
+            cursor.execute('''SELECT store_id FROM store WHERE store_name=(%s) and about=(%s)''', (form.name.data,form.about.data))
+            store = cursor.fetchone()
+
+            cursor.execute('''UPDATE user SET store_id= (%s) WHERE user_id = (%s)''', (store['store_id'], id))
+            db.connection.commit()
+
+        return redirect(url_for('store.store_detail', id=store['store_id']))
+
+    else:
+        print(form.errors)
+        print('Failed to create store')
+
     return render_template('store_registration.html', form=form)
+
+@store.route('/store/manager/purchase_history/<string:id>')
+def purchase_history(id):
+    with db.connection.cursor() as cursor:
+        db.reconnect()
+
+        cursor.execute('CREATE VIEW purchase_history_store '
+                       'AS SELECT p.name, oi.quantity, oi.total_price, pm.payment_name, u.firstname, u.lastname '
+                       'FROM product p, order_item oi, payment_method pm, user u, transaction t '
+                       'WHERE t.payment_method_id=pm.payment_method_id '
+                       'AND t.order_item_id=oi.order_item_id '
+                       'AND oi.product_id=p.product_id '
+                       'AND t.user_id= u.user_id '
+                       'AND t.store_id=(%s)',(id))
+
+        db.connection.commit()
+
+        cursor.execute('SELECT * FROM purchase_history_store')
+        phs=cursor.fetchall()
+        print(phs)
+
+        cursor.execute('DROP VIEW purchase_history_store')
+
+        db.connection.commit()
+
+        return render_template('purchase_history_store.html', phs=phs)
 

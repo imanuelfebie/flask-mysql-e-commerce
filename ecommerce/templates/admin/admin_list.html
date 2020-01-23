@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% include 'admin/navbar.html' %}
+
+{% block title %}Admin list{% endblock title %}
+
+{% block body %}
+<div class="card">
+	<div class="card-content">
+		<span class="card-title">Administrators</span>
+		<table class="highlight responsive-table">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Username</th>
+					<th>Email</th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for admin in admin_list %}
+					<tr>
+						<td>{{ admin.admin_id }}</td>
+						<td>{{ admin.username }}</td>
+						<td>{{ admin.email }}</td>
+						<td>
+							<a href=""><i class="tiny material-icons red-text">clear</i></a>	
+						</td>
+						<td>
+							<a href=""><i class="tiny material-icons green-text">edit</i></a>
+						</td>
+					</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+{% endblock body %}

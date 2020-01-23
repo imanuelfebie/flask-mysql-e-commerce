@@ -336,3 +336,30 @@ def account(id):
 
     image = url_for('static', filename="profile_img/default_avatar.png")
     return render_template('user_dashboard.html', image=image)
+
+@users.route('/account/purchase_history/<string:id>')
+def purchase_history(id):
+    with db.connection.cursor() as cursor:
+        db.reconnect()
+
+        cursor.execute('CREATE VIEW purchase_history_user '
+                       'AS SELECT p.name, oi.quantity, oi.total_price, pm.payment_name, s.store_name '
+                       'FROM product p, order_item oi, payment_method pm, store s, transaction t '
+                       'WHERE t.payment_method_id=pm.payment_method_id '
+                       'AND t.store_id=s.store_id '
+                       'AND t.order_item_id=oi.order_item_id '
+                       'AND oi.product_id=p.product_id '
+                       'AND t.user_id=(%s)',(id))
+
+        db.connection.commit()
+
+        cursor.execute('SELECT * FROM purchase_history_user')
+        phu=cursor.fetchall()
+        print(phu)
+
+
+        cursor.execute('DROP VIEW purchase_history_user')
+
+        db.connection.commit()
+
+    return render_template('purchase_history_user.html', phu=phu)

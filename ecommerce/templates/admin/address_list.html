@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% include 'admin/navbar.html' %}
+
+{% block title %}{% endblock title %}
+
+{% block body %}
+<div class="card">
+	<div class="card-content">
+		<span class="card-title">Addresses</span>
+		<table class="highlight responsive-table">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Line 1</th>
+					<th>Line 2</th>
+					<th>Line 3</th>
+					<th>Postal Code</th>
+					<th>City</th>
+					<th>Country</th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for a in address_list %}
+				<tr>
+					<td>{{ a.address_id }}</td>
+					<td>{{ a.line1 }}</td>
+					<td>{{ a.line2 }}</td>
+					<td>{{ a.line3 }}</td>
+					<td>{{ a.postal_code }}</td>
+					<td>{{ a.city_id }}</td>
+					<td>{{ a.country_id }}</td>
+					<td></td>
+					<td></td>
+					<td><a href=""><i class="tiny material-icons red-text">clear</i></a></td>
+					<td><a href=""><i class="tiny material-icons green-text">edit</i></a></td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
+{% endblock body %}
