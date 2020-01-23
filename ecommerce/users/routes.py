@@ -28,7 +28,7 @@ def before_request():
 
 @users.route('/login', methods=['GET', 'POST'])
 def user_login():
-
+    '''Controller to authenticate a user and start a session'''
     form = UserLoginForm()
     error = None
 
@@ -73,37 +73,30 @@ def user_login():
 @users.route('/logout')
 @is_authenticated
 def logout():
+    '''Controller to logout users by ending clearing the session'''
     session.clear()
     return redirect(url_for('main.index'))
 
 
 @users.route('/register', methods=['POST', 'GET'])
 def register():
-    form = UserRegistrationForm()
-
+    '''Controller for registering new users'''
     
+    form = UserRegistrationForm()
+ 
     if form.validate_on_submit():
-        # insert new user object into user
         with db.connection.cursor() as cursor:
-            try:
-                cursor.execute('INSERT INTO user (firstname, lastname, email, password) VALUES (%s, %s, %s, %s)', (
-                    form.firstname.data,
-                    form.lastname.data,
-                    form.email.data,
-                    generate_password_hash(form.password1.data)
-                    ))
-                # commit to db
-                db.connection.commit()
-            except (pymysql.OperationalError):
-                cursor.execute('INSERT INTO user (firstname, lastname, email, password) VALUES (%s, %s, %s, %s)', (
-                    form.firstname.data,
-                    form.lastname.data,
-                    form.email.data,
-                    generate_password_hash(form.password1.data)
-                    ))
-                # commit to db
-                db.connection.commit()
+            db.reconnect()
+            # insert new user object into user
+            cursor.execute('INSERT INTO user (firstname, lastname, email, password) VALUES (%s, %s, %s, %s)', (
+            form.firstname.data,
+            form.lastname.data,
+            form.email.data,
+            generate_password_hash(form.password1.data)))
 
+            # commit to db
+            db.connection.commit()
+        
         flash('Awesome! You just created an account and can now login')
         
         # redirect user to address form
@@ -117,6 +110,8 @@ def register():
 
 @users.route('/register/address/', methods=['GET','POST'])
 def register_address():
+    '''Controller to handle adding an address for new registered user'''
+
     form = AddressRegisterForm()
     
     with db.connection.cursor() as cursor:
@@ -137,23 +132,29 @@ def register_address():
 @is_authenticated
 def profile(id):
     '''render the user profile details'''
-    db.reconnect()
-    # render the forms
+
     profile_form = UserUpdateForm()
     address_form = AddressCreateForm()
     password_form = UserPasswordUpdateForm()
 
     with db.connection.cursor() as cursor:
+        # reconnect to heroku mysql db
         db.reconnect()
+
+        # get all the contries for select form
         cursor.execute('SELECT * FROM country')
         country_list = cursor.fetchall()
         address_form.country.choices = [(country['country_id'], country['name']) for country in country_list]
-        with db.connection.cursor() as cursor:
-            db.reconnect()
-            cursor.execute('''SELECT city_id, name FROM city''')
-            city_list = cursor.fetchall()
-            address_form.city.choices = [(city['city_id'], city['name']) for city in city_list]
+        
+        # get all cities for select form
+        cursor.execute('''SELECT city_id, name FROM city''')
+        city_list = cursor.fetchall()
+        address_form.city.choices = [(city['city_id'], city['name']) for city in city_list]
 
+        # get address from current user
+        cursor.execute('SELECT a.line1, a.line2, a.line3, a.postal_code, a.country_id, a.city_id FROM address a LEFT JOIN user u ON a.address_id=u.address_id WHERE u.user_id=(%s)', (id))
+        user_address = cursor.fetchone()
+        print(user_address['line1'])
 
 
     # Populate user detail fields
@@ -161,23 +162,25 @@ def profile(id):
     profile_form.firstname.data = g.user['firstname']
     profile_form.lastname.data = g.user['lastname']
     
+    # populate address fields if address already filled
+    address_form.line1.data = user_address['line1']
+    address_form.line2.data = user_address['line2']
+    address_form.line3.data = user_address['line3']
+    address_form.postal_code.data = user_address['postal_code']
+    address_form.country.data = user_address['country_id']
+    address_form.city.data = user_address['city_id']
+
     return render_template('profile.html', profile_form=profile_form, address_form=address_form, password_form=password_form)
 
 @users.route('/profile/update/<string:id>', methods=['GET','POST'])
 @is_authenticated
 def profile_update(id):
-    '''Handles updating the user details - email, firstname & lastname'''
+    '''Controller to update the user's email, name, lastname'''
+
     profile_form = UserUpdateForm()
     address_form = AddressCreateForm()
     password_form = UserPasswordUpdateForm()
-    
-    # Populate user detail fields
-    #profile_form.email.data = g.user['email']
-    #profile_form.firstname.data = g.user['firstname']
-    #profile_form.lastname.data = g.user['lastname']
-    #print(g.user['email'])
-
-
+   
     if profile_form.validate_on_submit():
         with db.connection.cursor() as cursor:
             try:
@@ -203,6 +206,8 @@ def profile_update(id):
 @users.route('/profile/update/password/<string:id>', methods=['POST', 'GET'])
 @is_authenticated
 def password_update(id):
+    '''Controller to handle the password update form'''
+
     profile_form = UserUpdateForm()
     address_form = AddressCreateForm()
     password_form = UserPasswordUpdateForm()
@@ -230,73 +235,104 @@ def password_update(id):
 @users.route('/profile/update/address/<string:id>', methods=['GET', 'POST'])
 @is_authenticated
 def address_update(id):
+    '''Controller to handle address update form'''
+
     profile_form = UserUpdateForm()
     address_form = AddressCreateForm()
     password_form = UserPasswordUpdateForm()
 
     with db.connection.cursor() as cursor:
+        # reconnect to heroku mysql db
         db.reconnect()
+
+        # get all the contries for select form
         cursor.execute('SELECT * FROM country')
         country_list = cursor.fetchall()
         address_form.country.choices = [(country['country_id'], country['name']) for country in country_list]
-        with db.connection.cursor() as cursor:
-            db.reconnect()
-            cursor.execute('''SELECT city_id, name FROM city''')
-            city_list = cursor.fetchall()
-            address_form.city.choices = [(city['city_id'], city['name']) for city in city_list]
+        
+        # get all cities for select form
+        cursor.execute('''SELECT city_id, name FROM city''')
+        city_list = cursor.fetchall()
+        address_form.city.choices = [(city['city_id'], city['name']) for city in city_list]
 
 
-    if address_form.validate_on_submit():
-        with db.connection.cursor() as cursor:
-            cursor.execute('''INSERT INTO address (line1, line2, line3, postal_code, country_id, city_id) VALUES (%s, %s, %s, %s, %s, %s)''',
-                           (address_form.line1.data,
-                            address_form.line2.data,
-                            address_form.line3.data,
-                            address_form.postal_code.data,
-                            address_form.country.data,
-                            address_form.city.data
-                            ))
-            # save changes to db
+        if address_form.validate_on_submit():
+            # insert address to database
+            cursor.execute('''INSERT INTO address (line1, line2, line3, postal_code, country_id, city_id) VALUES (%s, %s, %s, %s, %s, %s)''', (
+                           address_form.line1.data,
+                           address_form.line2.data,
+                           address_form.line3.data,
+                           address_form.postal_code.data,
+                           address_form.country.data,
+                           address_form.city.data))
+            # commit to db
+            cursor.connection.commit()
+            
+            # get address id
+            cursor.execute('''SELECT address_id FROM address WHERE line1=(%s)''', (address_form.line1.data))
+            address = cursor.fetchone()
+            
+            # update address_id to currentuser
+            cursor.execute('''UPDATE user SET address_id = (%s) WHERE user_id = (%s)''', (address['address_id'], id))
             db.connection.commit()
-            with db.connection.cursor() as cursor:
-                cursor.execute(
-                    'SELECT address_id FROM address WHERE line1 = (%s)',
-                    (address_form.line1.data
-                     ))
-                address_list = cursor.fetchall()
-                address_id = [(address['address_id']) for address in address_list]
-                with db.connection.cursor() as cursor:
-                    cursor.execute(
-                        '''UPDATE user SET address_id = (%s) WHERE user_id = (%s)''',
-                        (address_id,
-                         id
-                         ))
-                    db.connection.commit()
+            
+            flash('Address has beed added')
 
-                    # show success message and redirect to the same page
-                    flash('Address has been updated')
-                    return redirect(url_for('users.profile', id=g.user['user_id']))
-    else:
-        flash('Something went wrong')
+            return redirect(url_for('users.profile', id=g.user['user_id']))
+        else:
+            flash('{}'.format(address_form.errors))
+
+    #with db.connection.cursor() as cursor:
+    #    db.reconnect()
+    #    cursor.execute('SELECT * FROM country')
+    #    country_list = cursor.fetchall()
+    #    address_form.country.choices = [(country['country_id'], country['name']) for country in country_list]
+    #    with db.connection.cursor() as cursor:
+    #        db.reconnect()
+    #        cursor.execute('''SELECT city_id, name FROM city''')
+    #        city_list = cursor.fetchall()
+    #        address_form.city.choices = [(city['city_id'], city['name']) for city in city_list]
+
+
+    #if address_form.validate_on_submit():
+    #    with db.connection.cursor() as cursor:
+    #        cursor.execute('''INSERT INTO address (line1, line2, line3, postal_code, country_id, city_id) VALUES (%s, %s, %s, %s, %s, %s)''',
+    #                       (address_form.line1.data,
+    #                        address_form.line2.data,
+    #                        address_form.line3.data,
+    #                        address_form.postal_code.data,
+    #                        address_form.country.data,
+    #                        address_form.city.data
+    #                        ))
+    #        # save changes to db
+    #        db.connection.commit()
+    #        with db.connection.cursor() as cursor:
+    #            cursor.execute(
+    #                'SELECT address_id FROM address WHERE line1 = (%s)',
+    #                (address_form.line1.data
+    #                 ))
+    #            address_list = cursor.fetchall()
+    #            address_id = [(address['address_id']) for address in address_list]
+    #            with db.connection.cursor() as cursor:
+    #                cursor.execute(
+    #                    '''UPDATE user SET address_id = (%s) WHERE user_id = (%s)''',
+    #                    (address_id,
+    #                     id
+    #                     ))
+    #                db.connection.commit()
+
+    #                # show success message and redirect to the same page
+    #                flash('Address has been updated')
+    #                return redirect(url_for('users.profile', id=g.user['user_id']))
+    #else:
+    #    flash('Something went wrong')
 
     return render_template('profile.html', profile_form=profile_form, address_form=address_form, password_form=password_form)
 
 @users.route('/account/<string:id>')
 @is_authenticated
 def account(id):
-    '''User account dashboard'''
+    '''Controller for the user account'''
+
     image = url_for('static', filename="profile_img/default_avatar.png")
     return render_template('user_dashboard.html', image=image)
-
-
-
-
-
-
-
-
-
-
-
-
-

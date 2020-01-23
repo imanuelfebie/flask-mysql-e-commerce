@@ -11,3 +11,4 @@ class StoreRegistrationForm(FlaskForm):
     submit = SubmitField('Register')
 
 
+
