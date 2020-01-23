@@ -17,13 +17,28 @@
 				</tr>
 			</thead>
 			<tbody>
+				{% for key in session.cart_item %}
 				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
+					<td> {{key}} </td>
+					<td> {{session.cart_item[key]['qty']}}</td>
+					<td> {{ session.cart_item[key]['price'] }} </td>
 				</tr>
+				{% endfor %}
 			</tbody>
-		</table>	
+			<thead>
+				<tr>
+					<th></th>
+					<th></th>
+					<th> Total Price: {{ total_price }} </th>
+				</tr>
+			</thead>
+		</table>
+		<form action="" method="POST">
+			{{ form.csrf_token() }}
+			<div class="input-field">
+				{{ form.clear(class='btn green white-text') }}
+			</div>
+		</form>
 	</div>
 </div>
 {% endblock body %}
