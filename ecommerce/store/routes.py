@@ -74,12 +74,12 @@ def purchase_history(id):
         db.reconnect()
 
         cursor.execute('CREATE VIEW purchase_history_store '
-                       'AS SELECT p.name, oi.quantity, oi.total_price, pm.payment_name, u.firstname, u.lastname'
-                       'FROM product p, order_item oi, payment_method pm, user u, transaction t'
-                       'WHERE t.payment_method_id=pm.payment_method_id'
-                       'AND t.order_item_id=oi.order_item_id'
-                       'AND oi.product_id=p.product_id'
-                       'AND t.user_id= u.user_id'
+                       'AS SELECT p.name, oi.quantity, oi.total_price, pm.payment_name, u.firstname, u.lastname '
+                       'FROM product p, order_item oi, payment_method pm, user u, transaction t '
+                       'WHERE t.payment_method_id=pm.payment_method_id '
+                       'AND t.order_item_id=oi.order_item_id '
+                       'AND oi.product_id=p.product_id '
+                       'AND t.user_id= u.user_id '
                        'AND t.store_id=(%s)',(id))
 
         db.connection.commit()
@@ -92,5 +92,5 @@ def purchase_history(id):
 
         db.connection.commit()
 
-        return render_template('store_purchase_history.html', phs=phs)
+        return render_template('purchase_history_store.html', phs=phs)
 

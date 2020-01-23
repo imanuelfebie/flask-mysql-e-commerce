@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Store Manager{% endblock title %}
+
+{% include 'includes/store_navbar.html' %}
+
+{% block body %}
+<div class="row">
+	<div class="col s12">
+		<h4>Transaction History</h4>
+		<table class="striped">
+			<thead>
+				<tr>
+					<th>First Name Buyer</th>
+					<th>Last Name Buyer </th>
+					<th>Product Name</th>
+					<th>Quantity</th>
+					<th>Total Price</th>
+					<th>Payment Method</th>
+				</tr>
+			</thead>
+			
+			<tbody>
+				{% for i in phs %}
+				<tr>
+					<td>{{i.firstname}}</td>
+					<td>{{i.lastname}}</td>
+					<td>{{i.name}}</td>
+					<td>{{i.quantity}}</td>
+					<td>{{i.total_price}}</td>
+					<td>{{i.payment_name}}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	
+</div>
+{% endblock body %}
