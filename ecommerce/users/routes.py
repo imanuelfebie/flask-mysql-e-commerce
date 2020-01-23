@@ -170,7 +170,7 @@ def profile(id):
     address_form.country.data = user_address['country_id']
     address_form.city.data = user_address['city_id']
 
-    return render_template('profile.html', profile_form=profile_form, address_form=address_form, password_form=password_form)
+    return render_template('profile.html', profile_form=profile_form, address_form=address_form, password_form=password_form, user_address=user_address)
 
 @users.route('/profile/update/<string:id>', methods=['GET','POST'])
 @is_authenticated
@@ -201,7 +201,7 @@ def profile_update(id):
         print(profile_form.errors)
         print("failed")
     
-    return render_template('profile.html', profile_form=profile_form, address_form=address_form, password_form=password_form)
+    return render_template('profile.html', profile_form=profile_form, address_form=address_form, password_form=password_form, user_address=user_address)
 
 @users.route('/profile/update/password/<string:id>', methods=['POST', 'GET'])
 @is_authenticated
@@ -229,7 +229,7 @@ def password_update(id):
     else:
         flash('Something went wrong')
  
-    return render_template('profile.html', profile_form=profile_form, address_form=address_form, password_form=password_form)
+    return render_template('profile.html', profile_form=profile_form, address_form=address_form, password_form=password_form, user_address=user_address)
 
 
 @users.route('/profile/update/address/<string:id>', methods=['GET', 'POST'])
@@ -327,7 +327,7 @@ def address_update(id):
     #else:
     #    flash('Something went wrong')
 
-    return render_template('profile.html', profile_form=profile_form, address_form=address_form, password_form=password_form)
+    return render_template('profile.html', profile_form=profile_form, address_form=address_form, password_form=password_form, user_address=user_address)
 
 @users.route('/account/<string:id>')
 @is_authenticated
