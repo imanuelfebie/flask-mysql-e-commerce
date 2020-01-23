@@ -31,5 +31,32 @@
 			<a href="" class="collection-item">Basket</a>
 		</div>
 	</div>
+	
+	<div class="col s8">
+		<table class="striped">
+			<thead>
+				<tr>
+					<th>Product Name</th>
+					<th>Quantity</th>
+					<th>Total Price</th>
+					<th>Payment Method</th>
+					<th>Store Name</th>
+				</tr>
+			</thead>
+			
+			<tbody>
+				{% for i in phu %}
+				<tr>
+					<td>{{i.name}}</td>
+					<td>{{i.quantity}}</td>
+					<td>{{i.total_price}}</td>
+					<td>{{i.payment_name}}</td>
+					<td>{{i.store_name}}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+	
 </div>
 {% endblock body %}

@@ -68,3 +68,29 @@ def store_register(id):
 
     return render_template('store_registration.html', form=form)
 
+@store.route('/store/manager/purchase_history/<string:id>')
+def purchase_history(id):
+    with db.connection.cursor() as cursor:
+        db.reconnect()
+
+        cursor.execute('CREATE VIEW purchase_history_store '
+                       'AS SELECT p.name, oi.quantity, oi.total_price, pm.payment_name, u.firstname, u.lastname'
+                       'FROM product p, order_item oi, payment_method pm, user u, transaction t'
+                       'WHERE t.payment_method_id=pm.payment_method_id'
+                       'AND t.order_item_id=oi.order_item_id'
+                       'AND oi.product_id=p.product_id'
+                       'AND t.user_id= u.user_id'
+                       'AND t.store_id=(%s)',(id))
+
+        db.connection.commit()
+
+        cursor.execute('SELECT * FROM purchase_history_store')
+        phs=cursor.fetchall()
+        print(phs)
+
+        cursor.execute('DROP VIEW purchase_history_store')
+
+        db.connection.commit()
+
+        return render_template('store_purchase_history.html', phs=phs)
+
