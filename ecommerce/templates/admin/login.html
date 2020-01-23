@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Login{% endblock title %}
+
+{% block body_class %}green accent-4{% endblock body_class %}
+
+{% block body %}
+<h5 class="center-align">
+<a href="{{ url_for('main.index') }}" class="white-text">
+	<i class="material-icons large">keyboard_arrow_left</i>
+</a>
+</h5>
+<div class="row">
+	<div class="card col s12 l8 offset-l2">
+		<div class="card-content">
+			<span class="card-title center-align">Admin</span>
+			<form action="" method="post">
+				{{ form.csrf_token() }}
+				<!-- username -->
+				<div class="input-field">
+					{{ form.username(class="validate") }}
+					{{ form.username.label() }}
+				</div>
+				<div class="input-field">
+					{{ form.password(class="validate") }}
+					{{ form.password.label() }}
+				</div>
+				<div class="input-field">
+					{{ form.submit(class="btn green accent-4 white-text") }}
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock body %}

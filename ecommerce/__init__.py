@@ -20,7 +20,9 @@ from ecommerce.users.routes import users
 from ecommerce.catalog.routes import catalog
 from ecommerce.store.routes import store
 from ecommerce.cart.routes import cart
+from ecommerce.admin.routes import admin
 
+app.register_blueprint(admin)
 app.register_blueprint(main)
 app.register_blueprint(users)
 app.register_blueprint(catalog)
