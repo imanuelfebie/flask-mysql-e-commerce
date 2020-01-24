@@ -5,4 +5,36 @@
 {% block title %}{% endblock title %}
 
 {% block body %}
+<div class="card">
+	<div class="card-content">
+		<div class="row valign-wrapper">
+			<div class="col s10"><span class="card-title">Stores</span></div>
+			<div class="col s2"><a href="{{ url_for('admin.store_create') }}">Add store</a></div>
+		</div>
+		<table class="highlight responsive-table">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Owner</th>
+					<th>Joined on</th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for s in store_list %}
+				<tr>
+					<td>{{ s.store_id }}</td>
+					<td>{{ s.store_name }}</td>
+					<td>{{ s.fullname }}</td>
+					<td>{{ s.joined_on.strftime('%d %b %Y') }}</td>
+					<td><a href="{{ url_for('admin.store_delete', id=s.store_id) }}"><i class="tiny material-icons red-text">clear</i></a></td>
+					<td><a href="{{ url_for('admin.store_update', id=s.store_id) }}"><i class="tiny material-icons green-text">edit</i></a></td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
 {% endblock body %}

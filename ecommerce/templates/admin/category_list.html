@@ -2,7 +2,35 @@
 
 {% include 'admin/navbar.html' %}
 
-{% block title %}{% endblock title %}
+{% block title %}New Category{% endblock title %}
 
 {% block body %}
+<div class="card">
+	<div class="card-content">
+		<div class="row valign-wrapper">
+			<div class="col s10"><span class="card-title">Categories</span></div>
+			<div class="col s2"><a href="{{ url_for('admin.category_create') }}">Add category</a></div>
+		</div>
+		<table class="highlight responsive-table">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Name</th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for c in category_list %}
+				<tr>
+					<td>{{ c.category_id }}</td>
+					<td>{{ c.category_name }}</td>
+					<td><a href="{{ url_for('admin.category_delete', id=c.category_id) }}"><i class="tiny material-icons red-text">clear</i></a></td>
+					<td><a href="{{ url_for('admin.category_update', id=c.category_id) }}"><i class="tiny material-icons green-text">edit</i></a></td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
 {% endblock body %}

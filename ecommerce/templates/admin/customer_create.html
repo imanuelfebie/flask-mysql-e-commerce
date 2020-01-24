@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}New customer{% endblock title %}
+
+{% include 'admin/navbar.html' %}
+
+{% block body %}
+<div class="row">
+	<div class="col l8 offset-l2 s12">
+		<div class="card">
+			<div class="card-content">
+				<span class="card-title">Register customer</span>
+				<form action="" method="post">
+					{{ form.csrf_token() }}
+					<div class="input-field">
+						{{ form.firstname(class="validate") }}
+						{{ form.firstname.label() }}
+					</div>
+					<div class="input-field">
+						{{ form.lastname(class="validate") }}
+						{{ form.lastname.label() }}
+					</div>
+					<div class="input-field">
+						{{ form.email(class="validate") }}
+						{{ form.email.label() }}
+					</div>
+					<div class="input-field">
+						{{ form.password1(class="validate") }}
+						{{ form.password1.label() }}
+					</div>
+					<div class="input-field">
+						{{ form.password2(class="validate") }}
+						{{ form.password2.label() }}
+					</div>
+					<div class="input-field">
+						{{ form.submit(class="btn green accent-4 white-text") }}
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock body %}

@@ -25,7 +25,7 @@
 						<td>{{ admin.username }}</td>
 						<td>{{ admin.email }}</td>
 						<td>
-							<a href=""><i class="tiny material-icons red-text">clear</i></a>	
+							<a href="{{ url_for('admin.admin_delete', id=admin.admin_id) }}"><i class="tiny material-icons red-text">clear</i></a>	
 						</td>
 						<td>
 							<a href=""><i class="tiny material-icons green-text">edit</i></a>

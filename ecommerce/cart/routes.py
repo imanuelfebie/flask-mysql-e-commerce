@@ -3,8 +3,6 @@ from ecommerce.db import Database as db
 from ecommerce.cart.forms import ClearCartForm
 import pymysql
 
-
-
 cart = Blueprint('cart', __name__)
 
 @cart.before_request

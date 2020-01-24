@@ -5,4 +5,40 @@
 {% block title %}{% endblock title %}
 
 {% block body %}
+<div class="card">
+	<div class="card-content">
+		<div class="row valign-wrapper">
+			<div class="col s10"><span class="card-title">Products</span></div>
+			<div class="col s2 right"><a href="{{ url_for('admin.product_create') }}" class="blue-text">Add product</a></div>
+		</div>
+		<table class="highlight responsive-table">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Name</th>
+					<th>Price</th>
+					<th>Category</th>
+					<th>Store</th>
+					<th>Added on</th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for p in product_list %}
+				<tr>
+					<td>{{ p.product_id }}</td>
+					<td>{{ p.name }}</td>
+					<td>$ {{ '%0.2f'|format(p.price|float) }}</td>
+					<td>{{ p.category_name }}</td>
+					<td>{{ p.store_name }}</td>
+					<td>{{ p.added_on.strftime('%d %b %Y') }}</td>
+					<td><a href="{{ url_for('admin.product_delete', id=p.product_id) }}"><i class="tiny material-icons red-text">clear</i></a></td>
+					<td><a href="{{ url_for('admin.product_update', id=p.product_id) }}"><i class="tiny material-icons green-text">edit</i></a></td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+	</div>
+</div>
 {% endblock body %}

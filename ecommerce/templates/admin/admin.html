@@ -10,10 +10,16 @@
 <div class="row">
 	<div class="col s12 l8">
 		<!-- Admin & Customers -->
-		<ul class="collection with-header">
+		<ul class="collection with-header z-depth-1">
 			<li class="collection-header green accent-4 white-text"><h6>Users</h6></li>
-			<li class="collection-item"><a href="{{ url_for('admin.admin_list') }}">Admin</a></li>
-			<li class="collection-item"><a href="{{ url_for('admin.customer_list') }}">Customers</a></li>
+			<li class="collection-item">
+				<a href="{{ url_for('admin.admin_list') }}">Admin</a>
+				<a href="{{ url_for('admin.admin_create') }}" class="secondary-content"><i class="material-icons green-text">add</i></a>
+			</li>
+			<li class="collection-item">
+				<a href="{{ url_for('admin.customer_list') }}">Customers</a>
+				<a href="{{ url_for('admin.customer_create') }}" class="secondary-content"><i class="material-icons green-text">add</i></a>
+			</li>
 		</ul>
 	</div>
 	
@@ -27,28 +33,45 @@
 	
 	<!-- Addresses, cities, countries -->
 	<div class="col s12 l8">
-		<ul class="collection with-header">
+		<ul class="collection with-header z-depth-1">
 			<li class="collection-header green accent-4 white-text"><h6>Addresses</h6></li>
-			<li class="collection-item"><a href="{{ url_for('admin.address_list') }}">Addresses</a></li>
-			<li class="collection-item"><a href="{{ url_for('admin.city_list') }}">Cities</a></li>
-			<li class="collection-item"><a href="{{ url_for('admin.country_list') }}">Countries</a></li>
+			<li class="collection-item">
+				<a href="{{ url_for('admin.address_list') }}">Addresses</a>
+			</li>
+			<li class="collection-item">
+				<a href="{{ url_for('admin.city_list') }}">Cities</a>
+				<a href="{{ url_for('admin.city_create') }}" class="secondary-content"><i class="material-icons green-text">add</i></a>
+			</li>
+			<li class="collection-item">
+				<a href="{{ url_for('admin.country_list') }}">Countries</a>
+				<a href="{{ url_for('admin.country_create') }}}" class="secondary-content"><i class="material-icons green-text">add</i></a>
+			</li>
 		</ul>
 	</div>
 
-	<!-- Products & Categories --->
+	<!-- Products & Categories -->
 	<div class="col s12 l8">
-		<ul class="collection with-header">
+		<ul class="collection with-header z-depth-1">
 			<li class="collection-header green accent-4 white-text"><h6>Catalog</h6></li>
-			<li class="collection-item"><a href="{{ url_for('admin.product_list') }}">Products</a></li>
-			<li class="collection-item"><a href="{{ url_for('admin.category_list') }}">Categories</a></li>
+			<li class="collection-item">
+				<a href="{{ url_for('admin.product_list') }}">Products</a>
+				<a href="" class="secondary-content"><i class="material-icons green-text">add</i></a>
+			</li>
+			<li class="collection-item">
+				<a href="{{ url_for('admin.category_list') }}">Categories</a>
+				<a href="{{ url_for('admin.category_create') }}" class="secondary-content"><i class="material-icons green-text">add</i></a>
+			</li>
 		</ul>
 	</div>
 	
 	<!-- Stores -->
 	<div class="col s12 l8">
-		<ul class="collection with-header">
+		<ul class="collection with-header z-depth-1">
 			<li class="collection-header green accent-4 white-text">Stores</li>
-			<li class="collection-item"><a href="{{ url_for('admin.store_list') }}">Stores</a></li>
+			<li class="collection-item">
+				<a href="{{ url_for('admin.store_list') }}">Stores</a>
+				<a href="" class="secondary-content"><i class="material-icons green-text">add</i></a>
+			</li>
 		</ul>
 	</div>
 </div>

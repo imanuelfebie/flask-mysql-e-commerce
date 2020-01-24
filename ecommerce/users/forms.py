@@ -28,6 +28,15 @@ class UserRegistrationForm(FlaskForm):
     # both username and email
 
 
+#class CustomerUpdateForm(FlaskForm):
+#    '''Update customer details'''
+#    email = StringField('email', validators=[Email()])
+#    firstname = StringField('firstname')
+#    lastname = StringField('lastname')
+#
+#    active = BooleanField('status')
+
+
 class AddressRegisterForm(FlaskForm):
     '''Register the user address'''
     line1 = StringField('address 1', validators=[DataRequired()])
@@ -36,7 +45,8 @@ class AddressRegisterForm(FlaskForm):
     city = SelectField('city', coerce=int)
     country = SelectField('country', coerce=int)
     postal_code = StringField('postal code', validators=[DataRequired()])
-    submit = SubmitField('Submit')    
+    submit = SubmitField('Submit')
+
 
 class UserUpdateForm(FlaskForm):
     email = StringField('email', validators=[Email()])

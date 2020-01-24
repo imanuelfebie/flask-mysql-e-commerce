@@ -22,14 +22,16 @@
 
     <!-- Main content -->
     <div class="container">
-    	<section class="section">
-    		{% with messages = get_flashed_messages() %}
+    	{% with messages = get_flashed_messages() %}
     			{% if messages %}
     				{% for message in messages %}
-    				<p class="center-align">{{ message }}</p>
+    				<section class="section">
+    					<span class="badge green darken-1 white-text right">{{ message }}</span>
+    				</section>
     				{% endfor %}
     			{% endif %}
     		{% endwith %}
+    	<section class="section">
         	{% block body %}{% endblock %}
         </section>
     </div>

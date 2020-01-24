@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}Address update{% endblock title %}
+
+{% include 'admin/navbar.html' %}
+
+{% block body %}
+<div class="row">
+	<div class="col s12">
+		<div class="card">
+			<div class="card-content">
+				<span class="card-title">Update address</span>
+				<br>
+				<form action="" method="post">
+					{{ form.csrf_token() }}
+					<div class="input-field">
+						{{ form.line1(class="validate") }}
+						{{ form.line1.label() }}
+					</div>
+					<div class="input-field">
+						{{ form.line2(class="validate") }}
+						{{ form.line2.label() }}
+						<span class="helper-text">optional field</span>
+					</div>
+					<div class="input-field">
+						{{ form.line3(class="validate") }}
+						{{ form.line3.label() }}
+						<span class="helper-text">optional field</span>
+					</div>
+					<div class="input-field">
+						{{ form.postal_code(class="validate") }}
+						{{ form.postal_code.label() }}
+					</div>
+					<div class="input-field">
+						{% if form.city.errors %}
+							
+							{{ form.city(class="browser-default") }}
+							
+							{% for error in form.city.errors %}
+								<span class="helper-text">{{ error }}</span>
+							{% endfor %}
+						{% else %}
+							{{ form.city(class="browser-default") }}
+						{% endif %}
+					</div>
+					<div class="input-field">
+						{{ form.country(class="browser-default") }}
+					</div>
+					<div class="input-field">
+						{{ form.submit(class="btn green accent-4 white-text") }}
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock body %}
