@@ -21,13 +21,8 @@ class AdminCreateForm(FlaskForm):
 class AdminUpdateForm(FlaskForm):
     username = StringField('username')
     email = StringField('email', validators=[Email])
-    submit = SubmitField('update')
-
-
-class AdminPasswordUpdateForm(FlaskForm):
-    password1 = PasswordField('new password', validators=[DataRequired()])
-    password2 = PasswordField('confirm new password', validators=[DataRequired(),
-                EqualTo('password1')])
+    password1 = PasswordField('new password')
+    password2 = PasswordField('confirm new password', validators=[EqualTo('password1')])
     submit = SubmitField('update')
 
 class CityForm(FlaskForm):

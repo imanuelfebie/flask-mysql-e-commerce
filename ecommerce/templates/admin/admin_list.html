@@ -28,7 +28,7 @@
 							<a href="{{ url_for('admin.admin_delete', id=admin.admin_id) }}"><i class="tiny material-icons red-text">clear</i></a>	
 						</td>
 						<td>
-							<a href=""><i class="tiny material-icons green-text">edit</i></a>
+							<a href="{{ url_for('admin.admin_update', id=admin.admin_id) }}"><i class="tiny material-icons green-text">edit</i></a>
 						</td>
 					</tr>
 				{% endfor %}

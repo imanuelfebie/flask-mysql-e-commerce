@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, redirect, url_for, session, flash, g, request
 from functools import wraps
-from ecommerce.admin.forms import (AdminLoginForm, AdminCreateForm, AdminUpdateForm, AdminPasswordUpdateForm, 
+from ecommerce.admin.forms import (AdminLoginForm, AdminCreateForm, AdminUpdateForm,
         CityForm, CityUpdateForm, CountryForm, CountryUpdateForm, CategoryForm, ProductCreateForm, ProductUpdateForm,
         StoreCreateForm, StoreUpdateForm)
 from ecommerce.users.forms import UserRegistrationForm, UserUpdateForm, AddressRegisterForm
@@ -129,10 +129,8 @@ def admin_create():
 @is_admin
 def admin_update(id):
     '''Update selected administrator'''
-    admin_form = AdminUpdateForm()
-    admin_password_form = AdminPasswordUpdateForm()
+    form = AdminUpdateForm()
 
-    session.modified = True
 
     with db.connection.cursor() as cursor:
         # reconnect to heroku
@@ -141,62 +139,23 @@ def admin_update(id):
         cursor.execute('SELECT * FROM admin WHERE admin_id=%s', int(id))
         admin = cursor.fetchone()
     
-    # populate fields
-    admin_form.username.data = admin['username']
-    admin_form.email.data = admin['email']
+        # populate fields
+        form.username.data = admin['username']
+        form.email.data = admin['email']
 
-    return render_template('admin/admin_update.html', admin_form=admin_form, admin_password_form=admin_password_form, admin=admin)
-
-@admin.route('/admin/update/username-password/<string:id>', methods=['GET', 'POST'])
-@is_admin
-def admin_update_username_email(id):
-    admin_form = AdminUpdateForm()
-    admin_password_form = AdminPasswordUpdateForm()
-    
-    with db.connection.cursor() as cursor:
-        # reconnect to heroku
-        db.reconnect()
-        # retrieve selected admin data
-        cursor.execute('SELECT * FROM admin WHERE admin_id=%s', int(id))
-        admin = cursor.fetchone()
-
-
-    if admin_form.validate_on_submit():
-        with db.connection.cursor() as cursor:
-            db.reconnect()
-            cursor.execute('UPDATE admin SET username = %s, email = %s WHERE admin_id = %s',
-                            admin_form.username.data,
-                            admin_form.email.data,
-                            id)
-            # commit update
+        if form.validate_on_submit():
+            # UPDATE admin
+            cursor.execute("UPDATE admin SET username = %s, email = %s, password1 = %s, password2 = %s WHERE admin_id = %s", (
+                            request.form['username'],
+                            request.form['email'],
+                            form.password1.data,
+                            form.passord2.data,
+                            id))
             db.connection.commit()
 
-            session.modified = True
+            return redirect(url_for('admin.admin_list'))
 
-            flash('Update successfull!')
-
-            return redirect(url_for('admin.admin_list', id=id))
-    else:
-        flash(admin_form.errors)
-        print(admin_form.errors)
- 
-    return render_template('admin/admin_update.html', admin_form=admin_form, admin_password_form=admin_password_form, admin=admin)
-
-@admin.route('/admin/update/password/<string:id>', methods=['GET', 'POST'])
-@is_admin
-def admin_update_password(id):
-    admin_form = AdminUpdateForm()
-    admin_password_form = AdminPasswordUpdateForm()
-    
-    with db.connection.cursor() as cursor:
-        # reconnect to heroku
-        db.reconnect()
-        # retrieve selected admin data
-        cursor.execute('SELECT * FROM admin WHERE admin_id=%s', int(id))
-        admin = cursor.fetchone()
-
-    return render_template('admin/admin_update.html', admin_form=admin_form, admin_password_form=admin_password_form, admin=admin)
-
+    return render_template('admin/admin_update.html', form=form, admin=admin)
 
 @admin.route('/admin/delete/<string:id>')
 @is_admin
