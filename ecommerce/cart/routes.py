@@ -14,14 +14,26 @@ def before_request():
 @cart.route('/cart/', methods=['POST', 'GET'])
 def shopping_cart():
     form = ClearCartForm()
+    total_price = 0
 
-    return render_template('cart.html', form=form)
+    if 'cart_item' in session:
+        for i in session['cart_item']:
+            total_price += (session['cart_item'][i]['price'])
+
+    else:
+        return redirect(url_for('cart.cart_items', id=g.user['user_id']))
+
+    if form.is_submitted():
+        session.pop('cart_item')
+        return redirect(url_for('cart.cart_items', id=g.user['user_id']))
+
+    return render_template('cart.html', form=form, total_price=total_price)
 
 @cart.route('/cart/<string:id>', methods=['POST', 'GET'])
 def cart_items(id):
     cart_item = {}
     form = ClearCartForm()
-
+    total_price = 0
     # with db.connection.cursor() as cursor:
     #     cursor.execute('''INSERT INTO order_item (product_id, quantity, total_price) VALUES (%s, %s, %s)''',
     #                    (generate_password_hash(password_form.new_password1.data),
@@ -67,12 +79,26 @@ def cart_items(id):
                 # session['cart_item'][name] = {'qty': 1, 'price': price}
                 session.modified = True
 
-            total_price = 0
+
             for i in session['cart_item']:
                 total_price += (session['cart_item'][i]['price'])
 
     else:
         session['cart_item'] = cart_item
+        # with db.connection.cursor() as cursor:
+        #     # reconnect to heroku cleardb database
+        #     db.reconnect()
+        #     # get this product
+        #     cursor.execute('SELECT * FROM product WHERE product_id=(%s)', (id))
+        #     product = cursor.fetchall()
+        #     name = ''
+        #     price = 0
+        #     for p in product:
+        #         name = p['name']
+        #         price = int(p['price'])
+        #
+        #     session['cart_item'][name] = {'qty': 1, 'price': price}
+        #     session.modified = True
     #
     # return session['cart_item']
 
@@ -84,6 +110,7 @@ def cart_items(id):
     # print(session['cart_item'])
 
 
-    return render_template('cart.html',form=form, total_price=total_price)
+    # return render_template('cart.html',form=form, total_price=total_price)
+    return redirect(url_for('cart.shopping_cart'))
 
 
