@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block title %}Payment{% endblock %}
+
+{% include 'includes/navbar.html' %}
+
+{% block body %}
+<div class="row">
+	<div class="col s12">
+		<div class="card">
+			<div class="card-content">
+				<div class="row valign-wrapper">
+					<div class="col s7"><span class="card-title">Your order</span></div>
+					<div class="col s5"><span class="card-title right-align">Delivery address</span></div>
+				</div>
+				<div class="row">
+					<div class="col s7">
+						<table class="responsive-table highlight">
+							<thead>
+								<tr>
+									<th>Item</th>
+									<th>Quantity</th>
+									<th>Price</th>
+									<th></th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for item in session.cart_item %}
+								<tr>
+									<td>{{ item.name }}</td>
+									<td>{{ item.quantity }}</td>
+									<td>{{ item.price }}</td>
+									<th></th>
+									<th></th>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>			
+					</div>
+					<div class="col s5 right-align">
+						<p>{{ customer.line1 }}</p>
+						<p>{{ customer.line2 }}</p>
+						<p>{{ customer.line3 }}</p>
+						<p>{{ customer.postal_code }}</p>
+						<p>{{ customer.city_name }}, {{ customer.country_name }}</p>
+						<h6>Receiver</h6>
+						<p class="green-text">{{ customer.firstname }} {{ customer.lastname }}</p>
+						<p>{{ customer.email }}</p>
+					</div>
+				</div>
+				<form action="" method="post">
+					<h5>Payment method</h5>
+					<div class="row valign-wrapper">
+						<div class="input-field col s4">
+							{{ form.payment_method(class="browser-default") }}
+						</div>
+						<div class="col s8">
+							{{ form.submit(class="btn green accent-4 white-text") }}
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock body %}

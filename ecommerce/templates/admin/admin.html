@@ -49,13 +49,24 @@
 		</ul>
 	</div>
 
+	<!-- Payment methods -->
+	<div class="col s12 l8">
+		<ul class="collection with-header z-depth-1">
+			<li class="collection-header green accent-4 white-text">Payment methods</li>
+			<li class="collection-item">
+				<a href="{{ url_for('admin.payment_method_list') }}">Payment methods</a>
+				<a href="" class="secondary-content"><i class="material-icons green-text">add</i></a>
+			</li>
+		</ul>
+	</div>
+
 	<!-- Products & Categories -->
 	<div class="col s12 l8">
 		<ul class="collection with-header z-depth-1">
 			<li class="collection-header green accent-4 white-text"><h6>Catalog</h6></li>
 			<li class="collection-item">
 				<a href="{{ url_for('admin.product_list') }}">Products</a>
-				<a href="" class="secondary-content"><i class="material-icons green-text">add</i></a>
+				<a href="{{ url_for('admin.product_create') }}" class="secondary-content"><i class="material-icons green-text">add</i></a>
 			</li>
 			<li class="collection-item">
 				<a href="{{ url_for('admin.category_list') }}">Categories</a>

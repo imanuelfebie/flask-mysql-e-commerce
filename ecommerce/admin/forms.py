@@ -83,4 +83,8 @@ class StoreUpdateForm(FlaskForm):
     owner = SelectField('Assing owner', coerce=int)
     submit = SubmitField('submit')
 
+class PaymentMethodForm(FlaskForm):
+    name = StringField('payment method', validators=[DataRequired()])   
+    submit = SubmitField('submit')
+
 

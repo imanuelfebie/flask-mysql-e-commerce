@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Payment methods{% endblock %}
+
+{% include 'admin/navbar.html' %}
+
+{% block body %}
+<div class="row">
+	<div class="col s12">
+		<div class="card">
+			<div class="card-content">
+				<div class="row valign-wrapper">
+					<div class="col s9"><span class="card-title">Payment Methods</span></div>
+					<div class="col s3"><a href="{{ url_for('admin.payment_method_create') }}">Add payment method</a></div>
+				</div>
+				<table class="highlight responsive-table">
+					<thead>
+						<tr>
+							<th>ID</th>
+							<th>Name</th>
+							<th></th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for p in payment_method_list %}
+						<tr>
+							<td>{{ p.id }}</td>
+							<td>{{ p.name }}</td>
+							<td><a href="{{ url_for('admin.payment_method_delete', id=p.id) }}"><i class="tiny material-icons red-text">clear</i></a></td>
+							<td><a href="{{ url_for('admin.payment_method_update', id=p.id) }}"><i class="tiny material-icons green-text">edit</i></a></td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock body %}

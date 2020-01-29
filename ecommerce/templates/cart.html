@@ -33,12 +33,19 @@
 				</tr>
 			</thead>
 		</table>
-		<form action="" method="POST">
-			{{ form.csrf_token() }}
-			<div class="input-field">
-				{{ form.clear(class='btn green white-text') }}
+		{% if session.cart_item %}
+		<div class="row valign-wrapper">
+			<div class="col s10">
+				<form action="" method="POST">
+					{{ form.csrf_token() }}
+					<div class="input-field">
+						{{ form.clear(class='btn yellow white-text') }}
+					</div>
+				</form>
 			</div>
-		</form>
+			<div class="col s2"><a href="{{ url_for('cart.choose_payment_method') }}" class="btn green white-text">Payment method</a></div>
+		</div>
+		{% endif %}
 	</div>
 </div>
 {% endblock body %}

@@ -37,8 +37,9 @@ def store_detail(id):
     return render_template("store_detail.html", owner=owner, product_list=product_list)
 
 @store.route('/store/manager/<string:id>')
-def store_manager(id):
+def store_manager(id):  
     '''Display the store owner's products'''
+
     with db.connection.cursor() as cursor:
         db.reconnect()
         cursor.execute('''SELECT p.product_id, p.name, p.price, p.description, p.category_id, c.category_name FROM product p
@@ -55,6 +56,9 @@ def store_register(id):
 
     if form.validate_on_submit():
         with db.connection.cursor() as cursor:
+            # reconnect to heroku
+            db.reconnect()
+            # Isset new store
             cursor.execute('INSERT INTO store (store_name, about) VALUES (%s, %s)', (
                 form.name.data,
                 form.about.data,
@@ -67,7 +71,7 @@ def store_register(id):
             cursor.execute('''UPDATE user SET store_id= (%s) WHERE user_id = (%s)''', (store['store_id'], id))
             db.connection.commit()
 
-        return redirect(url_for('store.store_detail', id=store['store_id']))
+        return redirect(url_for('store.store_manager', id=store['store_id']))
 
     else:
         print(form.errors)

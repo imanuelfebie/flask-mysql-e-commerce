@@ -2,13 +2,13 @@
 	<div class="nav-wrapper green accent-4">
 		<div class="container">
 			<!-- Store Name -->
-			<a href="{{ url_for('store.store_manager', id=g.user.store_id) }}" class="brand-logo">StoreName</a>
+			<a href="{{ url_for('store.store_manager', id=g.user.user_id) }}" class="brand-logo">StoreName</a>
 			<!-- Navbar -->
 			<ul class="right">
-				<li><a href="{{ url_for('catalog.product_create', id=g.user.store_id ) }}"><i class="material-icons">add</i></a></li>
+				<li><a href="{{ url_for('catalog.product_create', id=g.user.user_id) }}"><i class="material-icons">add</i></a></li>
 				<li><a href=""><i class="material-icons">edit</i></a></li>
 				<li><a href=""><i class="material-icons">notifications</i></a></li>
-				<li><a href="{{ url_for('store.purchase_history', id=g.user.store_id ) }}"><i class="material-icons">history</i></a></li>
+				<li><a href=""><i class="material-icons">history</i></a></li>
 				<li><a href="{{ url_for('users.account', id=g.user.user_id) }}"><i class="material-icons">person</i></a></li>
 				<li><a href="{{ url_for('main.index') }}"><i class="material-icons">home</i></a></li>
 			</ul>	

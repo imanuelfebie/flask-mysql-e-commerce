@@ -2,7 +2,7 @@ from flask import Blueprint, render_template, redirect, url_for, session, flash,
 from functools import wraps
 from ecommerce.admin.forms import (AdminLoginForm, AdminCreateForm, AdminUpdateForm,
         CityForm, CityUpdateForm, CountryForm, CountryUpdateForm, CategoryForm, ProductCreateForm, ProductUpdateForm,
-        StoreCreateForm, StoreUpdateForm)
+        StoreCreateForm, StoreUpdateForm, PaymentMethodForm)
 from ecommerce.users.forms import UserRegistrationForm, UserUpdateForm, AddressCreateForm
 from ecommerce.store.forms import StoreRegistrationForm
 from ecommerce.db import Database as db
@@ -886,15 +886,81 @@ def store_delete(id):
          
     return redirect(url_for('admin.store_list'))
 
+@admin.route('/admin/payment-methods/new', methods=['GET', 'POST'])
+@is_admin
+def payment_method_create():
+    '''Create new payment method'''
+    form = PaymentMethodForm()
 
+    with db.connection.cursor() as cursor:
+        # heroku reconnect
+        db.reconnect()
+        # Insert into payment method
+        if form.validate_on_submit():
+            cursor.execute('INSERT INTO payment_method (payment_name) VALUES (%s)', (form.name.data)) 
+            # commit insert to db
+            db.connection.commit()
 
+            #flash('Payment method has been added')
 
+            return redirect(url_for('admin.payment_method_list'))
 
+    return render_template('admin/payment_method_create.html', form=form)
 
+@admin.route('/admin/payment-methods/delete/<string:id>')
+@is_admin
+def payment_method_delete(id):
+    '''Delete selected payment method'''
 
+    with db.connection.cursor() as cursor:
+        db.reconnect()
+        # delete from
+        cursor.execute('DELETE FROM payment_method WHERE payment_method_id = %s', (id))
+        # Commit changes
 
+        return redirect(url_for('admin.payment_method_list'))
 
+@admin.route('/amdin/payment-methods/update/<string:id>', methods=['GET', 'POST'])
+@is_admin
+def payment_method_update(id):
+    form = PaymentMethodForm()
 
+    with db.connection.cursor() as cursor:
+        # heroku reconnect
+        db.reconnect()
 
+        cursor.execute('SELECT payment_name FROM payment_method WHERE payment_method_id = %s', (id))
+        method = cursor.fetchone()
+        
+        form.name.data = method['payment_name']
+
+        if form.validate_on_submit():
+            # Update from
+            cursor.execute('''UPDATE payment_method SET payment_name = %s WHERE payment_method_id = %s''', (
+                              request.form['name'],
+                              id))
+            # commit update
+            db.connection.commit()
+
+            flash('Payment method updated')
+            
+            return redirect(url_for('admin.payment_method_list'))
+            
+    return render_template('admin/payment_method_update.html', form=form)
+
+@admin.route('/admin/payment-methods/list')
+@is_admin
+def payment_method_list():
+    '''List out the payment methods'''
+
+    with db.connection.cursor() as cursor:
+        # reconnect to heroku
+        db.reconnect()
+        # Retrieve all payment methods
+        cursor.execute('SELECT payment_method_id AS id, payment_name AS name FROM payment_method')
+        payment_method_list = cursor.fetchall()
+        
+
+    return render_template('admin/payment_method_list.html', payment_method_list=payment_method_list)
 
 

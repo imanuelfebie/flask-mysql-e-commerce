@@ -64,20 +64,17 @@ def product_create(id):
                               (name, price, available, category_id, description, store_id) VALUES (%s, %s, %s, %s, %s, %s)''', (
                                   form.name.data,
                                   form.price.data,
-                                  int(1),
+                                  True,
                                   form.category.data,
                                   form.description.data,
-                                  form.store_id.data
-                                  ))
+                                  g.user['store_id']))
             # Commit changes to db
             db.connection.commit()
             flash('Product added')
             return redirect(url_for('store.store_manager', id=g.user['store_id']))
 
         else:
-            print('fail')
-            print(form.category.data)
-            print(form.errors)
+            print('fail') 
      
     return render_template('product_create.html', form=form)
 
