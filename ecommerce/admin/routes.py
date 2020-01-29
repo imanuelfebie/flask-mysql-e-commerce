@@ -3,7 +3,7 @@ from functools import wraps
 from ecommerce.admin.forms import (AdminLoginForm, AdminCreateForm, AdminUpdateForm,
         CityForm, CityUpdateForm, CountryForm, CountryUpdateForm, CategoryForm, ProductCreateForm, ProductUpdateForm,
         StoreCreateForm, StoreUpdateForm)
-from ecommerce.users.forms import UserRegistrationForm, UserUpdateForm, AddressRegisterForm
+from ecommerce.users.forms import UserRegistrationForm, UserUpdateForm, AddressCreateForm
 from ecommerce.store.forms import StoreRegistrationForm
 from ecommerce.db import Database as db
 
@@ -301,7 +301,7 @@ def address_list():
 @is_admin
 def address_update(id):
     '''Add a new address'''
-    form = AddressRegisterForm()
+    form = AddressCreateForm()
 
     with db.connection.cursor() as cursor:
         # recconect to heroku
@@ -426,7 +426,7 @@ def city_update(id):
     with db.connection.cursor() as cursor:
         db.reconnect()
         # get current city
-        cursor.execute("SELECT city.name, country.name AS country_name FROM city "
+        cursor.execute("SELECT city.name, city.country_id, country.name AS country_name FROM city "
                        "INNER JOIN country ON city.country_id=country.country_id "
                        "WHERE city.city_id=%s", (id))
         city = cursor.fetchone()
@@ -438,13 +438,15 @@ def city_update(id):
         # select field for countries
         form.country.choices = [(country['country_id'], country['name']) for country in country_list]
 
+        # populate the fields with existing data
         form.name.data = city['name']
+        form.country.data = city['country_id']
 
         if form.validate_on_submit():
             # 
             cursor.execute("UPDATE city SET name = %s, country_id = %s WHERE city_id = %s", (
                             request.form['name'],
-                            form.country.data,
+                            request.form['country'],
                             id))
             db.connection.commit()
 
@@ -652,10 +654,10 @@ def product_list():
     with db.connection.cursor() as cursor:
         # reconnect to heroku
         db.reconnect()
-        # retrieve all products
+        # retrieve all products and order by the latest added on timestamp
         cursor.execute('SELECT p.product_id, p.name, p.price, p.added_on, s.store_name, c.category_name FROM product p '
                        'INNER JOIN category c ON c.category_id=p.category_id '
-                       'INNER JOIN store s ON p.store_id=s.store_id')
+                       'INNER JOIN store s ON p.store_id=s.store_id ORDER BY p.added_on DESC')
         # fetch results
         product_list = cursor.fetchall()
 
@@ -710,9 +712,11 @@ def product_update(id):
         # get select product to update
         cursor.execute("SELECT name, price, description, category_id, store_id FROM product WHERE product_id = %s", (id))
         product = cursor.fetchone()
+
         # get categories
         cursor.execute("SELECT * FROM category")
         category_list = cursor.fetchall()
+
         # get stores
         cursor.execute("SELECT * FROM store")
         store_list = cursor.fetchall()
@@ -727,12 +731,14 @@ def product_update(id):
         form.store.choices = [(store['store_id'], store['store_name'])for store in store_list]
 
         if form.validate_on_submit():
-            cursor.execute("UPDATE product SET name = %s, price = %s, description = %s, category_id = %s, store_id = %s", (
+            # update the selected product
+            cursor.execute("UPDATE product SET name = %s, price = %s, description = %s, category_id = %s, store_id = %s WHERE product_id = %s", (
                             request.form['name'],
                             request.form['price'],
                             request.form['description'],
                             form.category.data,
-                            form.store.data))
+                            form.store.data,
+                            id))
             # commit changes
             db.connection.commit()
 
@@ -833,6 +839,7 @@ def store_update(id):
         cursor.execute("SELECT store_name, about FROM store WHERE store_id=%s", (id))
         store = cursor.fetchone()
 
+        # populate the select field witht the users
         form.owner.choices = [(user['user_id'], user['fullname']) for user in user_list]
         
         # populate fields

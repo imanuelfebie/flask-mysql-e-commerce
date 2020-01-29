@@ -17,7 +17,10 @@
 				<!-- Quantity -->
 				<div class="row valign-wrapper">
 					<div class="col s2 grey-text">QUANTITY</div>
-					<div class="col s10"></div>
+					<div class="col s10 black-text">
+						
+						<a href="" class="btn-small green accent-4 white-text">Add</a>
+					</div>
 				</div>
 				<!-- Product description -->
 				<div class="row valign-wrapper">
@@ -33,7 +36,13 @@
 			<!-- Store name -->
 			<div class="row valign-wrapper">
 				<div class="col s1 grey-text">STORE</div>
-				<div class="col s11"><h5 class="green-text">{{ product.store_name }}</h5></div>
+				<div class="col s11">
+					<h5>
+						<a href="{{ url_for('store.store_detail', id=product.store_id) }}" class="green-text">
+							{{ product.store_name }}
+						</a>
+					</h5>
+				</div>
 			</div>
 			<!-- Store description -->
 			<div class="row valign-wrapper">

@@ -25,9 +25,16 @@ def store_detail(id):
                           WHERE s.store_id = (%s)
                           ''', (id))
         # fetch the data
-        object = cursor.fetchone()
+        owner = cursor.fetchone()
+
+        # select this store's products
+        cursor.execute('''SELECT p.product_id, p.name, p.description, p.price
+                          FROM product p 
+                          INNER JOIN store s ON p.store_id=s.store_id
+                          WHERE p.store_id=%s''', (id))
+        product_list = cursor.fetchall()
     
-    return render_template("store_detail.html", object=object)
+    return render_template("store_detail.html", owner=owner, product_list=product_list)
 
 @store.route('/store/manager/<string:id>')
 def store_manager(id):

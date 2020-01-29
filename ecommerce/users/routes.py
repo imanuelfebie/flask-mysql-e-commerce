@@ -2,7 +2,7 @@ import pymysql
 from flask import Blueprint, render_template, session, redirect, url_for, flash, g
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
-from ecommerce.users.forms import (UserRegistrationForm, AddressRegisterForm, UserLoginForm, AddressCreateForm,
+from ecommerce.users.forms import (UserRegistrationForm, UserLoginForm, AddressCreateForm,
         UserUpdateForm, UserPasswordUpdateForm)
 from ecommerce.db import Database as db
 #from ecommerce import mysql
@@ -82,7 +82,6 @@ def logout():
 @users.route('/register', methods=['POST', 'GET'])
 def register():
     '''Controller for registering new users'''
-    
     form = UserRegistrationForm()
  
     if form.validate_on_submit():
@@ -97,11 +96,20 @@ def register():
 
             # commit to db
             db.connection.commit()
+
+            # select new registered user
+            cursor.execute('SELECT user_id FROM user WHERE email LIKE (%s)', (
+                            form.email.data))
+            user = cursor.fetchone() 
+            session.pop('user', None)
+            
+            session['is_authenticated'] = True
+            session['user'] = user
         
         flash('Awesome! You just created an account and can now login')
         
         # redirect user to address form
-        return redirect(url_for('users.user_login'))
+        return redirect(url_for('users.register_address', id=user['user_id']))
 
     else:
         print(form.errors)
@@ -109,25 +117,52 @@ def register():
 
     return render_template('register.html', form=form)
 
-@users.route('/register/address/', methods=['GET','POST'])
-def register_address():
-    '''Controller to handle adding an address for new registered user'''
-
-    form = AddressRegisterForm()
+@users.route('/register/address/<string:id>', methods=['GET', 'POST'])
+@is_authenticated
+def register_address(id):
+    form = AddressCreateForm()
     
     with db.connection.cursor() as cursor:
         db.reconnect()
-        cursor.execute('SELECT * FROM city,country WHERE country.name LIKE "indonesia"')
+        # select cities
+        cursor.execute('SELECT * FROM city')
         city_list = cursor.fetchall()
-        form.city.choices = [(city['city_id'],city['name']) for city in city_list]
+        # select countries
+        cursor.execute('SELECT * FROM country')
+        country_list = cursor.fetchall()
+    
+        form.city.choices = [(city['city_id'], city['name']) for city in city_list]
+        form.country.choices = [(country['country_id'], country['name']) for country in country_list]
 
         if form.validate_on_submit():
-            with db.connection.cursor() as cursor:
-                cursor.execute("INSERT INTO address (line1, line2, line3, postal_code, country)")
-                db.connection.commit()
+            cursor.execute("INSERT INTO address (line1, line2, line3, postal_code, city_id, country_id) VALUES (%s, %s, %s, %s, %s, %s)", (
+                            form.line1.data,
+                            form.line2.data,
+                            form.line3.data,
+                            form.postal_code.data,
+                            form.city.data,
+                            form.country.data))
+            # save address
+            db.connection.commit()
+
+            # select address
+            cursor.execute("SELECT address_id FROM address WHERE line1=%s", (
+                            form.line1.data))
+            address = cursor.fetchone()
+            
+            # insert address
+            cursor.execute("UPDATE user SET address_id = %s WHERE user_id = %s", (
+                            address['address_id'],
+                            id))
+            db.connection.commit()
+
+            flash('User registered')
+            
+            return redirect(url_for('users.account', id=id))
+    if form.errors:
+        print(form.errors)
 
     return render_template('register_address.html', form=form)
-    
 
 @users.route('/profile/<string:id>')
 @is_authenticated
@@ -153,23 +188,19 @@ def profile(id):
         address_form.city.choices = [(city['city_id'], city['name']) for city in city_list]
 
         # get address from current user
-        cursor.execute('SELECT a.line1, a.line2, a.line3, a.postal_code, a.country_id, a.city_id FROM address a LEFT JOIN user u ON a.address_id=u.address_id WHERE u.user_id=(%s)', (id))
+        #cursor.execute('SELECT a.line1, a.line2, a.line3, a.postal_code, a.country_id, a.city_id FROM address a LEFT JOIN user u ON a.address_id=u.address_id WHERE u.user_id=(%s)', (id))
+        cursor.execute('''SELECT a.line1, a.line2, a.line3, a.postal_code, a.country_id, a.city_id FROM address a WHERE EXISTS (
+                          SELECT u.address_id FROM user u WHERE u.address_id IS NOT NULL AND u.address_id=a.address_id AND u.user_id=%s)''', (id))
         user_address = cursor.fetchone()
-        print(user_address['line1'])
+        #print(user_address['line1'])
 
 
     # Populate user detail fields
-    profile_form.email.data = g.user['email']
-    profile_form.firstname.data = g.user['firstname']
-    profile_form.lastname.data = g.user['lastname']
+    #profile_form.email.data = g.user['email']
+    #profile_form.firstname.data = g.user['firstname']
+    #profile_form.lastname.data = g.user['lastname']
     
-    # populate address fields if address already filled
-    address_form.line1.data = user_address['line1']
-    address_form.line2.data = user_address['line2']
-    address_form.line3.data = user_address['line3']
-    address_form.postal_code.data = user_address['postal_code']
-    address_form.country.data = user_address['country_id']
-    address_form.city.data = user_address['city_id']
+    print(g.user['email'])
 
     return render_template('profile.html', profile_form=profile_form, address_form=address_form, password_form=password_form)
 

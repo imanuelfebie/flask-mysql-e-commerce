@@ -24,29 +24,6 @@ class UserRegistrationForm(FlaskForm):
         EqualTo('password1')])
     submit = SubmitField('Register')
 
-    # Need to add username validation - Checking wether user already exist or not
-    # both username and email
-
-
-#class CustomerUpdateForm(FlaskForm):
-#    '''Update customer details'''
-#    email = StringField('email', validators=[Email()])
-#    firstname = StringField('firstname')
-#    lastname = StringField('lastname')
-#
-#    active = BooleanField('status')
-
-
-class AddressRegisterForm(FlaskForm):
-    '''Register the user address'''
-    line1 = StringField('address 1', validators=[DataRequired()])
-    line2 = StringField('address 2') # not required field
-    line3 = StringField('address 3') # not required field
-    city = SelectField('city', coerce=int)
-    country = SelectField('country', coerce=int)
-    postal_code = StringField('postal code', validators=[DataRequired()])
-    submit = SubmitField('Submit')
-
 
 class UserUpdateForm(FlaskForm):
     email = StringField('email', validators=[Email()])
