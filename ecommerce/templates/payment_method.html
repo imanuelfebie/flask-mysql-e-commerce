@@ -28,14 +28,21 @@
 							<tbody>
 								{% for item in session.cart_item %}
 								<tr>
-									<td>{{ item.name }}</td>
-									<td>{{ item.quantity }}</td>
-									<td>{{ item.price }}</td>
+									<td>{{ item }}</td>
+									<td>{{ session.cart_item[item]['qty'] }}</td>
+									<td>{{ session.cart_item[item]['price'] }}</td>
 									<th></th>
 									<th></th>
 								</tr>
 								{% endfor %}
 							</tbody>
+							<thead>
+								<tr>
+									<th></th>
+									<th></th>
+									<th> Total Price: {{ total_price }} </th>
+								</tr>
+							</thead>
 						</table>			
 					</div>
 					<div class="col s5 right-align">
