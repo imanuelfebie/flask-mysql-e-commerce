@@ -224,10 +224,10 @@ def profile_update(id):
         with db.connection.cursor() as cursor:
             try:
                 cursor.execute('''UPDATE user SET email = (%s), firstname = (%s), lastname = (%s) WHERE user_id = (%s)''', 
-                                        (profile_form.email.data,
-                                        profile_form.firstname.data,
-                                        profile_form.lastname.data,
-                                        id))
+                                  (profile_form.email.data,
+                                  profile_form.firstname.data,
+                                  profile_form.lastname.data,
+                                  id))
                 # commit changes to database
                 db.connection.commit()
 
@@ -296,48 +296,25 @@ def address_update(id):
 
 
         if address_form.validate_on_submit():
-            cursor.execute('''UPDATE address SET a.line1 = %s, a.line2 = %s, a.line3 = %s, a.postal_code = %s, a.city_id = %s, a.country_id = %s 
-                              FROM address a
-                              INNER JOIN user u ON a.address_id=u.address_id WHERE u.user_id=%s''', (
-                              request.form['line1'],
-                              request.form['line2'],
-                              request.form['line3'],
-                              request.form['postal_code'],
-                              request.form['city'],
-                              request.form['country'],
-                              id))
-            # commit changes
-            db.connection.commit()
-
+            # Update the address from current user using the customer_view
+            cursor.execute('UPDATE customer_view SET address_line1=%s, address_line2=%s, address_line3=%s, postal_code=%s, city_id=%s, country_id=%s WHERE user_id=%s', (
+                            request.form['line1'],
+                            request.form['line2'],
+                            request.form['line3'],
+                            request.form['postal_code'],
+                            request.form['city'],
+                            request.form['country'],
+                            id))
+            # commit update
+            cursor.connection.commit()
+                       
             flash('Your address is updated')
 
             return redirect(url_for('users.profile', id=g.user['user_id']))
 
-            ## insert address to database
-            #cursor.execute('''INSERT INTO address (line1, line2, line3, postal_code, country_id, city_id) VALUES (%s, %s, %s, %s, %s, %s)''', (
-            #               address_form.line1.data,
-            #               address_form.line2.data,
-            #               address_form.line3.data,
-            #               address_form.postal_code.data,
-            #               address_form.country.data,
-            #               address_form.city.data))
-            ## commit to db
-            #cursor.connection.commit()
-            #
-            ## get address id
-            #cursor.execute('''SELECT address_id FROM address WHERE line1=(%s)''', (address_form.line1.data))
-            #address = cursor.fetchone()
-            #
-            ## update address_id to currentuser
-            #cursor.execute('''UPDATE user SET address_id = (%s) WHERE user_id = (%s)''', (address['address_id'], id))
-            #db.connection.commit()
-            #
-            #flash('Address has beed added')
-
-            #return redirect(url_for('users.profile', id=g.user['user_id']))
         else:
             flash('{}'.format(address_form.errors))
-
+    print(request)
     return render_template('profile.html', profile_form=profile_form, address_form=address_form, password_form=password_form)
 
 @users.route('/account/<string:id>')
