@@ -1,8 +1,8 @@
 import pymysql
-from flask import Blueprint, render_template, session, redirect, url_for, flash, g
+from flask import Blueprint, render_template, session, redirect, url_for, flash, g, request
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
-from ecommerce.users.forms import (UserRegistrationForm, UserLoginForm, AddressCreateForm,
+from ecommerce.users.forms import (UserRegistrationForm, UserLoginForm, AddressCreateForm, AddressUpdateForm,
         UserUpdateForm, UserPasswordUpdateForm)
 from ecommerce.db import Database as db
 #from ecommerce import mysql
@@ -76,7 +76,7 @@ def logout():
     '''Controller to logout users by ending clearing the session'''
     session.pop('user', None)
     session.pop('is_authenticated', False)
-    return redirect(url_for('main.index'))
+    return redirect(url_for('users.user_login'))
 
 
 @users.route('/register', methods=['POST', 'GET'])
@@ -156,9 +156,9 @@ def register_address(id):
                             id))
             db.connection.commit()
 
-            flash('User registered')
+            flash('User has been created. Sign in with your email and password')
             
-            return redirect(url_for('users.account', id=id))
+            return redirect(url_for('users.logout'))
     if form.errors:
         print(form.errors)
 
@@ -170,7 +170,7 @@ def profile(id):
     '''render the user profile details'''
 
     profile_form = UserUpdateForm()
-    address_form = AddressCreateForm()
+    address_form = AddressUpdateForm()
     password_form = UserPasswordUpdateForm()
 
     with db.connection.cursor() as cursor:
@@ -192,13 +192,20 @@ def profile(id):
         cursor.execute('''SELECT a.line1, a.line2, a.line3, a.postal_code, a.country_id, a.city_id FROM address a WHERE EXISTS (
                           SELECT u.address_id FROM user u WHERE u.address_id IS NOT NULL AND u.address_id=a.address_id AND u.user_id=%s)''', (id))
         user_address = cursor.fetchone()
-        #print(user_address['line1'])
+
 
 
     # Populate user detail fields
     profile_form.email.data = g.user['email']
     profile_form.firstname.data = g.user['firstname']
     profile_form.lastname.data = g.user['lastname']
+
+    address_form.line1.data = user_address['line1']
+    address_form.line2.data = user_address['line2']
+    address_form.line3.data = user_address['line3']
+    address_form.postal_code.data = user_address['postal_code']
+    address_form.city.data = user_address['city_id']
+    address_form.country.data = user_address['country_id']
     
     print(g.user['email'])
 
@@ -210,7 +217,7 @@ def profile_update(id):
     '''Controller to update the user's email, name, lastname'''
 
     profile_form = UserUpdateForm()
-    address_form = AddressCreateForm()
+    address_form = AddressUpdateForm()
     password_form = UserPasswordUpdateForm()
    
     if profile_form.validate_on_submit():
@@ -241,7 +248,7 @@ def password_update(id):
     '''Controller to handle the password update form'''
 
     profile_form = UserUpdateForm()
-    address_form = AddressCreateForm()
+    address_form = AddressUpdateForm()
     password_form = UserPasswordUpdateForm()
 
 
@@ -270,7 +277,7 @@ def address_update(id):
     '''Controller to handle address update form'''
 
     profile_form = UserUpdateForm()
-    address_form = AddressCreateForm()
+    address_form = AddressUpdateForm()
     password_form = UserPasswordUpdateForm()
 
     with db.connection.cursor() as cursor:
@@ -289,28 +296,45 @@ def address_update(id):
 
 
         if address_form.validate_on_submit():
-            # insert address to database
-            cursor.execute('''INSERT INTO address (line1, line2, line3, postal_code, country_id, city_id) VALUES (%s, %s, %s, %s, %s, %s)''', (
-                           address_form.line1.data,
-                           address_form.line2.data,
-                           address_form.line3.data,
-                           address_form.postal_code.data,
-                           address_form.country.data,
-                           address_form.city.data))
-            # commit to db
-            cursor.connection.commit()
-            
-            # get address id
-            cursor.execute('''SELECT address_id FROM address WHERE line1=(%s)''', (address_form.line1.data))
-            address = cursor.fetchone()
-            
-            # update address_id to currentuser
-            cursor.execute('''UPDATE user SET address_id = (%s) WHERE user_id = (%s)''', (address['address_id'], id))
+            cursor.execute('''UPDATE address SET a.line1 = %s, a.line2 = %s, a.line3 = %s, a.postal_code = %s, a.city_id = %s, a.country_id = %s 
+                              FROM address a
+                              INNER JOIN user u ON a.address_id=u.address_id WHERE u.user_id=%s''', (
+                              request.form['line1'],
+                              request.form['line2'],
+                              request.form['line3'],
+                              request.form['postal_code'],
+                              request.form['city'],
+                              request.form['country'],
+                              id))
+            # commit changes
             db.connection.commit()
-            
-            flash('Address has beed added')
+
+            flash('Your address is updated')
 
             return redirect(url_for('users.profile', id=g.user['user_id']))
+
+            ## insert address to database
+            #cursor.execute('''INSERT INTO address (line1, line2, line3, postal_code, country_id, city_id) VALUES (%s, %s, %s, %s, %s, %s)''', (
+            #               address_form.line1.data,
+            #               address_form.line2.data,
+            #               address_form.line3.data,
+            #               address_form.postal_code.data,
+            #               address_form.country.data,
+            #               address_form.city.data))
+            ## commit to db
+            #cursor.connection.commit()
+            #
+            ## get address id
+            #cursor.execute('''SELECT address_id FROM address WHERE line1=(%s)''', (address_form.line1.data))
+            #address = cursor.fetchone()
+            #
+            ## update address_id to currentuser
+            #cursor.execute('''UPDATE user SET address_id = (%s) WHERE user_id = (%s)''', (address['address_id'], id))
+            #db.connection.commit()
+            #
+            #flash('Address has beed added')
+
+            #return redirect(url_for('users.profile', id=g.user['user_id']))
         else:
             flash('{}'.format(address_form.errors))
 

@@ -42,7 +42,7 @@ def store_manager(id):
 
     with db.connection.cursor() as cursor:
         db.reconnect()
-        cursor.execute('''SELECT p.product_id, p.name, p.price, p.description, p.category_id, c.category_name FROM product p
+        cursor.execute('''SELECT p.product_id, p.name, p.price, p.category_id, p.added_on, c.category_name FROM product p
                           INNER JOIN category c
                           ON p.category_id=c.category_id
                           WHERE p.store_id = (%s)''',(id))
@@ -78,6 +78,18 @@ def store_register(id):
         print('Failed to create store')
 
     return render_template('store_registration.html', form=form)
+
+@store.route('/store/delete/<string:id>')
+def store_delete(id):
+    '''Delete store'''
+
+    with db.connection.cursor() as cursor:
+        # reconnect to heroku
+        db.reconnect()
+        #
+
+
+    return redirect(url_for('users.account', id=g.user['user_id']))
 
 @store.route('/store/manager/purchase_history/<string:id>')
 def purchase_history(id):

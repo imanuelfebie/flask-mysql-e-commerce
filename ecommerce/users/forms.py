@@ -48,3 +48,14 @@ class AddressCreateForm(FlaskForm):
     city = SelectField('city', coerce=int)
     user_id = HiddenField()
     submit = SubmitField('Submit')    
+
+
+class AddressUpdateForm(FlaskForm):
+    line1 = StringField('address 1')
+    line2 = StringField('address 2') # not required field
+    line3 = StringField('address 3') # not required field
+    postal_code = StringField('postal code')
+    country = SelectField('country', coerce=int)
+    city = SelectField('city', coerce=int)
+    user_id = HiddenField()
+    submit = SubmitField('Submit')

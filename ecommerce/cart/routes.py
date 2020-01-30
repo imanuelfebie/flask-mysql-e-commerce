@@ -133,8 +133,6 @@ def choose_payment_method():
 
             # select the order_item 
             
-
-
             # get the payment method and insert into the transaction
             cursor.execute("INSERT INTO transaction (payment_method_id, user_id, order_item_id) VALUES (%s, %s, %s)", (
                             form.payment_method.data,
