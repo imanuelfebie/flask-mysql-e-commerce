@@ -7,6 +7,14 @@
 
 	<!-- Loop through the product objects and display them -->
 	{% if product_list %}
+		
+	<!-- Categories pagination -->
+	<ul class="pagination">
+		{% for c in category_list %}
+		<li><a href="{{ url_for('main.filtered_by_category', c.category_name) }}">{{ c.category_name }}</a></li>
+		{% endfor %}
+	</ul>
+
 	{% for product in product_list %}
 	<div class="col l4 s12">
 		<div class="card">

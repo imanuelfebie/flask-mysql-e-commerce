@@ -307,15 +307,10 @@ def address_update(id):
         # recconect to heroku
         db.reconnect()
         # get selected address date
-        cursor.execute('SELECT line1, line2, line3, postal_code, city_id, country_id '
+        cursor.execute('SELECT line1, line2, line3, postal_code, city_id'
                        'FROM address WHERE address_id = %s', (id))
          # get address
         address = cursor.fetchone() 
-
-        # get all the contries for select form
-        cursor.execute('SELECT * FROM country')
-        country_list = cursor.fetchall()
-        form.country.choices = [(country['country_id'], country['name']) for country in country_list]
         
         # get all cities for select form
         cursor.execute('''SELECT city_id, name FROM city''')
@@ -335,13 +330,12 @@ def address_update(id):
 
         if form.validate_on_submit():
             # Update selected address
-            cursor.execute("UPDATE address SET line1 = %s, line2 = %s, line3 = %s, postal_code = %s, city_id = %s, country_id = %s WHERE address_id = %s", (
+            cursor.execute("UPDATE address SET line1 = %s, line2 = %s, line3 = %s, postal_code = %s, city_id = %s WHERE address_id = %s", (
                             request.form['line1'],
                             request.form['line2'],
                             request.form['line3'],
                             request.form['postal_code'],
                             form.city.data,
-                            form.country.data,
                             id))  
             #commit to db
             db.connection.commit

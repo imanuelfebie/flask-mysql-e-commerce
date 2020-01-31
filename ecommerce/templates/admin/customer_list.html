@@ -15,6 +15,7 @@
 				</a>
 			</div>
 		</div>
+		{% if customer_list %}
 		<table class="highlight responsive-table">
 			<thead>
 				<tr>
@@ -45,6 +46,9 @@
 				{% endfor %}
 			</tbody>
 		</table>
+		{% else %}
+		<p class="center-align">No customers</p>
+		{% endif %}
 	</div>
 </div>
 {% endblock body %}

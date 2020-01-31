@@ -48,6 +48,8 @@ def store_manager(id):
                           WHERE p.store_id = (%s)''',(id))
         product_list = cursor.fetchall()
 
+    print(session)
+
     return render_template('store_manager.html', product_list=product_list)
 
 @store.route('/store/register/<string:id>', methods=['POST', 'GET'])
@@ -70,6 +72,8 @@ def store_register(id):
 
             cursor.execute('''UPDATE user SET store_id= (%s) WHERE user_id = (%s)''', (store['store_id'], id))
             db.connection.commit()
+
+            session.modified = True
 
         return redirect(url_for('store.store_manager', id=store['store_id']))
 

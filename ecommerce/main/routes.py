@@ -1,6 +1,4 @@
-import pymysql
-
-from flask import Blueprint, render_template, session, g
+from flask import Blueprint, render_template, session, g, url_for, redirect
 from ecommerce.db import Database as db
 
 main = Blueprint('main', __name__)
@@ -15,14 +13,33 @@ def before_request():
 def index():
     
     with db.connection.cursor() as cursor:
-        try: 
-            cursor.execute("SELECT * FROM product")
-            product_list = cursor.fetchall()
-        except (pymysql.OperationalError):
-            db.reconnect()
-            cursor.execute("SELECT * FROM product")
-            product_list = cursor.fetchall()
+        # reconnect to heroku
+        db.reconnect()
+        
+        # get categories
+        cursor.execute('SELECT DISTINCT * FROM category')
+        category_list = cursor.fetchall() 
+         
+        # get products
+        cursor.execute("SELECT * FROM product")
+        product_list = cursor.fetchall()
+ 
+    return render_template('index.html', product_list=product_list, category_list=category_list)
+
+@main.route('/category/<string:name>')
+def filtered_by_category(name):
     
-    return render_template('index.html', product_list=product_list)
+    with db.connection.cursor() as cursor:
+        # reconnect to heroku
+        db.reconnect()
+
+        cursor.execute('SELECT DISTINCT * FROM category')
+        category_list = cursor.fetchall()
+        
+        cursor.execute('SELECT * FROM product WHERE category LIKE = (%s)', (
+                        name))
+        product_list = cursor.fetchall()
+        
+    return render_template('product_filtered_by_category.html', product_list=product_list, category_list=category_list)
 
 

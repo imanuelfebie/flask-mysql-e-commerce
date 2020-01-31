@@ -44,7 +44,6 @@ class AddressCreateForm(FlaskForm):
     line2 = StringField('address 2') # not required field
     line3 = StringField('address 3') # not required field
     postal_code = StringField('postal code', validators=[DataRequired()])
-    country = SelectField('country', coerce=int)
     city = SelectField('city', coerce=int)
     user_id = HiddenField()
     submit = SubmitField('Submit')    

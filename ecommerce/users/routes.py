@@ -88,11 +88,12 @@ def register():
         with db.connection.cursor() as cursor:
             db.reconnect()
             # insert new user object into user
-            cursor.execute('INSERT INTO user (firstname, lastname, email, password) VALUES (%s, %s, %s, %s)', (
+            cursor.execute('INSERT INTO user (firstname, lastname, email, password, is_active) VALUES (%s, %s, %s, %s, %s)', (
             form.firstname.data,
             form.lastname.data,
             form.email.data,
-            generate_password_hash(form.password1.data)))
+            generate_password_hash(form.password1.data),
+            True))
 
             # commit to db
             db.connection.commit()
@@ -124,24 +125,19 @@ def register_address(id):
     
     with db.connection.cursor() as cursor:
         db.reconnect()
+
         # select cities
         cursor.execute('SELECT * FROM city')
         city_list = cursor.fetchall()
-        # select countries
-        cursor.execute('SELECT * FROM country')
-        country_list = cursor.fetchall()
-    
         form.city.choices = [(city['city_id'], city['name']) for city in city_list]
-        form.country.choices = [(country['country_id'], country['name']) for country in country_list]
 
         if form.validate_on_submit():
-            cursor.execute("INSERT INTO address (line1, line2, line3, postal_code, city_id, country_id) VALUES (%s, %s, %s, %s, %s, %s)", (
+            cursor.execute("INSERT INTO address (line1, line2, line3, postal_code, city_id) VALUES (%s, %s, %s, %s, %s)", (
                             form.line1.data,
                             form.line2.data,
                             form.line3.data,
                             form.postal_code.data,
-                            form.city.data,
-                            form.country.data))
+                            form.city.data))
             # save address
             db.connection.commit()
 
@@ -283,11 +279,6 @@ def address_update(id):
     with db.connection.cursor() as cursor:
         # reconnect to heroku mysql db
         db.reconnect()
-
-        # get all the contries for select form
-        cursor.execute('SELECT * FROM country')
-        country_list = cursor.fetchall()
-        address_form.country.choices = [(country['country_id'], country['name']) for country in country_list]
         
         # get all cities for select form
         cursor.execute('''SELECT city_id, name FROM city''')
@@ -297,13 +288,12 @@ def address_update(id):
 
         if address_form.validate_on_submit():
             # Update the address from current user using the customer_view
-            cursor.execute('UPDATE customer_view SET address_line1=%s, address_line2=%s, address_line3=%s, postal_code=%s, city_id=%s, country_id=%s WHERE user_id=%s', (
+            cursor.execute('UPDATE customer_view SET address_line1=%s, address_line2=%s, address_line3=%s, postal_code=%s, city_id=%s WHERE user_id=%s', (
                             request.form['line1'],
                             request.form['line2'],
                             request.form['line3'],
                             request.form['postal_code'],
                             request.form['city'],
-                            request.form['country'],
                             id))
             # commit update
             cursor.connection.commit()

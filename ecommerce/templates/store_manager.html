@@ -9,6 +9,7 @@
 <div class="card">
 	<div class="card-content">
 		<span class="card-title">My Products</span>
+		{% if product_list %}
 		<table class="highlight responsive-table">
 			<thead>
 				<tr>
@@ -46,6 +47,9 @@
 				{% endfor %}
 			</tbody>
 		</table>
+		{% else %}
+		<h6>You have product's in your store yet. Add them by clicking on the <i class="material-icons">add</i> in the navigation.</h6>
+		{% endif %}
 	</div>
 </div>
 {% endblock body %}

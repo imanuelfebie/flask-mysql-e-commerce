@@ -55,13 +55,18 @@ def product_create(id):
     with db.connection.cursor() as cursor:
         # reconnect by default because heroku server connection is unstable
         db.reconnect()
+        
+        # get this store_id
+        #cursor.execute('SELECT * FROM user WHERE store_id=(%s)', (id))
+        #user = cursor.fetchone()
+
+        # select all categories
         cursor.execute('SELECT * FROM category')
         category_list = cursor.fetchall()
         form.category.choices = [(category['category_id'], category['category_name']) for category in category_list]
 
         if form.validate_on_submit():
-            cursor.execute('''INSERT INTO product 
-                              (name, price, available, category_id, description, store_id) VALUES (%s, %s, %s, %s, %s, %s)''', (
+            cursor.execute('''INSERT INTO product (name, price, available, category_id, description, store_id) VALUES (%s, %s, %s, %s, %s, %s)''', (
                                   form.name.data,
                                   form.price.data,
                                   True,
@@ -71,11 +76,9 @@ def product_create(id):
             # Commit changes to db
             db.connection.commit()
             flash('Product added')
+        
             return redirect(url_for('store.store_manager', id=g.user['store_id']))
-
-        else:
-            print('fail') 
-     
+ 
     return render_template('product_create.html', form=form)
 
 # Product details

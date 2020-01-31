@@ -11,6 +11,7 @@
 			<div class="col s10"><span class="card-title">Products</span></div>
 			<div class="col s2 right"><a href="{{ url_for('admin.product_create') }}" class="blue-text">Add product</a></div>
 		</div>
+		{% if product_list %}
 		<table class="highlight responsive-table">
 			<thead>
 				<tr>
@@ -39,6 +40,9 @@
 				{% endfor %}
 			</tbody>
 		</table>
+		{% else %}
+		<p class="center-align">Product list is empty</p>
+		{% endif %}
 	</div>
 </div>
 {% endblock body %}

@@ -8,6 +8,9 @@ app = Flask(__name__)
 # Secret key
 app.config['SECRET_KEY'] = '12345678' 
 
+# File Uploads
+app.config['PRODUCT_IMAGES'] = '/uploads/images'
+
 # Init sentry for flask
 sentry_sdk.init(
     dsn="https://8b22654d815049f4b4097f30af22a07e@sentry.io/1883857",
