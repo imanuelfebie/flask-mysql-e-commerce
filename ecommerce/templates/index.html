@@ -11,7 +11,7 @@
 	<!-- Categories pagination -->
 	<ul class="pagination">
 		{% for c in category_list %}
-		<li><a href="{{ url_for('main.filtered_by_category', c.category_name) }}">{{ c.category_name }}</a></li>
+		<li><a href="{{ url_for('main.filtered_by_category', name=c.category_name) }}">{{ c.category_name }}</a></li>
 		{% endfor %}
 	</ul>
 
