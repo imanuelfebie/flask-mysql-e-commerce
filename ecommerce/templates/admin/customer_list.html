@@ -39,7 +39,7 @@
 					<td>{{ c.email }}</td>
 					<td>{{ c.joined_on.strftime('%d %b %Y') }}</td>
 					<td>{{ c.is_active }}</td>
-					<td>{{ c.store_id }}</td>
+					<td>{{ c.store_name }}</td>
 					<td><a href="{{ url_for('admin.customer_delete', id=c.user_id) }}"><i class="tiny material-icons red-text">clear</i></a></td>
 					<td><a href="{{ url_for('admin.customer_update', id=c.user_id) }}"><i class="tiny material-icons green-text">edit</i></a></td>
 				</tr>

@@ -59,7 +59,7 @@ def admin_login():
             # start session with the user (admin) and redirect to the admin page
             session['is_admin'] = True
             session['admin'] = user
-            print(session)    
+            print(session) 
             return redirect(url_for('admin.admin_page', id=user['admin_id']))
             
         # flash message
@@ -118,7 +118,7 @@ def admin_create():
             cursor.execute('INSERT INTO admin (username, email, password) VALUES (%s, %s, %s)', (
                             form.username.data,
                             form.email.data,
-                            form.password1.data))
+                            generate_password_hash(form.password1.data)))
             # commit changes to database
             db.connection.commit()
             
@@ -188,12 +188,10 @@ def customer_list():
     '''List of all the customers'''
 
     with db.connection.cursor() as cursor:
-        # select the customers view
-        # cursor.execute('SELECT * FROM customers ORDER BY joined_on DESC')
         # reconnect to heroku server
         db.reconnect()
         # Select all customers
-        cursor.execute('SELECT * FROM user ORDER BY joined_on DESC')
+        cursor.execute('SELECT u.user_id, u.firstname, u.lastname, u.email, u.joined_on, u.is_active, s.store_name FROM user u LEFT JOIN store s ON u.store_id=s.store_id ORDER BY u.joined_on DESC')
         customer_list = cursor.fetchall()
 
     return render_template('admin/customer_list.html', customer_list=customer_list)
@@ -273,7 +271,7 @@ def customer_update(id):
                             request.form['email'],
                             id))
             # commit to db
-            db.connection.cursor()
+            db.connection.commit()
 
             flash('Customer updated')
             print(form.errors)
@@ -369,20 +367,20 @@ def address_update(id):
 
     return render_template('admin/address_update.html', form=form)
 
-@admin.route('/admin/address/delete/<string:id>')
-@is_admin
-def address_delete(id):
-    '''Delete selected address'''
-    
-    with db.connection.cursor() as cursor:
-        # reconnect to heroku
-        db.reconnect()
-        # Delete selected address
-        cursor.execute('DELETE FROM address WHERE address_id = %s', (id))
-        # commit
-        db.connection.commit()
-
-    return redirect(url_for('admin.address_list'))
+#@admin.route('/admin/address/delete/<string:id>')
+#@is_admin
+#def address_delete(id):
+#    '''Delete selected address'''
+#    
+#    with db.connection.cursor() as cursor:
+#        # reconnect to heroku
+#        db.reconnect()
+#        # Delete selected address
+#        cursor.execute('DELETE FROM address WHERE address_id = %s', (id))
+#        # commit
+#        db.connection.commit()
+#
+#    return redirect(url_for('admin.address_list'))
 
 
 #############################################################
@@ -474,21 +472,21 @@ def city_update(id):
     return render_template('admin/city_update.html', form=form)
 
 
-@admin.route('/admin/city/delete/<string:id>')
-@is_admin
-def city_delete(id):
-    '''Deleted selected city'''
-
-    with db.connection.cursor() as cursor:
-        # reconnect to heroku
-        db.reconnect()
-        # delete select city
-        cursor.execute("DELETE FROM city WHERE city_id=%s", (id))
-        db.connection.commit()
-        
-        flash('City has been deleted')
-
-        return redirect(url_for('admin.city_list'))
+#@admin.route('/admin/city/delete/<string:id>')
+#@is_admin
+#def city_delete(id):
+#    '''Deleted selected city'''
+#
+#    with db.connection.cursor() as cursor:
+#        # reconnect to heroku
+#        db.reconnect()
+#        # delete select city
+#        cursor.execute("DELETE FROM city WHERE city_id=%s", (id))
+#        db.connection.commit()
+#        
+#        flash('City has been deleted')
+#
+#        return redirect(url_for('admin.city_list'))
 
 
 ################################################################
@@ -560,19 +558,19 @@ def country_update(id):
 
     return render_template('admin/country_update.html', form=form)
 
-@admin.route('/admin/country/delete/<string:id>')
-@is_admin
-def country_delete(id):
-    '''Delete selected Country'''
-
-    with db.connection.cursor() as cursor:
-        db.reconnect()
-        cursor.execute("DELETE FROM country WHERE country_id=%s", (id))
-        db.connection.commit()
-
-        flash('Delelete successfull')
-
-        return redirect(url_for('admin.country_list'))
+#@admin.route('/admin/country/delete/<string:id>')
+#@is_admin
+#def country_delete(id):
+#    '''Delete selected Country'''
+#
+#    with db.connection.cursor() as cursor:
+#        db.reconnect()
+#        cursor.execute("DELETE FROM country WHERE country_id=%s", (id))
+#        db.connection.commit()
+#
+#        flash('Delelete successfull')
+#
+#        return redirect(url_for('admin.country_list'))
 
 
 #################################################################
@@ -644,19 +642,19 @@ def category_update(id):
 
     return render_template('admin/category_update.html', form=form)
 
-@admin.route('/admin/category/delete/<string:id>')
-@is_admin
-def category_delete(id):
-    '''Deleted selected category'''
-
-    with db.connection.cursor() as cursor:
-        db.reconnect()
-        # DELETE from category
-        cursor.execute("DELETE FROM category WHERE category_id=%s", (id))
-
-        flash('Delete successfull')
-
-        return redirect(url_for('admin.category_list'))
+#@admin.route('/admin/category/delete/<string:id>')
+#@is_admin
+#def category_delete(id):
+#    '''Deleted selected category'''
+#
+#    with db.connection.cursor() as cursor:
+#        db.reconnect()
+#        # DELETE from category
+#        cursor.execute("DELETE FROM category WHERE category_id=%s", (id))
+#
+#        flash('Delete successfull')
+#
+#        return redirect(url_for('admin.category_list'))
 
 
 ##############################################################
@@ -742,6 +740,8 @@ def product_update(id):
         form.name.data = product['name']
         form.price.data = product['price']
         form.description.data = product['description']
+        form.category.data = product['category_id']
+        form.store.data = product['store_id']
         
         # select fields
         form.category.choices = [(category['category_id'], category['category_name']) for category in category_list]
@@ -753,8 +753,8 @@ def product_update(id):
                             request.form['name'],
                             request.form['price'],
                             request.form['description'],
-                            form.category.data,
-                            form.store.data,
+                            request.form['category'],
+                            request.form['store'],
                             id))
             # commit changes
             db.connection.commit()

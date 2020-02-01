@@ -34,7 +34,6 @@
 					<td>{{ a.country_name }}</td>
 					<td></td>
 					<td></td>
-					<td><a href="{{ url_for('admin.address_delete', id=a.address_id) }}"><i class="tiny material-icons red-text">clear</i></a></td>
 					<td><a href="{{ url_for('admin.address_update', id=a.address_id) }}"><i class="tiny material-icons green-text">edit</i></a></td>
 				</tr>
 				{% endfor %}

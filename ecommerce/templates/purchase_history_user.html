@@ -16,18 +16,18 @@
 			<a href="{{ url_for('users.profile', id=g.user.user_id) }}" class="collection-item">
 				Update profile
 			</a>
-			{% if g.user.store_id== 0 %}
+			{% if g.user.store_id is none %}
 			<a href="{{ url_for('store.store_register', id=g.user.user_id) }}" class="collection-item">
 					Register Store
 			</a>
 			{% else %}
-			<a href="{{ url_for('store.store_detail', id=g.user.store_id) }}" class="collection-item"
+			<a href="{{ url_for('store.store_detail', id=user.store_id) }}" class="collection-item"
 				>My Store</a>
-			<a href="{{ url_for('store.store_manager', id=g.user.store_id) }}" class="collection-item">
+			<a href="{{ url_for('store.store_manager', id=user.store_id) }}" class="collection-item">
 				Store Manager
 			</a>
 			{% endif %}
-			<a href="{{ url_for('users.purchase_history', id=g.user.user_id) }}" class="collection-item">Purchase History</a>
+			<a href="{{ url_for('users.purchase_history', id=user.user_id) }}" class="collection-item">Purchase History</a>
 			<a href="" class="collection-item">Basket</a>
 		</div>
 	</div>

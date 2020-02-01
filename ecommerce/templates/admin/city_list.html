@@ -32,7 +32,6 @@
 					<td>{{ c.city_id }}</td>
 					<td>{{ c.name }}</td>
 					<td>{{ c.country_name }}</td>
-					<td><a href="{{ url_for('admin.city_delete', id=c.city_id) }}"><i class="tiny material-icons red-text">clear</i></a></td>
 					<td><a href="{{ url_for('admin.city_update', id=c.city_id) }}"><i class="tiny material-icons green-text">edit</i></a></td>
 				</tr>
 				{% endfor %}

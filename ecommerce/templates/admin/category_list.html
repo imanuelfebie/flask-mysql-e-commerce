@@ -25,7 +25,6 @@
 				<tr>
 					<td>{{ c.category_id }}</td>
 					<td>{{ c.category_name }}</td>
-					<td><a href="{{ url_for('admin.category_delete', id=c.category_id) }}"><i class="tiny material-icons red-text">clear</i></a></td>
 					<td><a href="{{ url_for('admin.category_update', id=c.category_id) }}"><i class="tiny material-icons green-text">edit</i></a></td>
 				</tr>
 				{% endfor %}
