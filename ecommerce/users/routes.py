@@ -296,8 +296,16 @@ def address_update(id):
 def account(id):
     '''Controller for the user account'''
 
+    with db.connection.cursor() as cursor:
+        # reconnect to heroku
+        db.reconnect()
+        cursor.execute('SELECT firstname, lastname, email, address_line1, address_line2, address_line3, postal_code, city_id, city_name FROM customer_view WHERE user_id=%s',(
+                id))
+        user = cursor.fetchone()
+
     image = url_for('static', filename="profile_img/default_avatar.png")
-    return render_template('user_dashboard.html', image=image)
+
+    return render_template('user_dashboard.html', image=image, user=user)
 
 @users.route('/account/purchase_history/<string:id>')
 def purchase_history(id):
@@ -307,6 +315,9 @@ def purchase_history(id):
         # SELECT ALL transaction from this user
         cursor.execute('SELECT t.transaction_id, t.ordered_on FROM transaction t WHERE t.user_id=%s', (id))
         transaction_list = cursor.fetchall()
+        cursor.execute('SELECT firstname, lastname, email, address_line1, address_line2, address_line3, postal_code, city_id, city_name FROM customer_view WHERE user_id=%s',(
+                    id))
+        user = cursor.fetchone()
 
-    return render_template('purchase_history_user.html', transaction_list=transaction_list)
+    return render_template('purchase_history_user.html', transaction_list=transaction_list, user=user)
        

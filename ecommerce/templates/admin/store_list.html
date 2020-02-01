@@ -29,7 +29,6 @@
 					<td>{{ s.store_name }}</td>
 					<td>{{ s.fullname }}</td>
 					<td>{{ s.joined_on.strftime('%d %b %Y') }}</td>
-					<td><a href="{{ url_for('admin.store_delete', id=s.store_id) }}"><i class="tiny material-icons red-text">clear</i></a></td>
 					<td><a href="{{ url_for('admin.store_update', id=s.store_id) }}"><i class="tiny material-icons green-text">edit</i></a></td>
 				</tr>
 				{% endfor %}

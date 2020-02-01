@@ -1,9 +1,12 @@
 from flask import Blueprint, render_template, redirect, url_for, session, flash, g, request
 from functools import wraps
+from werkzeug.security import generate_password_hash, check_password_hash
 from ecommerce.admin.forms import (AdminLoginForm, AdminCreateForm, AdminUpdateForm,
-        CityForm, CityUpdateForm, CountryForm, CountryUpdateForm, CategoryForm, ProductCreateForm, ProductUpdateForm,
-        StoreCreateForm, StoreUpdateForm, PaymentMethodForm)
-from ecommerce.users.forms import UserRegistrationForm, UserUpdateForm, AddressCreateForm
+                                   CityForm, CityUpdateForm, CountryForm, 
+                                   CountryUpdateForm, CategoryForm, ProductCreateForm, 
+                                   ProductUpdateForm, StoreCreateForm, StoreUpdateForm, 
+                                   CustomerCreateForm, PaymentMethodForm)
+from ecommerce.users.forms import UserUpdateForm, AddressCreateForm
 from ecommerce.store.forms import StoreRegistrationForm
 from ecommerce.db import Database as db
 
@@ -199,27 +202,48 @@ def customer_list():
 @is_admin
 def customer_create():
     '''Create new user'''
-    form = UserRegistrationForm()
+    form = CustomerCreateForm()
 
     with db.connection.cursor() as cursor:
         # reconnect to heroku server
         db.reconnect()
-        
+    
+        # get all the cities
+        cursor.execute('SELECT * FROM city')
+        city_list = cursor.fetchall()
+        form.city.choices = [(city['city_id'], city['name']) for city in city_list]
+
         if form.validate_on_submit():
-            # insert new customer to db
-            cursor.execute('INSERT INTO user (firstname, lastname, email, password, is_active) VALUES (%s, %s, %s, %s, %s)',(
-                form.firstname.data,
-                form.lastname.data,
-                form.email.data,
-                form.password1.data,
-                True))
-            # commit to db
+            # insert into user first
+            cursor.execute('INSERT INTO user (firstname, lastname, email, password, is_active) VALUES (%s, %s, %s, %s, %s)', (
+                            form.firstname.data,
+                            form.lastname.data,
+                            form.email.data,
+                            generate_password_hash(form.password1.data),
+                            True
+                            ))
             db.connection.commit()
+
+            # select this user
+            cursor.execute('SELECT user_id FROM user WHERE email LIKE (%s)', (
+                            form.email.data))
+            user = cursor.fetchone()
             
-            flash('New customer has been added')
+            # insert address into customer_view
+            cursor.execute('UPDATE customer_view SET address_line1=%s, address_line2=%s, address_line3=%s, postal_code=%s, city_id=%s WHERE user_id=%s', (
+                            form.address_line1.data,
+                            form.address_line2.data,
+                            form.address_line3.data,
+                            form.postal_code.data,
+                            form.city.data,
+                            user['user_id']))
+
+            db.connection.commit()           
+        
+            flash(f'{form.firstname.data} {form.lastname.data} created')
 
             return redirect(url_for('admin.customer_list'))
-        
+
     return render_template('admin/customer_create.html', form=form)
 
 @admin.route('/admin/customer/update/<string:id>', methods=['GET', 'POST'])
@@ -290,7 +314,7 @@ def address_list():
         db.reconnect()
         
         # select all addresses
-        cursor.execute('SELECT * FROM address')
+        cursor.execute('SELECT * FROM address_view')
 
         # fetch all
         address_list = cursor.fetchall()
@@ -307,9 +331,8 @@ def address_update(id):
         # recconect to heroku
         db.reconnect()
         # get selected address date
-        cursor.execute('SELECT line1, line2, line3, postal_code, city_id'
-                       'FROM address WHERE address_id = %s', (id))
-         # get address
+        cursor.execute('SELECT line1, line2, line3, postal_code, city_id FROM address WHERE address_id = %s', (id))
+        # get address
         address = cursor.fetchone() 
         
         # get all cities for select form
@@ -864,21 +887,6 @@ def store_update(id):
 
 
     return render_template('admin/store_update.html', form=form)
-
-@admin.route('/admin/store/delete/<string:id>')
-@is_admin
-def store_delete(id):
-    '''Delete selected store'''
-
-    with db.connection.cursor() as cursor:
-        # reconnect to heroku
-        db.reconnect()
-        # delete from store
-        cursor.execute("DELETE FROM store WHERE store_id=%s", (id))
-
-    flash('Store delete successfull')
-         
-    return redirect(url_for('admin.store_list'))
 
 @admin.route('/admin/payment-methods/new', methods=['GET', 'POST'])
 @is_admin

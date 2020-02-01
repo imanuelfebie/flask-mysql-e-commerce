@@ -25,6 +25,22 @@ class AdminUpdateForm(FlaskForm):
     password2 = PasswordField('confirm new password', validators=[EqualTo('password1')])
     submit = SubmitField('update')
 
+class CustomerCreateForm(FlaskForm):
+    firstname = StringField('firstname', validators=[DataRequired()])
+    lastname = StringField('lastname', validators=[DataRequired()])
+    email = StringField('email', validators=[DataRequired(), Email()])
+
+    address_line1 = StringField('line 1', validators=[DataRequired()])
+    address_line2 = StringField('line 2')
+    address_line3 = StringField('line 3')
+    postal_code = StringField('postal_code', validators=[DataRequired()])
+    city = SelectField('city', coerce=int)
+
+    password1 = PasswordField('password', validators=[DataRequired()])
+    password2 = PasswordField('confirm password', validators=[DataRequired(),
+                                                              EqualTo('password1')])
+    submit = SubmitField('submit')
+
 class CityForm(FlaskForm):
     name = StringField('city name', validators=[DataRequired()])
     country = SelectField('countries', coerce=int, validators=[DataRequired()])
