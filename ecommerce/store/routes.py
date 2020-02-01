@@ -1,4 +1,4 @@
-from flask import render_template, redirect, url_for, Blueprint, g, session
+from flask import render_template, redirect, url_for, Blueprint, g, session, flash
 from ecommerce.store.forms import StoreRegistrationForm
 from ecommerce.db import Database as db
 
@@ -74,8 +74,10 @@ def store_register(id):
             db.connection.commit()
 
             session.modified = True
+        
+        flash(f"{form.name.data} successfully registered. Log back in!")
 
-        return redirect(url_for('store.store_manager', id=store['store_id']))
+        return redirect(url_for('users.logout'))
 
     else:
         print(form.errors)
