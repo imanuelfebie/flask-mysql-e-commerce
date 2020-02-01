@@ -34,7 +34,6 @@
 					<td>{{ p.category_name }}</td>
 					<td>{{ p.store_name }}</td>
 					<td>{{ p.added_on.strftime('%d %b %Y') }}</td>
-					<td><a href="{{ url_for('admin.product_delete', id=p.product_id) }}"><i class="tiny material-icons red-text">clear</i></a></td>
 					<td><a href="{{ url_for('admin.product_update', id=p.product_id) }}"><i class="tiny material-icons green-text">edit</i></a></td>
 				</tr>
 				{% endfor %}

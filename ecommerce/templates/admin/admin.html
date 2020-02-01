@@ -8,6 +8,33 @@
 <h5 class="green-text">Site administrator</h5>
 
 <div class="row">
+	<div class="col s4">
+		<div class="card">
+			<div class="card-content center-align">
+				<h5>Customers</h5>	
+				<h6 class="green-text">{{ total_users }}</h6>
+			</div>
+		</div>
+	</div>
+	<div class="col s4">
+		<div class="card">
+			<div class="card-content center-align">
+				<h5>Stores</h5>
+				<h6 class="green-text">{{ total_stores }}</h6>
+			</div>
+		</div>
+	</div>
+	<div class="col s4">
+		<div class="card">
+			<div class="card-content center-align">
+				<h5>Products</h5>
+				<h6 class="green-text">{{ total_products }}</h6>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row">
 	<div class="col s12 l8">
 		<!-- Admin & Customers -->
 		<ul class="collection with-header z-depth-1">
@@ -27,7 +54,7 @@
 	<div class="col l4 hide-on-med-and-down">
 		<div class="card-panel">
 			<h6>Hello {{ session.admin.username }}</h6>
-			<small>As site administrator you can modify all the tables</small>
+			<small>Overview of the ecommerce. Authorized to do some modificatoins on the data</small>
 		</div>
 	</div>
 	

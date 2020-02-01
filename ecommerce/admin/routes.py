@@ -81,8 +81,24 @@ def logout():
 @is_admin
 def admin_page(id):
     '''Overview all the tables - administrator page'''
+    
+    with db.connection.cursor() as cursor:
+        db.reconnect()
+        # count all customer;
+        cursor.execute("SELECT COUNT(user_id) AS total_users FROM user")    
+        total_users = cursor.fetchone()
 
-    return render_template('admin/admin.html')
+        # count all stores
+        cursor.execute("SELECT COUNT(store_id) AS total_stores FROM store")
+        total_stores = cursor.fetchone()
+
+        # count all products
+        cursor.execute("SELECT COUNT(product_id) AS total_products FROM product")
+        total_products = cursor.fetchone()
+
+    return render_template('admin/admin.html', total_users=total_users['total_users'],
+                            total_stores=total_stores['total_stores'],
+                            total_products=total_products['total_products'])
 
 
 #######################################################################
@@ -765,21 +781,21 @@ def product_update(id):
 
     return render_template('admin/product_update.html', form=form)
 
-@admin.route('/admin/product/delete/<string:id>')
-@is_admin
-def product_delete(id):
-    '''DELETE selected product'''
-
-    with db.connection.cursor() as cursor:
-        db.reconnect()
-        # delete from product
-        cursor.execute("DELETE FROM product WHERE product_id = %s", (id))
-        # commit changes
-        db.connection.commit()
-
-        flash('Delete successfull')
-
-        return redirect(url_for('admin.product_list'))
+#@admin.route('/admin/product/delete/<string:id>')
+#@is_admin
+#def product_delete(id):
+#    '''DELETE selected product'''
+#
+#    with db.connection.cursor() as cursor:
+#        db.reconnect()
+#        # delete from product
+#        cursor.execute("DELETE FROM product WHERE product_id = %s", (id))
+#        # commit changes
+#        db.connection.commit()
+#
+#        flash('Delete successfull')
+#
+#        return redirect(url_for('admin.product_list'))
 
 #############################################################
 # ROUTES FOR CREATING, RETRIEVING, UDPATING & DELETING STORES 

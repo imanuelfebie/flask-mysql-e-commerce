@@ -8,6 +8,7 @@
 <div class="card">
 	<div class="card-content">
 		<span class="card-title">Shopping Cart</span>
+		{% if session.cart_item %}
 		<table class="striped responsive-table">
 			<thead>
 				<tr>
@@ -33,7 +34,7 @@
 				</tr>
 			</thead>
 		</table>
-		{% if session.cart_item %}
+
 		<div class="row valign-wrapper">
 			<div class="col s10">
 				<form action="" method="POST">
@@ -45,6 +46,8 @@
 			</div>
 			<div class="col s2"><a href="{{ url_for('orders.order_confirm') }}" class="btn green white-text">Payment method</a></div>
 		</div>
+		{% else %}
+		<h6>Your shopping cart is empty<h6>
 		{% endif %}
 	</div>
 </div>
