@@ -12,37 +12,12 @@ def before_request():
     if 'user' in session:
         g.user = session['user']
 
-
-@catalog.route('/categories/new', methods=['GET', 'POST'])
-def category_create():
-    '''Adding new categories, this page should only be accessible for the admin'''
-    form = CategoryCreateForm()
-    
-   # if form.validate_on_submit():
-   #     # create cursor and insert form data into category table
-   #     cursor = db.connection().cursor() 
-   #     cursor.execute('INSERT INTO category (name) VALUES (%s)', (form.name.data))
-
-   #     # commit changes to database
-   #     db.connection().commit() 
-   #     cursor.close()
-
-   #     return redirect(url_for('catalog.category_list'))
-
-   # else:
-   #     # print this if commit to database fails
-   #     print(request.args.get('name'))
-   #     print(form.errors)
-   #     print('Commit failed')
-
-    return render_template('catagory_create.html', form=form)
-
 # Category list
 @catalog.route('/categories')
 def category_list():
     # retrieve all category object from database
     with db.connection.cursor() as cursor:
-        cursor.execute('SELECT * FROM category')
+        cursor.execute('SELECT COUNT(name) AS product_count, name AS p_name, category_name FROM product_view GROUP BY category_name')
         category_list = cursor.fetchall()
 
     return render_template('category_list.html', category_list=category_list)

@@ -17,11 +17,11 @@ def index():
         db.reconnect()
         
         # get categories
-        cursor.execute('SELECT DISTINCT * FROM category')
+        cursor.execute('SELECT DISTINCT * FROM category LIMIT 10')
         category_list = cursor.fetchall() 
          
         # get products
-        cursor.execute("SELECT * FROM product")
+        cursor.execute("SELECT * FROM product_view")
         product_list = cursor.fetchall()
  
     return render_template('index.html', product_list=product_list, category_list=category_list)
@@ -36,7 +36,7 @@ def filtered_by_category(name):
         cursor.execute('SELECT DISTINCT * FROM category')
         category_list = cursor.fetchall()
         
-        cursor.execute('SELECT * FROM product WHERE category LIKE = (%s)', (
+        cursor.execute('SELECT * FROM product_view WHERE category_name LIKE (%s)', (
                         name))
         product_list = cursor.fetchall()
         

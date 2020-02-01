@@ -2,8 +2,8 @@ import pymysql
 from flask import Blueprint, render_template, session, redirect, url_for, flash, g, request
 from werkzeug.security import generate_password_hash, check_password_hash
 from functools import wraps
-from ecommerce.users.forms import (UserRegistrationForm, UserLoginForm, AddressCreateForm, AddressUpdateForm,
-        UserUpdateForm, UserPasswordUpdateForm)
+from ecommerce.users.forms import (UserRegistrationForm, UserLoginForm, AddressCreateForm, 
+                                   ProfileUpdateForm, AddressUpdateForm, UserPasswordUpdateForm)
 from ecommerce.db import Database as db
 #from ecommerce import mysql
 
@@ -160,82 +160,66 @@ def register_address(id):
 
     return render_template('register_address.html', form=form)
 
-@users.route('/profile/<string:id>')
+@users.route('/profile/<string:id>', methods=['GET', 'POST'])
 @is_authenticated
 def profile(id):
     '''render the user profile details'''
-
-    profile_form = UserUpdateForm()
-    address_form = AddressUpdateForm()
     password_form = UserPasswordUpdateForm()
+    address_form =AddressUpdateForm()
+    profile_form = ProfileUpdateForm()
 
     with db.connection.cursor() as cursor:
         # reconnect to heroku mysql db
         db.reconnect()
-
-        # get all the contries for select form
-        cursor.execute('SELECT * FROM country')
-        country_list = cursor.fetchall()
-        address_form.country.choices = [(country['country_id'], country['name']) for country in country_list]
         
         # get all cities for select form
         cursor.execute('''SELECT city_id, name FROM city''')
         city_list = cursor.fetchall()
         address_form.city.choices = [(city['city_id'], city['name']) for city in city_list]
 
-        # get address from current user
-        #cursor.execute('SELECT a.line1, a.line2, a.line3, a.postal_code, a.country_id, a.city_id FROM address a LEFT JOIN user u ON a.address_id=u.address_id WHERE u.user_id=(%s)', (id))
-        cursor.execute('''SELECT a.line1, a.line2, a.line3, a.postal_code, a.country_id, a.city_id FROM address a WHERE EXISTS (
-                          SELECT u.address_id FROM user u WHERE u.address_id IS NOT NULL AND u.address_id=a.address_id AND u.user_id=%s)''', (id))
-        user_address = cursor.fetchone()
-
-
+        # get data from current user
+        cursor.execute('SELECT firstname, lastname, email, address_line1, address_line2, address_line3, postal_code, city_id, city_name FROM customer_view WHERE user_id=%s',(
+                        id))
+        user = cursor.fetchone()
 
     # Populate user detail fields
-    profile_form.email.data = g.user['email']
-    profile_form.firstname.data = g.user['firstname']
-    profile_form.lastname.data = g.user['lastname']
+    profile_form.email.data = user['email']
+    profile_form.firstname.data = user['firstname']
+    profile_form.lastname.data = user['lastname']
 
-    address_form.line1.data = user_address['line1']
-    address_form.line2.data = user_address['line2']
-    address_form.line3.data = user_address['line3']
-    address_form.postal_code.data = user_address['postal_code']
-    address_form.city.data = user_address['city_id']
-    address_form.country.data = user_address['country_id']
-    
-    print(g.user['email'])
+    address_form.address_line1.data = user['address_line1']
+    address_form.address_line2.data = user['address_line2']
+    address_form.address_line3.data = user['address_line3']
+    address_form.postal_code.data = user['postal_code']
+    address_form.city.data = user['city_id'] 
 
-    return render_template('profile.html', profile_form=profile_form, address_form=address_form, password_form=password_form)
+    return render_template('profile.html',user=user, profile_form=profile_form, address_form=address_form, password_form=password_form)
 
 @users.route('/profile/update/<string:id>', methods=['GET','POST'])
 @is_authenticated
 def profile_update(id):
     '''Controller to update the user's email, name, lastname'''
 
-    profile_form = UserUpdateForm()
+    profile_form = ProfileUpdateForm()
     address_form = AddressUpdateForm()
     password_form = UserPasswordUpdateForm()
    
-    if profile_form.validate_on_submit():
-        with db.connection.cursor() as cursor:
-            try:
-                cursor.execute('''UPDATE user SET email = (%s), firstname = (%s), lastname = (%s) WHERE user_id = (%s)''', 
-                                  (profile_form.email.data,
-                                  profile_form.firstname.data,
-                                  profile_form.lastname.data,
-                                  id))
-                # commit changes to database
-                db.connection.commit()
+    with db.connection.cursor() as cursor:
+        # reconnect to heroku
+        db.reconnect()
 
-            except (pymysql.OperationalError):
-                db.reconnect()
-            
-        flash('Profile updated')
-        return redirect(url_for('users.profile', id=g.user['user_id']))
-    else:
-        print(profile_form.errors)
-        print("failed")
-    
+        if profile_form.validate_on_submit():
+            cursor.execute('UPDATE customer_view SET firstname=%s, lastname=%s, email=%s WHERE user_id=%s', (
+                            request.form['firstname'],
+                            request.form['lastname'],
+                            request.form['email'],
+                            id)) 
+            db.connection.commit()
+             
+            flash('Successfully updated')
+
+            return redirect(url_for('users.profile', id=g.user['user_id']))
+       
     return render_template('profile.html', profile_form=profile_form, address_form=address_form, password_form=password_form)
 
 @users.route('/profile/update/password/<string:id>', methods=['POST', 'GET'])
@@ -243,7 +227,9 @@ def profile_update(id):
 def password_update(id):
     '''Controller to handle the password update form'''
 
-    profile_form = UserUpdateForm()
+    #profile_form = UserUpdateForm()
+    #address_form = AddressUpdateForm()
+    profile_form = ProfileUpdateForm()
     address_form = AddressUpdateForm()
     password_form = UserPasswordUpdateForm()
 
@@ -272,7 +258,7 @@ def password_update(id):
 def address_update(id):
     '''Controller to handle address update form'''
 
-    profile_form = UserUpdateForm()
+    profile_form = ProfileUpdateForm()
     address_form = AddressUpdateForm()
     password_form = UserPasswordUpdateForm()
 
@@ -289,22 +275,20 @@ def address_update(id):
         if address_form.validate_on_submit():
             # Update the address from current user using the customer_view
             cursor.execute('UPDATE customer_view SET address_line1=%s, address_line2=%s, address_line3=%s, postal_code=%s, city_id=%s WHERE user_id=%s', (
-                            request.form['line1'],
-                            request.form['line2'],
-                            request.form['line3'],
+                            request.form['address_line1'],
+                            request.form['address_line2'],
+                            request.form['address_line3'],
                             request.form['postal_code'],
                             request.form['city'],
                             id))
             # commit update
             cursor.connection.commit()
                        
-            flash('Your address is updated')
+            flash('Successfully updated address')
 
             return redirect(url_for('users.profile', id=g.user['user_id']))
+    print(request.form.errors)
 
-        else:
-            flash('{}'.format(address_form.errors))
-    print(request)
     return render_template('profile.html', profile_form=profile_form, address_form=address_form, password_form=password_form)
 
 @users.route('/account/<string:id>')

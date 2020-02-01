@@ -3,15 +3,29 @@
 {% include 'includes/navbar.html' %}
 
 {% block body %}
-<div class="row">
-{% for category in category_list %}
-<div class="col s3">
-	<div class="card">
-		<div class="card-content">
-			<p><a href="" class="grey-text">{{ category.name }}</a></p>
-		</div>
+<div class="card">
+	<div class="card-content">
+		<span class="card-title">Categories</span>
+		<table class="responsive-table highlight">
+			<thead>
+				<tr>
+					<th>Category</th>
+					<th>Products</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for c in category_list %}	
+				<tr>
+					<td>
+						<a href="{{ url_for('main.filtered_by_category', name=c.category_name) }}">
+						{{ c.category_name }}
+						</a>
+					</td>
+					<td>{{ c.product_count }}</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
 	</div>
 </div>
-
-{% endfor %}
 {% endblock body %}

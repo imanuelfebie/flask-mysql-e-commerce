@@ -4,17 +4,17 @@
 
 {% block body %}
 <div class="row">
-
-	<!-- Loop through the product objects and display them -->
-	{% if product_list %}
 		
 	<!-- Categories pagination -->
 	<ul class="pagination">
+		<li><a href="{{ url_for('main.index') }}">All</a></li>
 		{% for c in category_list %}
 		<li><a href="{{ url_for('main.filtered_by_category', name=c.category_name) }}">{{ c.category_name }}</a></li>
 		{% endfor %}
 	</ul>
 
+	<!-- Loop through the product objects and display them -->
+	{% if product_list %}
 	{% for product in product_list %}
 	<div class="col l4 s12">
 		<div class="card">
@@ -33,7 +33,6 @@
 			</div>
 			<div class="card-action">
 				<a href="">$ {{ product.price }}</a>
-				<a href="">Stock {{ product.stock }}</a>
 			</div>
 		</div>
 	</div>

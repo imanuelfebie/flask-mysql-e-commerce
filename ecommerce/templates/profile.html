@@ -27,9 +27,45 @@
 					<div class="input-field">
 						{{ profile_form.lastname(class="validate") }}
 						{{ profile_form.lastname.label() }}
+					</div>	
+					<div class="input-field">
+						{{ profile_form.submit(class="btn green accent-4 white-text")}}
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+		
+	<!-- Update Address FORM -->
+	<div class="col s12">
+		<div class="card">
+			<div class="card-content">
+				<span class="card-title valign-wrapper">Update address</span>
+				<form action="{{ url_for('users.address_update', id=g.user.user_id) }}" method="POST">
+					{{ address_form.csrf_token() }}
+					<div class="input-field">
+						{{ address_form.address_line1(class='validate') }}
+						{{ address_form.address_line1.label() }}
 					</div>
 					<div class="input-field">
-						{{ profile_form.submit(class="btn green accent-4 white-text") }}
+						{{ address_form.address_line2(class="") }}
+						{{ address_form.address_line2.label() }}
+						<span class="helper-text">Optional</span>
+					</div>
+					<div class="input-field">
+						{{ address_form.address_line3(class="") }}
+						{{ address_form.address_line3.label() }}
+						<span class="helper-text">Optional</span>
+					</div>
+					<div class="input-field">
+						{{ address_form.postal_code(class="validate") }}
+						{{ address_form.postal_code.label() }}
+					</div>
+					<div class="input-field">
+						{{ address_form.city(class="browser-default") }}
+					</div>
+					<div class="input-field">
+						{{ address_form.submit(class="btn green accent-4 white-text") }}
 					</div>
 				</form>
 			</div>
@@ -56,45 +92,6 @@
 					</div>
 					<div class="input-field">
 						{{ password_form.submit(class="btn green accent-4 white-text") }}
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-		
-	<!-- Update Address FORM -->
-	<div class="col s12">
-		<div class="card">
-			<div class="card-content">
-				<span class="card-title valign-wrapper">Update address</span>
-				<form action="{{ url_for('users.address_update', id=g.user.user_id) }}" method="POST">
-					{{ address_form.csrf_token() }}
-					<div class="input-field">
-						{{ address_form.line1(class='validate') }}
-						{{ address_form.line1.label() }}
-					</div>
-					<div class="input-field">
-						{{ address_form.line2(class="") }}
-						{{ address_form.line2.label() }}
-						<span class="helper-text">Optional</span>
-					</div>
-					<div class="input-field">
-						{{ address_form.line3(class="") }}
-						{{ address_form.line3.label() }}
-						<span class="helper-text">Optional</span>
-					</div>
-					<div class="input-field">
-						{{ address_form.postal_code(class="validate") }}
-						{{ address_form.postal_code.label() }}
-					</div>
-					<div class="input-field">
-						{{ address_form.country(class="browser-default") }}
-					</div>
-					<div class="input-field">
-						{{ address_form.city(class="browser-default") }}
-					</div>
-					<div class="input-field">
-						{{ address_form.submit(class="btn green accent-4 white-text") }}
 					</div>
 				</form>
 			</div>
