@@ -239,18 +239,33 @@ def customer_create():
             db.connection.commit()
 
             # select this user
-            cursor.execute('SELECT user_id FROM user WHERE email LIKE (%s)', (
-                            form.email.data))
-            user = cursor.fetchone()
-            
-            # insert address into customer_view
-            cursor.execute('UPDATE customer_view SET address_line1=%s, address_line2=%s, address_line3=%s, postal_code=%s, city_id=%s WHERE user_id=%s', (
+            #cursor.execute('SELECT user_id FROM user WHERE email LIKE (%s)', (
+            #                form.email.data))
+            #user = cursor.fetchone()
+
+            cursor.execute('INSERT INTO address (line1, line2, line3, postal_code, city_id) VALUES (%s, %s, %s, %s, %s)', (
                             form.address_line1.data,
                             form.address_line2.data,
                             form.address_line3.data,
                             form.postal_code.data,
-                            form.city.data,
-                            user['user_id']))
+                            form.city.data))
+            db.connection.commit()
+
+            cursor.execute('SELECT address_id FROM address WHERE line1=%s', (
+                            form.address_line1.data))
+            address = cursor.fetchone()
+
+            cursor.execute('UPDATE user SET address_id=%s', (
+                            address['address_id']))
+            
+            ## insert address into customer_view
+            #cursor.execute('UPDATE customer_view SET address_line1=%s, address_line2=%s, address_line3=%s, postal_code=%s, city_id=%s WHERE user_id=%s', (
+            #                form.address_line1.data,
+            #                form.address_line2.data,
+            #                form.address_line3.data,
+            #                form.postal_code.data,
+            #                form.city.data,
+            #                user['user_id']))
 
             db.connection.commit()           
         
